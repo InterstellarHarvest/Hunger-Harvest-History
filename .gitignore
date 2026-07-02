@@ -1,0 +1,22 @@
+# ── macOS ──
+.DS_Store
+**/.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# ── Dev docs & Claude context (not part of the runtime game) ──
+CLAUDE.md
+resources/
+
+# ── Future Campaign 2 — not part of this release ──
+c2/
+
+# ── Source art / working files (the game loads the packed spritesheets & UI PNGs, not these) ──
+UI/originals/
+
+# ── Individual NPC animation frames ──
+# Each NPC's frames are packed into its spritesheet.png and read via the embedded
+# HHH_FRAMES coordinates; the loose frame_NNN.png files are never loaded at runtime.
+**/frame_*.png
