@@ -1,0 +1,142 @@
+{
+    "frames": [
+        {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 512,
+                "h": 512
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 512,
+                "h": 512
+            },
+            "sourceSize": {
+                "w": 512,
+                "h": 512
+            },
+            "filename": "badge_archive_initiate.jpg"
+        },
+        {
+            "frame": {
+                "x": 512,
+                "y": 0,
+                "w": 512,
+                "h": 512
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 512,
+                "h": 512
+            },
+            "sourceSize": {
+                "w": 512,
+                "h": 512
+            },
+            "filename": "badge_field_recorder.jpg"
+        },
+        {
+            "frame": {
+                "x": 0,
+                "y": 512,
+                "w": 512,
+                "h": 512
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 512,
+                "h": 512
+            },
+            "sourceSize": {
+                "w": 512,
+                "h": 512
+            },
+            "filename": "badge_historical_witness.jpg"
+        },
+        {
+            "frame": {
+                "x": 512,
+                "y": 512,
+                "w": 512,
+                "h": 512
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 512,
+                "h": 512
+            },
+            "sourceSize": {
+                "w": 512,
+                "h": 512
+            },
+            "filename": "badge_keeper_of_the_chain.jpg"
+        },
+        {
+            "frame": {
+                "x": 1024,
+                "y": 0,
+                "w": 512,
+                "h": 512
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 512,
+                "h": 512
+            },
+            "sourceSize": {
+                "w": 512,
+                "h": 512
+            },
+            "filename": "badge_temporal_archivist.jpg"
+        },
+        {
+            "frame": {
+                "x": 1024,
+                "y": 512,
+                "w": 512,
+                "h": 512
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 512,
+                "h": 512
+            },
+            "sourceSize": {
+                "w": 512,
+                "h": 512
+            },
+            "filename": "badge_thread_walker.jpg"
+        }
+    ],
+    "meta": {
+        "app": "https://www.codeandweb.com/texturepacker",
+        "version": "1.0",
+        "image": "spritesheet.jpg",
+        "format": "RGBA8888",
+        "size": {
+            "w": 1536,
+            "h": 1024
+        },
+        "scale": "1",
+        "comment": "Created with TexturePacker Online (free version)\nhttps://www.codeandweb.com/texturepacker-online\n\nTexturePacker desktop offers better support for Pixi and Phaser with sprite trimming, better packing algorithms, hardware texture compression, and PNG optimization.\nTry TexturePacker desktop: https://www.codeandweb.com/texturepacker"
+    }
+}
