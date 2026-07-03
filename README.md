@@ -33,15 +33,6 @@ Every thread is a real turning point in the science and history of food.
 
 The science in each thread — domestication and selection, soil salinization, monoculture and plant disease, nitrogen fixation, soil conservation, and closed-loop farming — is drawn from the real historical record.
 
-## Running it
-
-The game is a single, self-contained `index.html` — **no build step, no dependencies, no server required.**
-
-- **Play locally:** open `index.html` in a modern browser (Chrome, Edge, Firefox, or Safari).
-- **Host it:** serve the repository folder from any static web host.
-
-Everything the game needs lives alongside it: `hhh_data.js` (all game content) and the `UI/`, `npc/`, and `scene/` asset folders.
-
 ## About
 
 Hunger, Harvest, & History is set in the **Space Sprout Sleuth** universe and was built as an educational game about the real history and science of agriculture. Made with plain HTML, CSS, and Canvas — pixels, and a lot of care. 🌱
