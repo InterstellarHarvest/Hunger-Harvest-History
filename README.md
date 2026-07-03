@@ -1,5 +1,7 @@
 # 🌾 Hunger, Harvest, & History
 
+▶ **[Play it in your browser](https://interstellarharvest.github.io/Hunger-Harvest-History/)**
+
 *Another Space Sprout Sleuth mystery.*
 
 A retro-pixel edutainment game about the moments that made agriculture possible.
