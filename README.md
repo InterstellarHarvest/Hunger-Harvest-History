@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/InterstellarHarvest/Hunger-Harvest-History/main/UI/hhh_icon.png" width="32" height="33" alt=""> Hunger, Harvest, & History
+# <img src="https://raw.githubusercontent.com/InterstellarHarvest/Hunger-Harvest-History/main/UI/hhh_icon.png" width="42" height="43" alt=""> Hunger, Harvest, & History
 
 ▶ **[Play it in your browser](https://interstellarharvest.github.io/Hunger-Harvest-History/)**
 
