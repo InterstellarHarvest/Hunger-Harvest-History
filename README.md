@@ -1,4 +1,4 @@
-# 🌾 Hunger, Harvest, & History
+# <img src="https://raw.githubusercontent.com/InterstellarHarvest/Hunger-Harvest-History/main/UI/hhh_icon.png" width="32" height="33" alt=""> Hunger, Harvest, & History
 
 ▶ **[Play it in your browser](https://interstellarharvest.github.io/Hunger-Harvest-History/)**
 
@@ -35,4 +35,4 @@ The science in each thread — domestication and selection, soil salinization, m
 
 ## About
 
-Hunger, Harvest, & History is set in the **Space Sprout Sleuth** universe and was built as an educational game about the real history and science of agriculture. Made with plain HTML, CSS, and Canvas — pixels, and a lot of care. 🌱
+Hunger, Harvest, & History is set in the **Space Sprout Sleuth** universe and was built as an educational game about the real history and science of agriculture. Made with plain HTML, CSS, and Canvas — pixels, and a lot of care.
