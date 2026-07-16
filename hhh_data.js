@@ -15,28 +15,11 @@ const GAME_DATA = {
   ranks: ['Archive Initiate'],     // placeholder; superseded at runtime by HHH_DATA.meta.ranks
 };
 
-// CAMPAIGN_2_DATA: DORMANT — RESERVED for a future HHH Campaign 2 (do NOT remove).
-// A second HHH campaign IS planned (after Campaign 1 is fully finished). The scaffolding
-// forked from SSS (this stub + the Incoming-Transmission button + char-creation +
-// enterCampaign2 + callHome + the showVictory C2 branch, all in index.html) is kept
-// dormant so C2 can reuse it. In SSS, C2 unlocked via an "Incoming Transmission" pickup
-// on the title screen once the first campaign was finished (STATE.campaign1Complete);
-// HHH sets that same "finished" flag on completing L7. The in-world manifestation of the
-// C2 unlock on the HHH startup screen is still TBD (SSS's transmission conceit won't fit
-// as-is). See HHH_HANDOFF.md "FUTURE — HHH Campaign 2". Empty until C2 content is authored.
-const CAMPAIGN_2_DATA = {
-  id: 'hhh_placeholder',
-  name: 'placeholder',
-  cases: [],
-  ranks: ['Archive Initiate'],
-  species: [],
-};
-
 // ── Embedded sprite-frame data (keyed by PNG path) ──
 // loadSpritesheet() resolves frames from here so NO fetch() is needed — this is
 // what makes spritesheets work from the file:// protocol (Chrome blocks fetch of
-// local JSON). The PNG itself still loads via <img> (file:// safe). Same trick SSS
-// used with CAMPAIGN_2_FRAMES. Regenerate from the .json files if art is re-packed.
+// local JSON). The PNG itself still loads via <img> (file:// safe).
+// Regenerate from the .json files if art is re-packed.
 const HHH_FRAMES = {
   "npc/nova/spritesheet.png": [{"filename":"frame_000.png","frame":{"x":1,"y":1,"w":100,"h":100}},{"filename":"frame_001.png","frame":{"x":103,"y":1,"w":100,"h":100}},{"filename":"frame_002.png","frame":{"x":205,"y":1,"w":100,"h":100}},{"filename":"frame_003.png","frame":{"x":1,"y":103,"w":100,"h":100}},{"filename":"frame_004.png","frame":{"x":103,"y":103,"w":100,"h":100}},{"filename":"frame_005.png","frame":{"x":205,"y":103,"w":100,"h":100}},{"filename":"frame_006.png","frame":{"x":1,"y":205,"w":100,"h":100}},{"filename":"frame_007.png","frame":{"x":103,"y":205,"w":100,"h":100}},{"filename":"frame_008.png","frame":{"x":205,"y":205,"w":100,"h":100}},{"filename":"portrait_nova.png","frame":{"x":307,"y":1,"w":96,"h":96}}],
   "npc/nova/spritesheet_unmasked.png": [{"filename":"frame_000.png","frame":{"x":0,"y":0,"w":96,"h":96}},{"filename":"frame_001.png","frame":{"x":96,"y":0,"w":96,"h":96}},{"filename":"frame_002.png","frame":{"x":192,"y":0,"w":96,"h":96}},{"filename":"frame_003.png","frame":{"x":0,"y":96,"w":96,"h":96}},{"filename":"frame_004.png","frame":{"x":96,"y":96,"w":96,"h":96}},{"filename":"frame_005.png","frame":{"x":192,"y":96,"w":96,"h":96}},{"filename":"frame_006.png","frame":{"x":0,"y":192,"w":96,"h":96}},{"filename":"frame_007.png","frame":{"x":96,"y":192,"w":96,"h":96}},{"filename":"frame_008.png","frame":{"x":192,"y":192,"w":96,"h":96}},{"filename":"portrait_nova_unmasked.png","frame":{"x":288,"y":0,"w":96,"h":96}}],

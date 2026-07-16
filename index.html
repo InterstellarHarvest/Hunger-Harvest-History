@@ -245,7 +245,7 @@
      carries teach:{target,note}. Modal: a transparent blocker eats input
      under the card; the spotlight box-shadow dims everything but the
      highlighted element; the player dismisses with "Got it". Geometry is
-     adapted from the (dormant) SSS_Tutorial spotlight math.
+     adapted from the SSS spotlight math.
      Z-index: blocker 148, spotlight 150, card 152 (under help-overlay 160).
      ══════════════════════════════════════════════════════════════════ */
   #hhh-teach-layer { position: absolute; inset: 0; z-index: 148; }
@@ -383,31 +383,6 @@
     pointer-events: none; display: none;
   }
 
-  /* Connection screen overlay (Case 6 briefing) */
-  #connection-screen {
-    position: absolute;
-    inset: 0;
-    background: #0a0a12;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 24px 20px;
-    font-family: 'VT323', monospace;
-    font-size: 16px;
-    color: #4ecdc4;
-    overflow: hidden;
-  }
-  #connection-screen.hidden { display: none; }
-  #connection-screen .conn-line {
-    opacity: 0;
-    white-space: nowrap;
-    margin: 2px 0;
-    text-shadow: 0 0 6px #4ecdc488;
-  }
-  #connection-screen .conn-line.visible { opacity: 1; }
-  #connection-screen .conn-line.dim { color: #2a6b65; text-shadow: none; }
-  #connection-screen .conn-cursor { animation: blink-cursor 0.6s step-end infinite; }
   @keyframes blink-cursor { 50% { opacity: 0; } }
 
   /* ── Right column (info + actions) ─────────────────────────────── */
@@ -517,7 +492,7 @@
   /* ── HHH C2: recovered-archive figure treatment (sprite spec §2.5-lite) ──
      Vavilov/Borlaug appear as RECOVERED RECORDS, not live NPCs: desaturated
      under faint scanlines. Lighter than the Nova ghost (L4).
-     AUTHOR-TUNED 2026-07-06 in c2/resources/demos/locationfx/lvl2.html — keep in sync. */
+     AUTHOR-TUNED in c2/resources/demos/locationfx/lvl2.html — keep in sync. */
   .speaker-portrait.archive-figure canvas,
   .speaker-portrait.archive-figure img {
     filter: saturate(0.47) contrast(1.09) brightness(1.02);
@@ -851,7 +826,7 @@
   }
 
   /* ── HHH C2 L6: the FINALE VERDICT cards (showSolutionChoice, sc.finale) ──
-     Extends .diagnosis-option. Glow/gap/accent AUTHOR-TUNED 2026-07-13 in
+     Extends .diagnosis-option. Glow/gap/accent AUTHOR-TUNED in
      c2/resources/demos/finale/index.html (VERDICT_UI: accent #c94ad0, glow 0.75,
      gap 6, lens #8a94b8) — keep in sync with the VERDICT_UI const. */
   .verdict-option { margin-bottom: 6px; box-shadow: 0 0 8px rgba(201,74,208,0.26); }
@@ -866,7 +841,7 @@
 
   /* ── HHH C2 L6: the CASE DOSSIER view (showDossier — the identity-assembly
      surface; a lens over Field Notes, not a replacement). Author-tuned defaults
-     2026-07-13 (finale demo, Dossier tab): accentDone #c94ad0, portraitTreat none. */
+     (finale demo, Dossier tab): accentDone #c94ad0, portraitTreat none. */
   .dz-sub { font-size: 18px; color: #8a8f9c; margin: -8px 0 14px; letter-spacing: 0.5px; }
   .dz-facet { border: 2px solid rgba(74,106,138,0.3); padding: 9px 12px; margin-bottom: 8px; transition: border-color 0.4s; }
   .dz-facet .dz-tag { font-family: 'Press Start 2P', cursive; font-size: 7px; letter-spacing: 2px; color: #4a6a8a; margin-bottom: 6px; }
@@ -1070,26 +1045,6 @@
     50%       { box-shadow: 0 0 14px rgba(6,182,212,0.6), 0 0 24px rgba(6,182,212,0.3); }
   }
 
-  /* Campaign 2: 6-button action bar. The 5 source buttons plus
-     Diagnose all live inside #action-grid as equal-sized cells (2 columns ×
-     3 rows). The diagnose button keeps its cyan border and pulse so it stays
-     visually findable, but matches .action-btn dimensions. Gated on
-     #action-area.campaign-2 so Campaign 1 layout is untouched. */
-  #action-area.campaign-2 #action-grid {
-    margin-bottom: 0;
-  }
-  #action-area.campaign-2 #diagnose-btn {
-    width: auto;
-    font-size: 20px;
-    letter-spacing: 1px;
-    padding: 8px 10px;
-    margin: 0;
-    min-height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   /* ── Retro button (reusable) ───────────────────────────────────── */
   .retro-btn {
     background: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 50%, #1a1a1a 100%);
@@ -1127,118 +1082,7 @@
     text-shadow: 0 0 6px rgba(74,222,128,0.4);
   }
 
-  /* Campaign 2: "Incoming Transmission" terminal on title screen.
-     Combined mini-CRT terminal with signal-lock bars, glitch-decode text,
-     and blinking cursor. Hidden until STATE.campaign1Complete is true. */
-  #transmission-btn {
-    background: #050a0f;
-    border: 4px inset #3a3a3a;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.5);
-    padding: 12px 20px 10px;
-    cursor: pointer;
-    position: relative;
-    text-align: left;
-    width: fit-content;
-    align-self: center;
-    min-width: 320px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    transition: box-shadow 0.3s;
-    z-index: 1;
-  }
-  #transmission-btn.hidden { display: none; }
-  #transmission-btn:hover {
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 16px rgba(245,158,11,0.3);
-  }
-  .tx-scanlines {
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      transparent 0px, transparent 2px,
-      rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px
-    );
-    pointer-events: none;
-  }
-  .tx-led {
-    position: absolute;
-    top: 6px;
-    right: 8px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #333;
-    transition: background 0.5s, box-shadow 0.5s;
-  }
-  .tx-led.active {
-    background: #f59e0b;
-    box-shadow: 0 0 4px #f59e0b;
-    animation: tx-led-blink 2s ease-in-out infinite;
-  }
-  @keyframes tx-led-blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-  .tx-bars {
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 2px;
-    width: 16px;
-    flex-shrink: 0;
-  }
-  .tx-bar {
-    height: 4px;
-    background: #222;
-    transition: background 0.3s, box-shadow 0.3s;
-  }
-  .tx-bar.active {
-    background: #f59e0b;
-    box-shadow: 0 0 4px #f59e0b;
-  }
-  .tx-text {
-    font-family: 'VT323', monospace;
-    font-size: 20px;
-    letter-spacing: 1px;
-    color: #f59e0b;
-    text-shadow: 0 0 6px rgba(245,158,11,0.5);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .tx-text.visible { opacity: 1; }
-  .tx-cursor {
-    display: inline-block;
-    width: 10px;
-    height: 18px;
-    background: #f59e0b;
-    margin-left: 4px;
-    vertical-align: text-bottom;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .tx-cursor.active {
-    opacity: 1;
-    animation: tx-cursor-blink 1s step-end infinite;
-  }
-  @keyframes tx-cursor-blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-  }
-
-  /* Briefing header pulse — plays while connection screen animates */
-  .briefing-header-pulse {
-    animation: briefing-pulse 1.2s ease-in-out infinite;
-  }
-  @keyframes briefing-pulse {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; text-shadow: 0 0 10px rgba(6,182,212,0.6); }
-  }
-
-  @keyframes transmission-pulse {
-    0%, 100% { opacity: 0.6; text-shadow: 0 0 8px rgba(6,182,212,0.4); }
-    50% { opacity: 1; text-shadow: 0 0 14px rgba(6,182,212,0.7); }
-  }
-
-  /* Campaign 2: "Call Home" hint button in field notes */
+  /* TAA Comms hint button in field notes (class name is a legacy of the SSS "Call Home") */
   .call-home-btn {
     font-family: 'VT323', monospace;
     font-size: 16px;
@@ -1280,60 +1124,6 @@
     .call-home-btn.dossier-new { animation: none; box-shadow: 0 0 9px rgba(201,74,208,0.7); }
   }
 
-  /* Campaign 2: dual-portrait briefing frame (Nova + Zel'keth) */
-  .briefing-handlers {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    margin: 8px 0 12px;
-  }
-  .handler-portrait {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-  .handler-portrait canvas {
-    width: 96px;
-    height: 96px;
-    background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
-    border: 3px outset #444;
-    box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
-    image-rendering: pixelated;
-  }
-  .handler-name {
-    font-family: 'VT323', monospace;
-    font-size: 16px;
-    color: #8898a8;
-    letter-spacing: 1px;
-  }
-
-  /* Campaign 2 unlock notification on the Campaign 1 victory screen */
-  .victory-unlock {
-    margin-top: 18px;
-    padding: 12px 22px;
-    border: 2px solid rgba(6,182,212,0.5);
-    background: rgba(6,182,212,0.06);
-    max-width: 540px;
-    z-index: 1;
-    text-align: center;
-  }
-  .victory-unlock-header {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 9px;
-    color: #06b6d4;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    text-shadow: 0 0 8px rgba(6,182,212,0.6);
-    margin-bottom: 8px;
-    animation: transmission-pulse 1.6s ease-in-out infinite;
-  }
-  .victory-unlock-body {
-    font-family: 'VT323', monospace;
-    font-size: 18px;
-    color: #a8d8e8;
-    line-height: 1.4;
-  }
 
   .retro-btn.disabled {
     opacity: 0.3;
@@ -1818,154 +1608,6 @@
     justify-content: center;
   }
 
-  /* Campaign 2 character creation popup */
-  #char-create {
-    background: rgba(0,0,0,0.88);
-    flex-direction: column;
-    gap: 0;
-  }
-  .char-create-panel {
-    background: linear-gradient(180deg, #0f1a2e 0%, #081018 100%);
-    border: 4px solid;
-    border-color: #06b6d4 #0e4d5e #0e4d5e #06b6d4;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 0 24px rgba(6,182,212,0.3);
-    padding: 16px 28px 18px;
-    max-width: 740px;
-    text-align: center;
-    z-index: 1;
-  }
-  .char-create-panel h2 {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 12px;
-    color: #06b6d4;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    text-shadow: 0 0 8px rgba(6,182,212,0.5);
-  }
-  .char-create-blurb {
-    font-family: 'VT323', monospace;
-    font-size: 19px;
-    color: #b0c8d8;
-    line-height: 1.3;
-    margin-bottom: 10px;
-    padding: 0 8px;
-  }
-  .char-create-label {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 9px;
-    color: #06b6d4;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin: 12px 0 8px;
-  }
-  #char-create-name {
-    font-family: 'VT323', monospace;
-    font-size: 26px;
-    color: #e0f0ff;
-    background: #050a12;
-    border: 3px inset #06b6d4;
-    padding: 6px 12px;
-    width: 320px;
-    max-width: 100%;
-    text-align: center;
-    outline: none;
-  }
-  #char-create-name.invalid {
-    border-color: #f87171;
-  }
-  .char-create-error {
-    font-family: 'VT323', monospace;
-    font-size: 18px;
-    color: #f87171;
-    min-height: 22px;
-    margin-top: 4px;
-  }
-  .species-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin: 6px 0 8px;
-  }
-  .species-option {
-    background: linear-gradient(180deg, #1a2332 0%, #0a1018 100%);
-    border: 3px outset #3a5a7a;
-    padding: 10px 8px 8px;
-    cursor: pointer;
-    transition: border-color 0.1s, background 0.1s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-  }
-  .species-option:hover {
-    border-color: #06b6d4;
-    background: linear-gradient(180deg, #22334a 0%, #0f1a2a 100%);
-  }
-  .species-option.selected {
-    border-style: inset;
-    border-color: #06b6d4;
-    background: linear-gradient(180deg, #0a2a3a 0%, #051520 100%);
-    box-shadow: inset 0 0 12px rgba(6,182,212,0.3);
-  }
-  .species-portrait-placeholder {
-    width: 64px;
-    height: 64px;
-    background: #0a1520;
-    border: 2px solid #3a5a7a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-  }
-  .species-option.selected .species-portrait-placeholder {
-    border-color: #06b6d4;
-  }
-  .species-name {
-    font-family: 'VT323', monospace;
-    font-size: 18px;
-    color: #d1e0f0;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-  .char-create-confirm {
-    margin-top: 14px;
-  }
-  .char-create-confirm.disabled {
-    opacity: 0.45;
-    pointer-events: none;
-  }
-  .species-tooltip {
-    position: fixed;
-    background: linear-gradient(180deg, #0a1520 0%, #050a0f 100%);
-    border: 2px solid #06b6d4;
-    box-shadow: 0 0 12px rgba(6,182,212,0.35);
-    padding: 8px 12px;
-    font-family: 'VT323', monospace;
-    font-size: 16px;
-    color: #a0c0d8;
-    line-height: 1.35;
-    text-align: left;
-    max-width: 360px;
-    z-index: 200;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.15s;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1px 8px;
-  }
-  .species-tooltip.visible {
-    opacity: 1;
-  }
-  .species-tooltip .tip-label {
-    color: #06b6d4;
-    white-space: nowrap;
-  }
-  .species-tooltip .tip-value {
-    color: #a0c0d8;
-  }
-
   /* ── Level select dropdown ──────────────────────────────────────── */
   #menu-bar { position: relative; }
 
@@ -2015,18 +1657,6 @@
   .level-option-score { font-size: 16px; color: #7cc47c; flex-shrink: 0; }   /* completed score = soft green */
   .level-option.current .level-option-score { color: #e8b84a; }
   .level-option-lock  { font-size: 14px; color: #6a5a3a; flex-shrink: 0; letter-spacing: 0.5px; }
-
-  /* ── Title screen sprite support ───────────────────────────────── */
-  #title-sprout-img {
-    width: 96px;
-    height: 96px;
-    image-rendering: pixelated;
-    z-index: 1;
-    display: none;
-  }
-
-  #title-sprout-img.loaded { display: block; }
-  #title-sprout.hidden { display: none; }
 
   /* ── Title intro animation ──────────────────────────────────── */
   .intro-hidden { opacity: 0 !important; pointer-events: none !important; }
@@ -2109,99 +1739,10 @@
     display: block;
   }
 
-  /* ══════════════════════════════════════════════════════════════════
-     Tutorial system — spotlight tour + SAA agent handbook (Case 1 + replay)
-     Z-index map: tour-layer 150, help-overlay 160 (above tour), scanlines 100.
-     ══════════════════════════════════════════════════════════════════ */
-
-  /* Tour spotlight + card */
-  #tour-layer {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 150;
-  }
-  .tour-spotlight {
-    position: absolute;
-    pointer-events: none;
-    border: 2px solid #06b6d4;
-    border-radius: 2px;
-    box-shadow:
-      0 0 0 9999px rgba(0, 0, 0, 0.78),
-      0 0 24px rgba(6, 182, 212, 0.7),
-      inset 0 0 12px rgba(6, 182, 212, 0.3);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: tour-spotlight-pulse 2s ease-in-out infinite;
-  }
-  @keyframes tour-spotlight-pulse {
-    0%, 100% { box-shadow: 0 0 0 9999px rgba(0,0,0,0.78), 0 0 24px rgba(6,182,212,0.7), inset 0 0 12px rgba(6,182,212,0.3); }
-    50%      { box-shadow: 0 0 0 9999px rgba(0,0,0,0.78), 0 0 32px rgba(6,182,212,0.9), inset 0 0 16px rgba(6,182,212,0.5); }
-  }
-  .tour-card {
-    position: absolute;
-    width: 300px;
-    background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
-    border: 3px outset #06b6d4;
-    padding: 12px 14px 10px;
-    pointer-events: auto;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.8), 0 0 14px rgba(6,182,212,0.4);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .tour-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-    border-bottom: 1px dashed #4a6a8a;
-  }
-  .tour-card-title {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 9px;
-    color: #06b6d4;
-    letter-spacing: 1px;
-    text-shadow: 0 0 4px rgba(6,182,212,0.6);
-  }
-  .tour-card-body {
-    font-size: 18px;
-    line-height: 1.25;
-    color: #d1d5db;
-    margin-bottom: 10px;
-    min-height: 64px;
-  }
-  .tour-card-body b { color: #06b6d4; }
-  .tour-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-  }
-  .tour-skip {
-    background: none;
-    border: none;
-    color: #4a6a8a;
-    font-family: 'VT323', monospace;
-    font-size: 15px;
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 4px 6px;
-  }
-  .tour-skip:hover { color: #8898a8; }
-  .tour-next {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 9px;
-    padding: 8px 14px;
-    background: linear-gradient(180deg, #2a3040, #1a1a2e);
-    color: #06b6d4;
-    border: 2px outset #06b6d4;
-    cursor: pointer;
-    letter-spacing: 1px;
-    text-shadow: 0 0 4px rgba(6,182,212,0.5);
-  }
-  .tour-next:hover { background: linear-gradient(180deg, #06b6d4, #0a4a5a); color: #fff; }
+  /* Field Handbook hidden state (class name is a legacy of the SSS tour layer) */
   .tour-hidden { display: none !important; }
 
-  /* SAA Agent Handbook panel */
+  /* TAA Field Handbook panel */
   #help-overlay {
     position: absolute;
     inset: 0;
@@ -2327,37 +1868,6 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-  }
-  /* UI icons at 2x: sheet 392x246 → 784x492 */
-  .hb-sprite.src-logs {
-    width: 50px; height: 64px;
-    background-image: url(sprites/spritesheet.png);
-    background-size: 784px 492px;
-    background-position: -158px -2px;
-  }
-  .hb-sprite.src-plants {
-    width: 52px; height: 64px;
-    background-image: url(sprites/spritesheet.png);
-    background-size: 784px 492px;
-    background-position: -212px -2px;
-  }
-  .hb-sprite.src-sensors {
-    width: 64px; height: 64px;
-    background-image: url(sprites/spritesheet.png);
-    background-size: 784px 492px;
-    background-position: -268px -2px;
-  }
-  /* Kim portrait — 0.5x for grid, 1x for callout. Sheet 404x306 */
-  .hb-sprite.src-crew-sm {
-    width: 48px; height: 48px;
-    background-image: url(sprites/kim/spritesheet.png);
-    background-size: 202px 153px;
-    background-position: -153.5px -0.5px;
-  }
-  .hb-sprite.src-crew-lg {
-    width: 96px; height: 96px;
-    background-image: url(sprites/kim/spritesheet.png);
-    background-position: -307px -1px;
   }
   .hb-source-label { font-size: 16px; color: #d1d5db; line-height: 1.1; }
   .hb-source-label b {
@@ -2548,7 +2058,6 @@
         <div id="scene-flash"></div>
         <canvas id="scene-fx-overlay" width="240" height="280"></canvas>
         <canvas id="scene-static" width="120" height="140"></canvas>
-        <div id="connection-screen" class="hidden"></div>
         <div id="hhh-hint"></div>
       </div>
     </div>
@@ -2606,28 +2115,11 @@
       </div>
     </div>
 
-    <!-- DORMANT — the SSS "Incoming Transmission" pickup this bridge supersedes
-         (#c2-alert above is the in-world C2 manifestation). Kept for reference. -->
-    <div id="transmission-btn" class="hidden">
-      <div class="tx-scanlines"></div>
-      <div class="tx-led" id="tx-led"></div>
-      <div class="tx-bars" id="tx-bars">
-        <div class="tx-bar"></div>
-        <div class="tx-bar"></div>
-        <div class="tx-bar"></div>
-        <div class="tx-bar"></div>
-        <div class="tx-bar"></div>
-      </div>
-      <span class="tx-text" id="tx-text"></span><span class="tx-cursor" id="tx-cursor"></span>
-    </div>
     <button id="dev-log-btn" class="hidden" type="button">[ LOG VIEWER ]</button>
 
     <img id="insignia-mark" src="UI/taa_insignia.png" alt="TAA" onerror="this.style.display='none'">
     <div id="title-vignette"></div>
     <div id="title-scanlines"></div>
-    <!-- (the "press enter or click begin" prompt line was removed 2026-07-15 — author
-         call: SSS had no equivalent and it was redundant. Every JS ref to #prompt is
-         null-guarded; Enter on the name field still begins.) -->
   </div>
 
   <!-- Victory screen overlay -->
@@ -2655,9 +2147,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Campaign 2 character creation overlay -->
-  <div id="char-create" class="overlay hidden"></div>
 
   <!-- TAA Field Handbook — opens on click of the TAA badge. Tabs: HOW TO PLAY, AGENT FILE. -->
   <div id="help-overlay" class="tour-hidden">
@@ -2780,7 +2269,7 @@
           <h3>THE VERDICT</h3>
           <p>Every clue you uncover is logged to your <b>Field Notes</b>. Some clues are <b>required</b> to settle the thread; others are <b>extra insight</b> &mdash; not needed, but worth points and worth knowing. When you have the required clues, return to the <b>anchor</b> location and <b>Validate the Record</b>: the candidate records go up, and you name the genuine one. Guess early if you dare &mdash; a wrong call costs you.</p>
           <!-- (no READING THE ROOM here — C2 data has zero moodShift beats; the mood
-               system only fires in Campaign 1. Author call 2026-07-15.) -->
+               system only fires in Campaign 1.) -->
         </div>
 
         <div class="help-tab-panel hb-c2" data-panel="file">
@@ -2837,21 +2326,6 @@
           <p><b>FORENSICS</b> &mdash; you trust the record itself: ink, fiber, signal. Strong on flaws in the artifact.</p>
           <p><b>TESTIMONY</b> &mdash; you trust the witnesses. Strong where voices contradict the record.</p>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Tutorial spotlight + card (all positioning set in JS) -->
-  <div id="tour-layer">
-    <div id="tour-spotlight" class="tour-spotlight tour-hidden"></div>
-    <div id="tour-card" class="tour-card tour-hidden">
-      <div class="tour-card-header">
-        <div class="tour-card-title" id="tour-title">TITLE</div>
-      </div>
-      <div class="tour-card-body" id="tour-body">body</div>
-      <div class="tour-card-footer">
-        <button class="tour-skip" id="tour-skip" type="button">Skip tour</button>
-        <button class="tour-next" id="tour-next" type="button">NEXT &rarr;</button>
       </div>
     </div>
   </div>
@@ -3422,11 +2896,6 @@
 (function() {
   'use strict';
 
-  // ── Campaign registry: REMOVED (HHH cleanup) ──
-  // The SSS-era `GAME_DATA.campaigns = [...]` registry was built at load but never read
-  // (setActiveCampaign is neutralized below and reads only GAME_DATA.ranks/personalities).
-  // It was the last load-time consumer of the CAMPAIGN_2_DATA stub. Dropped.
-
   // ═══════════════════════════════════════════════════════════════
   // ⚠️ HHH C2 BUILD MODE — TEMPORARY DEV SCAFFOLD. ★ FLIP TO false BEFORE SHIP ★
   // While true (the whole C2 build): DEV_MODE is forced ON at every boot (ignoring
@@ -3441,20 +2910,17 @@
 
   // ── HHH C2: active-campaign data accessor ──
   // STATE.campaign (1 | 2) picks the content tree: hhh_data.js (C1) or
-  // hhh_campaign_2_data.js (C2). All live engine reads go through activeData();
-  // the dormant SSS branches keyed on STATE.currentCampaign === 1 stay dead
-  // forever (HHH C2 deliberately does NOT reuse the SSS C2 layout/victory paths).
+  // hhh_campaign_2_data.js (C2). All live engine reads go through activeData().
   function inCampaign2() { return STATE && STATE.campaign === 2; }
   function activeData() {
     return (inCampaign2() && window.HHH_C2_DATA) ? window.HHH_C2_DATA : HHH_DATA;
   }
   // The C2 bridge gate: real flag, or always-on while building C2.
-  // HHH C2 (ship fix 2026-07-15): ALSO consult the persisted save. STATE boots as
-  // defaultState() and is only hydrated on Resume, so on a fresh page load the title
-  // settles with STATE.campaign1Complete=false even for a finished-C1 profile — the
-  // bridge (and the C2-victory cross-rank line) must read the durable save-level fact,
-  // like savedPlayerName()/savedC1Companion() already do. (Masked under C2_BUILD_MODE,
-  // which short-circuits this gate true; caught by the shipped-mode live pass.)
+  // ALSO consults the persisted save: STATE boots as defaultState() and is only
+  // hydrated on Resume, so on a fresh page load the title settles with
+  // STATE.campaign1Complete=false even for a finished-C1 profile — the bridge
+  // (and the C2-victory cross-rank line) must read the durable save-level fact,
+  // like savedPlayerName()/savedC1Companion() already do.
   function c1Finished() {
     if (C2_BUILD_MODE || !!(STATE && STATE.campaign1Complete)) return true;
     const saved = loadState();
@@ -3495,14 +2961,12 @@
   const titleStars    = $('title-stars');
   const victoryScreen = $('victory-screen');
   const resumePrompt  = $('resume-prompt');
-  const charCreate    = $('char-create');
   const nameInput     = $('name-input');
   const beginBtn      = $('begin-btn');
-  const transmissionBtn = $('transmission-btn');
 
   // ── Sprite helpers ──────────────────────────────────────────────
   // Try to load a PNG. Returns true (async) if it exists, false otherwise.
-  // Use: tryLoadImg(imgEl, 'sprites/scene_iss.png')
+  // Use: tryLoadImg(imgEl, 'scene/scene_taa_briefing.png')
   function tryLoadImg(imgEl, src) {
     return new Promise(resolve => {
       const img = new Image();
@@ -3526,19 +2990,6 @@
     // Use embedded frame data if available (works with file:// protocol)
     // Fall back to fetch for backwards compatibility with JSON files
     let framesPromise;
-    if (typeof SPRITE_FRAMES !== 'undefined') {
-      if (spriteSrc === 'sprites/spritesheet.png' && SPRITE_FRAMES.ui) {
-        framesPromise = Promise.resolve(SPRITE_FRAMES.ui);
-      } else if (spriteSrc === 'sprites/badge_spritesheet.png' && SPRITE_FRAMES.badges) {
-        framesPromise = Promise.resolve(SPRITE_FRAMES.badges);
-      } else if (spriteSrc === 'sprites/alien/spritesheet.png' && SPRITE_FRAMES.alien) {
-        framesPromise = Promise.resolve(SPRITE_FRAMES.alien);
-      } else if (spriteSrc.match(/\/sprites\/\w+\/spritesheet\.png$/) && SPRITE_FRAMES.crew) {
-        framesPromise = Promise.resolve(SPRITE_FRAMES.crew);
-      }
-    }
-    // (Campaign-2 embedded frame branch REMOVED in HHH cleanup — CAMPAIGN_2_FRAMES stub dropped;
-    //  HHH uses HHH_FRAMES below. Any stray sprites/c2/* request now falls to the fetch fallback.)
     // HHH embedded frame data (npc/*, UI/*) — keyed by PNG path; works on file:// (no fetch).
     if (!framesPromise && typeof HHH_FRAMES !== 'undefined' && HHH_FRAMES[spriteSrc]) {
       framesPromise = Promise.resolve(HHH_FRAMES[spriteSrc]);
@@ -3566,38 +3017,10 @@
     });
   }
 
-  // ── UI Spritesheet (consolidated non-crew sprites) ──────────────
-  let uiSheetData = null; // { img, frameMap: { filename: {x,y,w,h} } }
-  // Campaign 2 has its own parallel UI sheet loaded alongside C1.
-  // drawUiFrame() below checks C1 first, then falls through to C2 — any frame
-  // name that lives only in spritesheet_c2 is still reachable via sprites.portrait
-  // or sprites.actionIcon without changing the call site.
-  let uiSheetDataC2 = null;
-
-  function loadUiSheet() {
-    return loadSpritesheet('sprites/spritesheet.png', 'sprites/spritesheet.json').then(data => {
-      const frameMap = {};
-      data.frames.forEach(f => { frameMap[f.filename] = f.frame; });
-      uiSheetData = { img: data.img, frameMap: frameMap };
-      return uiSheetData;
-    }).catch(() => {});
-  }
-
-  function loadUiSheetC2() {
-    return loadSpritesheet('sprites/c2/spritesheet_c2.png', 'sprites/c2/spritesheet_c2.json').then(data => {
-      const frameMap = {};
-      data.frames.forEach(f => { frameMap[f.filename] = f.frame; });
-      uiSheetDataC2 = { img: data.img, frameMap: frameMap };
-      return uiSheetDataC2;
-    }).catch(() => {});
-  }
-
   // ── Badge Spritesheet (separate, 512px badges) ─────────────────
   let badgeSheetData = null; // { img, frameMap: { filename: {x,y,w,h} } }
-  // Campaign 2 badges live in their own separate sheet with their own
-  // set of 5 filenames (federation_trainee → galactic_botanist). Campaign-aware
-  // helpers getActiveBadgeSheet() / getActiveBadgeFrames() below pick the right
-  // sheet + frame name array based on STATE.currentCampaign.
+  // HHH C2 badges live in their own sheet (c2/ui/spritesheet_badges.png);
+  // getActiveBadgeSheet() below picks the sheet by inCampaign2().
   let badgeSheetDataC2 = null;
 
   function loadBadgeSheet() {
@@ -3646,37 +3069,6 @@
     ctx.drawImage(alienSheetData.img, frame.x, frame.y, frame.w, frame.h, 0, 0, canvas.width, canvas.height);
   }
 
-  // Draw a named frame from the UI spritesheet onto a canvas.
-  // checks Campaign 1 sheet first, then falls through to Campaign 2
-  // sheet so existing sprites.portrait / sprites.actionIcon fields can reference
-  // frames from either sheet by filename.
-  function drawUiFrame(canvas, frameName) {
-    let sheet = null;
-    let frame = null;
-    if (uiSheetData && uiSheetData.frameMap[frameName]) {
-      sheet = uiSheetData;
-      frame = uiSheetData.frameMap[frameName];
-    } else if (uiSheetDataC2 && uiSheetDataC2.frameMap[frameName]) {
-      sheet = uiSheetDataC2;
-      frame = uiSheetDataC2.frameMap[frameName];
-    }
-    if (!sheet || !frame) return;
-    const ctx = canvas.getContext('2d');
-    ctx.imageSmoothingEnabled = false;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const cw = canvas.width;
-    const ch = canvas.height;
-    if (frame.w === cw && frame.h === ch) {
-      ctx.drawImage(sheet.img, frame.x, frame.y, cw, ch, 0, 0, cw, ch);
-    } else {
-      const scale = Math.min(cw / frame.w, ch / frame.h);
-      const dw = frame.w * scale;
-      const dh = frame.h * scale;
-      ctx.drawImage(sheet.img, frame.x, frame.y, frame.w, frame.h,
-        (cw - dw) / 2, (ch - dh) / 2, dw, dh);
-    }
-  }
-
   // ── Portrait system (spritesheet-based) ─────────────────────────
   // Build portrait HTML — canvas for spritesheet, or emoji fallback
   function portraitHtml(clue) {
@@ -3714,18 +3106,18 @@
   }
 
   // ── HHH C2: archive-figure MOTION — slow roll bar + subtle flicker ──
-  // Author call 2026-07-06 ("recovered tape", not a strobe). Values are TUNABLE —
+  // Reads as "recovered tape", not a strobe. Values are TUNABLE —
   // tuned in c2/resources/demos/locationfx/lvl2.html Archive tab (Copy values emits
   // this const). Base filter numbers must match the .archive-figure CSS above.
   // One guarded rAF: near-zero work unless an archive-figure portrait is on screen.
   // Set rollOpacity/flickerAmt to 0 to disable either. Honors prefers-reduced-motion.
-  // AUTHOR-TUNED 2026-07-06 (lvl2 demo Archive tab): faint wide roll + low quick flicker.
+  // AUTHOR-TUNED (lvl2 demo Archive tab): faint wide roll + low quick flicker.
   const AF_MOTION = { rollOpacity: 0.09, rollSecs: 8.0, rollHeight: 24, flickerAmt: 0.06, flickerSpeed: 4.8 };
   const AF_BASE = { sat: 0.47, con: 1.09, bri: 1.02 };   // = the .archive-figure CSS filter
   // HHH C2 (L4): the Nova ARCHIVE-GHOST motion — heavier than AF, plus an occasional
   // 1-frame horizontal GLITCH displacement (§2.5). GHOST_BASE must match the .archive-ghost
   // CSS filter/opacity. glitchRate = expected glitches/sec; glitchPx = displacement at 3× render.
-  // AUTHOR-TUNED 2026-07-07 (lvl4 demo, Nova ghost tab): faint slow roll + stronger flicker +
+  // AUTHOR-TUNED (lvl4 demo, Nova ghost tab): faint slow roll + stronger flicker +
   // rarer/bigger glitch. Set any *0 to disable.
   const GHOST_MOTION = { rollOpacity: 0.09, rollSecs: 9, rollHeight: 30, flickerAmt: 0.19, flickerSpeed: 5, glitchRate: 0.3, glitchPx: 10, glitchMs: 70 };
   const GHOST_BASE = { sat: 0.30, con: 1.05, bri: 0.96 };  // = the .archive-ghost CSS filter
@@ -3742,7 +3134,7 @@
   // inset fallback (values read from that mask's screen bbox). Math.random()-free
   // (resume/harness safe). LR_BASE must match the .live-record CSS filter.
   // AUTHOR-TUNABLE in c2/resources/demos/locationfx/lvl5.html (Live Record tab).
-  // AUTHOR-TUNED 2026-07-08 (lvl5 demo, Live Record tab): tear + jolt carry the glitch;
+  // AUTHOR-TUNED (lvl5 demo, Live Record tab): tear + jolt carry the glitch;
   // the red sweep band is authored OFF (sweepOpacity 0 — layer kept, zeroed).
   const LIVE_MOTION = {
     tearPeriod: 2.7, tearMs: 140, tearPx: 3, tearHeight: 18,          // signal tear (px at 1×)
@@ -3754,7 +3146,7 @@
   const LIVE_SCREEN = { top: 10.4, right: 6.4, bottom: 10.4, left: 9.4, round: 6 };  // % insets, from the mask bbox
   const LR_BASE = { sat: 1.08, con: 1.06, bri: 1.0 };   // = the .live-record CSS filter
   const lrHash = (n) => ((n * 2654435761) >>> 0);       // deterministic per-cycle positions
-  // HHH C2 L6: finale UI consts — AUTHOR-TUNED 2026-07-13 in the finale demo
+  // HHH C2 L6: finale UI consts — AUTHOR-TUNED in the finale demo
   // (c2/resources/demos/finale/index.html). DOSSIER_UI drives the Case Dossier view
   // (showDossier; redact flicker runs in afMotionLoop below, deterministic).
   // VERDICT_UI.lens maps discipline → the ending index whose card carries the dim
@@ -3818,8 +3210,8 @@
         band.style.opacity = M.sweepOpacity;
       } else band.style.opacity = 0;
     }
-    // Flicker the SCREEN COPY, not the base art — the bezel must not flicker (author call
-    // 2026-07-08). The copy carries LR_BASE so it matches the base image's CSS filter.
+    // Flicker the SCREEN COPY, not the base art — the bezel must not flicker.
+    // The copy carries LR_BASE so it matches the base image's CSS filter.
     const flickTarget = jolt || wrap.querySelector('canvas, img');
     if (flickTarget && M.flickerAmt > 0) {
       const fs = M.flickerSpeed,
@@ -3882,22 +3274,12 @@
     }
   })();
 
-  // Build action icon — small canvas from spritesheet portrait, or emoji fallback
-  //
-  // Precedence order: explicit actionIcon wins over spritesheet. This
-  // is a no-op for Campaign 1 (no C1 crew clue sets both) but lets Campaign 2
-  // crew override the auto-drawn spritesheet icon with a species portrait.
-  // E.g. Vressk crew has `spritesheet: "sprites/c2/vressk_botanist/..."` for the
-  // speaker bar talk anim AND `actionIcon: "portrait_species_vressk.png"` so
-  // the button shows the species face instead of the NPC face.
+  // Build action icon — precedence: alienIcon (Zel'keth mood sheet) → crew
+  // spritesheet portrait → loose-PNG iconImg → emoji fallback.
   function actionIconHtml(clue) {
     const sprites = clue.sprites || {};
     if (sprites.alienIcon) {
       return '<canvas class="action-icon-canvas" data-alien-frame="' + sprites.alienIcon + '" width="96" height="96"></canvas>';
-    }
-    if (sprites.actionIcon) {
-      // UI spritesheet canvas icon (drawUiFrame checks both C1 and C2 sheets)
-      return '<canvas class="action-icon-canvas" data-ui-frame="' + sprites.actionIcon + '" width="96" height="96"></canvas>';
     }
     if (sprites.spritesheet) {
       // Crew spritesheet canvas icon — will be drawn after DOM insert
@@ -3933,9 +3315,6 @@
         // Crew spritesheet
         loadSpritesheet(canvas.dataset.sheet, canvas.dataset.json)
           .then(data => drawPortraitIcon(canvas, data)).catch(() => {});
-      } else if (canvas.dataset.uiFrame) {
-        // UI spritesheet
-        drawUiFrame(canvas, canvas.dataset.uiFrame);
       }
     });
   }
@@ -4039,7 +3418,7 @@
     if (cursor) cursor.remove();
   }
 
-  // Pause/resume — used by tutorial overlays so text doesn't type while a tip is up.
+  // Pause/resume — used by the Field Handbook so text doesn't type while it's open.
   // Event-driven (no polling): clears the interval on pause, re-creates it on resume.
   function pauseTypewriter() {
     if (typewriterTimer) { clearInterval(typewriterTimer); typewriterTimer = null; }
@@ -4115,10 +3494,7 @@
     }
     typewriterResumeFn = startTicking;
 
-    // If a tutorial is up when typewriter starts, don't begin ticking yet
-    if (!(window.SSS_Tutorial && window.SSS_Tutorial.isActive())) {
-      startTicking();
-    }
+    startTicking();
   }
 
   // ── State ───────────────────────────────────────────────────────
@@ -4263,7 +3639,6 @@
       resolveNag: levelData.resolveNag || 'The record is incomplete',   // "not enough yet" message on the resolve button
       hideResolveOffAnchor: !!levelData.hideResolveOffAnchor,  // §4.2/§4.3: hide resolve btn off the anchor (L0/L7)
       ranksUp: levelData.ranksUp,                    // undefined ⇒ rank-up; L0/L7 set false
-      connectionScreen: false,                       // never use the connection screen
       // HHH C2 — Validate-the-Record framing on the reused diagnosis screen:
       diagnosisPrompt: levelData.diagnosisPrompt || null,             // header ("Which record is genuine?")
       diagnosisConfirmLabel: levelData.diagnosisConfirmLabel || null, // confirm button ("Validate")
@@ -4273,7 +3648,6 @@
       solutionChoice: levelData.solutionChoice || null,  // the 3-way verdict (SSS screen, finale-restyled)
       dossier: levelData.dossier || null,                // Case Dossier facets + assembled profile
       confrontation: levelData.confrontation || null     // the resolve-triggered final exchange
-      // Other optional SSS C2 fields (callHomeHints) left undefined.
     };
   }
 
@@ -4534,15 +3908,6 @@
       return cs.sourceStates[src] && cs.sourceStates[src].state === state;
     }
     // Campaign 2: player species checks for cross-campaign dialogue gating.
-    // playerSpecies: "alien" matches any non-human; otherwise exact match.
-    if (req.playerSpecies) {
-      if (req.playerSpecies === 'alien') return STATE.playerSpecies !== 'human';
-      return STATE.playerSpecies === req.playerSpecies;
-    }
-    if (req.playerSpeciesNot) {
-      if (req.playerSpeciesNot === 'human') return STATE.playerSpecies !== 'human';
-      return STATE.playerSpecies !== req.playerSpeciesNot;
-    }
     return true;
   }
 
@@ -4585,7 +3950,6 @@
       if (_dzLvl && _dzLvl.dossier && (_dzLvl.dossier.facets || []).some(f => f.clue === node.revealsClue)) {
         dossierPulse = true;
       }
-      if (window.SSS_Tutorial) SSS_Tutorial.onClueRevealed();
     }
 
     // Bonus insight + mood shift only on first visit (prevent double-counting)
@@ -4985,7 +4349,6 @@
         '</div>' +
         '<span class="back-link" onclick="SSS.showFieldNotes()">← <img class="fn-icon" src="UI/icon_field_guide.png" alt=""> Field Notes</span>' +
       '</div>';
-    if (window.SSS_Tutorial) SSS_Tutorial.onSpeakerSet(sourceKey);
 
     // Draw portrait
     const portraitCanvas = document.getElementById('portrait-canvas');
@@ -4998,8 +4361,6 @@
           ctx.imageSmoothingEnabled = false;
           drawCrewFrame(ctx, data.img, data.frames[data.frames.length - 1].frame);
         }).catch(() => {});
-      } else if (portraitCanvas.dataset.uiFrame) {
-        drawUiFrame(portraitCanvas, portraitCanvas.dataset.uiFrame);
       }
     }
 
@@ -5089,8 +4450,6 @@
 
   function updateActionButtons(fullRebuild) {
     const caseData = GAME_DATA.cases[STATE.currentCase];
-    const inC2 = STATE.currentCampaign === 1;
-
     // HHH §4.1: render only the CURRENT location's sources. The Stabilize gate
     // below still counts ALL clues in the level (locked decision: found ≥ total).
     let visibleClues = caseData.sourceLocation
@@ -5104,15 +4463,6 @@
 
     if (fullRebuild || !actionGrid.children.length) {
       // Full rebuild — only on first render or screen transitions.
-      // for Campaign 2, move Diagnose into the grid as the 6th cell.
-      // Re-parent to actionArea first so innerHTML='' on the grid can't wipe
-      // the diagnose element (preserving its click listener). Only touch the
-      // parent on full rebuild so lightweight updates (called on every
-      // dialogue node render) don't bounce diagnose around.
-      actionArea.classList.toggle('campaign-2', inC2);
-      if (diagnoseBtn.parentNode === actionGrid) {
-        actionArea.appendChild(diagnoseBtn);
-      }
       actionGrid.innerHTML = '';
       visibleClues.forEach(clue => {
         const status = getSourceStatus(clue);
@@ -5127,7 +4477,6 @@
         btn.addEventListener('click', () => showClue(clue));
         actionGrid.appendChild(btn);
       });
-      if (inC2) actionGrid.appendChild(diagnoseBtn);
       fillActionIcons();
     } else {
       // Lightweight update — toggle found/visited/locked state on existing buttons
@@ -5458,7 +4807,7 @@
   let locFxRAF = null, locFxBirds = [], locFxDust = [], locFxSmoke = [], locFxSnow = [], locFxNextBird = 0,
       locFxMask = null, locFxMaskPath = null;
   // ── HHH C2 L6: fx.holo — the dais hologram (wireframe polyhedron) ────────
-  // Author-picked 2026-07-13 from the lvl6 demo's 4-way comparison (thread-diagram /
+  // Author-picked from the lvl6 demo's 4-way comparison (thread-diagram /
   // records / Virel / wireframe — variants 1–3 remain DEMO-ONLY; only type 4 ships).
   // Chunky-pixel rule: drawn on a tiny offscreen canvas (holo.size logical px) and
   // blitted at EXACTLY ×2 with smoothing OFF — one hologram pixel = one art pixel,
@@ -5656,7 +5005,7 @@
         }
       }
       if (fx.snow) {                                    // HHH C2 (L2 Leningrad): full-frame falling snow —
-        // NO mask, per the author's 2026-07-04 correction: flakes fall across the whole
+        // NO mask: flakes fall across the whole
         // frame and fade out approaching the bottom edge. Tuned in c2/resources/demos/
         // locationfx/lvl2.html. Spec: { count, speed, drift, size, opacity, color, fadeBottom% }.
         const s = fx.snow, col = hexToRgbStr(s.color), count = Math.round(s.count);
@@ -5817,7 +5166,7 @@
       }
       // HHH C2 L6: the dais hologram — wireframe polyhedron (fx.holo, type 4 ONLY;
       // variants 1–3 live in the lvl6 demo for comparison and never shipped).
-      // AUTHOR-TUNED 2026-07-13. Offscreen recompute is fps-stepped; the ×2 blit
+      // AUTHOR-TUNED. Offscreen recompute is fps-stepped; the ×2 blit
       // runs every frame (cheap). Deterministic throughout (lrHash, time-based
       // rotation — no accumulated state, resume-safe).
       if (fx.holo && fx.holo.type === 4) {
@@ -5992,96 +5341,15 @@
       loadScene(caseData, STATE.currentCase);
     }
 
-    // Connection screen for first contact cases
-    if (caseData.connectionScreen) {
-      startConnectionScreen();
-    } else {
-      stopConnectionScreen();
-    }
+    renderInfo(
+      '<div class="info-header cyan">Incoming Dispatch</div>' +
+      '<div class="info-body"><p>' + escHtml(caseData.briefing).replace(/\n/g, '<br>') + '</p></div>' +
+      '<button class="retro-btn accent" onclick="SSS.beginInvestigation()">Begin Investigation \u2192</button>'
+    );
 
-    // Campaign 2 briefings show Nova + Zel'keth handler portraits
-    const handlersHtml = (STATE.currentCampaign === 1)
-      ? '<div class="briefing-handlers">' +
-          '<div class="handler-portrait">' +
-            '<canvas id="briefing-nova" width="96" height="96"></canvas>' +
-            '<div class="handler-name">Dr. Nova</div>' +
-          '</div>' +
-          '<div class="handler-portrait">' +
-            '<canvas id="briefing-zelketh" width="96" height="96"></canvas>' +
-            '<div class="handler-name">Zel\'keth</div>' +
-          '</div>' +
-        '</div>'
-      : '';
-
-    if (caseData.connectionScreen) {
-      // Connection screen cases: show pulsing header, delay briefing until
-      // the connection animation completes, then typewrite the text in.
-      // Use \n with white-space:pre-line so line breaks render DURING typing
-      // (the typewriter strips HTML tags, so <br> would collapse until finish).
-      const briefingText = escHtml(caseData.briefing);
-      renderInfo(
-        '<div class="info-header cyan briefing-header-pulse">Incoming Dispatch</div>' +
-        '<div class="info-body"><p id="briefing-text-target" style="white-space:pre-line;"></p></div>' +
-        '<div id="briefing-after-text" style="display:none">' +
-          '<button class="retro-btn accent" onclick="SSS.beginInvestigation()">Begin Investigation \u2192</button>' +
-        '</div>'
-      );
-
-      const connDelay = 300 + CONN_LINES.length * 250 + 1000;
-      setTimeout(() => {
-        const header = infoArea.querySelector('.briefing-header-pulse');
-        if (header) header.classList.remove('briefing-header-pulse');
-        const textTarget = document.getElementById('briefing-text-target');
-        const afterText = document.getElementById('briefing-after-text');
-        if (textTarget) {
-          typewriteText(textTarget, briefingText, 0, () => {
-            if (afterText) afterText.style.display = '';
-          });
-        }
-      }, connDelay);
-    } else {
-      renderInfo(
-        '<div class="info-header cyan">Incoming Dispatch</div>' +
-        handlersHtml +
-        '<div class="info-body"><p>' + escHtml(caseData.briefing).replace(/\n/g, '<br>') + '</p></div>' +
-        '<button class="retro-btn accent" onclick="SSS.beginInvestigation()">Begin Investigation \u2192</button>'
-      );
-    }
-
-    // Draw handler portraits after DOM insert
-    if (STATE.currentCampaign === 1) {
-      const novaCanvas = document.getElementById('briefing-nova');
-      if (novaCanvas) {
-        // Case 6 (bonus): Nova is physically present — use unmasked portrait
-        const caseData = GAME_DATA.cases[STATE.currentCase];
-        const novaSheet = (caseData && caseData.isBonus)
-          ? 'sprites/c2/nova/spritesheet_unmasked.png'
-          : 'sprites/c2/nova/spritesheet.png';
-        const novaJson = (caseData && caseData.isBonus)
-          ? 'sprites/c2/nova/spritesheet_unmasked.json'
-          : 'sprites/c2/nova/spritesheet.json';
-        loadSpritesheet(novaSheet, novaJson)
-          .then(data => {
-            const ctx = novaCanvas.getContext('2d');
-            ctx.imageSmoothingEnabled = false;
-            drawCrewFrame(ctx, data.img, data.frames[data.frames.length - 1].frame);
-          }).catch(() => {});
-      }
-      const zelCanvas = document.getElementById('briefing-zelketh');
-      if (zelCanvas) {
-        if (alienSheetData) {
-          drawAlienFrame(zelCanvas, 'portrait_alien_neutral.png');
-        } else {
-          loadAlienSheet().then(() => drawAlienFrame(zelCanvas, 'portrait_alien_neutral.png'));
-        }
-      }
-    }
-
-    if (window.SSS_Tutorial) SSS_Tutorial.onBriefingShown(STATE.currentCase);
   }
 
   function beginInvestigation() {
-    stopConnectionScreen();
     setScreen('INVESTIGATING');
     fieldNotesScroll = 0;
     initSourceStates();
@@ -6089,167 +5357,12 @@
     showFieldNotes();
     updateLocationBar(true);          // HHH §4.1: render the level's location dots
     // (Ambient FX already started in loadScene — runs through the briefing into investigation.)
-    if (window.SSS_Tutorial) SSS_Tutorial.onInvestigationStarted(STATE.currentCase);
     // Event teach: a few moments after dropping into the level, point out the
     // action grid. request() dedups, so re-entering won't re-show it.
     const introTeach = currentLevelTeaches().onInvestigationStart;
     if (introTeach && window.HHH_Teach) {
       setTimeout(() => HHH_Teach.request(introTeach), introTeach.delay || 1400);
     }
-  }
-
-  // ── Connection screen (DOS/Matrix typing for Case 6 briefing) ───
-  const connScreenEl = $('connection-screen');
-  let connTimers = [];
-  const CONN_LINES = [
-    'SOLAR AGRICULTURAL AUTHORITY',
-    'SECURE CHANNEL v4.2.1',
-    '',
-    '> INITIATING CONTACT PROTOCOL...',
-    '> SCANNING FREQUENCY BANDS......... OK',
-    '> ALIEN VESSEL DETECTED AT L2 HAYES',
-    '> TRANSLATING PROTOCOLS...',
-    '',
-    '  [████████████████████░░░░] 78%',
-    '  [█████████████████████░░░] 84%',
-    '  [████████████████████████] 100%',
-    '',
-    '> TRANSLATION MATRIX LOADED',
-    '> ATMOSPHERIC BRIDGE: ACTIVE',
-    '> BIOLOGICAL SCAN: NON-HOSTILE',
-    '',
-    '> ESTABLISHING SECURE CHANNEL...',
-    '',
-    '  ▓▓▓ SIGNAL LOCKED ▓▓▓',
-    '',
-    '> READY FOR DIPLOMATIC EXCHANGE',
-    '> AWAITING FIELD AGENT...',
-  ];
-
-  function startConnectionScreen() {
-    connScreenEl.classList.remove('hidden');
-    connScreenEl.innerHTML = '';
-    connTimers.forEach(clearTimeout);
-    connTimers = [];
-
-    CONN_LINES.forEach((line, i) => {
-      const el = document.createElement('div');
-      el.className = 'conn-line';
-      if (!line) { el.innerHTML = '&nbsp;'; }
-      else { el.textContent = line; }
-      connScreenEl.appendChild(el);
-
-      connTimers.push(setTimeout(() => {
-        el.classList.add('visible');
-        // Dim older lines to create scrolling feel
-        const all = connScreenEl.querySelectorAll('.conn-line.visible');
-        if (all.length > 10) {
-          for (let j = 0; j < all.length - 10; j++) all[j].classList.add('dim');
-        }
-      }, 300 + i * 250));
-    });
-
-    // After all lines typed, loop with cursor blink
-    const loopStart = 300 + CONN_LINES.length * 250 + 1000;
-    connTimers.push(setTimeout(() => {
-      const cursor = document.createElement('div');
-      cursor.className = 'conn-line visible';
-      cursor.innerHTML = '> <span class="conn-cursor">_</span>';
-      connScreenEl.appendChild(cursor);
-    }, loopStart));
-  }
-
-  function stopConnectionScreen() {
-    connTimers.forEach(clearTimeout);
-    connTimers = [];
-    connScreenEl.classList.add('hidden');
-    connScreenEl.innerHTML = '';
-  }
-
-  // "Call Home" — one-use hint per case (Campaign 2 only). Shows a message from
-  // Nova/Zel'keth keyed to how many clues the player has found, using the
-  // per-case scripts in caseData.callHomeHints (low / mid / full).
-  function callHome() {
-    if (STATE.currentCampaign !== 1) return;
-    if (STATE.caseState.calledHome) return;
-    STATE.caseState.calledHome = true;
-    saveState();
-
-    const found = STATE.caseState.cluesFound.length;
-    const caseData = GAME_DATA.cases[STATE.currentCase];
-    const total = caseData.clues.length;
-    const hints = caseData.callHomeHints;
-    let hint;
-    if (found >= total) {
-      hint = (hints && hints.full) || "You have everything you need. What\u2019s the diagnosis?";
-    } else if (found >= 2) {
-      hint = (hints && hints.mid) || "You\u2019re getting close. Check the sources you haven\u2019t visited yet \u2014 the answer is in the gaps.";
-    } else {
-      hint = (hints && hints.low) || "Take your time. Talk to the crew, check the sensors, examine the plants. The clues are there.";
-    }
-
-    stopTalkAnim();
-    stopTypewriter();
-
-    const novaClue = {
-      icon: '\ud83d\udce1',
-      sprites: {
-        spritesheet:     'sprites/c2/nova/spritesheet.png',
-        spritesheetJson: 'sprites/c2/nova/spritesheet.json'
-      }
-    };
-
-    speakerBar.innerHTML =
-      '<div class="speaker-header">' +
-        portraitHtml(novaClue) +
-        '<div class="speaker-info">' +
-          '<div class="speaker-name">Dr. Nova</div>' +
-          '<div class="speaker-role">Remote Handler</div>' +
-        '</div>' +
-        '<span class="back-link" onclick="SSS.showFieldNotes()">\u2190 <img class="fn-icon" src="UI/icon_field_guide.png" alt=""> Field Notes</span>' +
-      '</div>';
-
-    const portraitCanvas = document.getElementById('portrait-canvas');
-    if (portraitCanvas) {
-      loadSpritesheet(novaClue.sprites.spritesheet, novaClue.sprites.spritesheetJson)
-        .then(data => {
-          const ctx = portraitCanvas.getContext('2d');
-          ctx.imageSmoothingEnabled = false;
-          drawCrewFrame(ctx, data.img, data.frames[data.frames.length - 1].frame);
-        }).catch(() => {});
-    }
-
-    const optionsHtml = '<div class="dialogue-options">' +
-      '<div class="dialogue-option" data-opt-idx="0">\u2190 Back to Field Notes</div>' +
-      '</div>';
-
-    renderInfo(
-      '<div class="info-body"><p id="dialogue-text-target"></p></div>' +
-      '<div id="dialogue-after-text" style="display:none">' + optionsHtml + '</div>'
-    );
-
-    // Defer typewriter start so the current click event (from the Call Home
-    // button inside infoArea) finishes propagating before the typewriter's
-    // skip-on-click handler is attached. Without this, the original click
-    // bubbles to infoArea and immediately skips the typewriter.
-    setTimeout(() => {
-      startTalkAnim(novaClue);
-
-      const textTarget = document.getElementById('dialogue-text-target');
-      const afterText = document.getElementById('dialogue-after-text');
-      if (textTarget) {
-        typewriteText(textTarget, escHtml(hint), 0, () => {
-          stopTalkAnim();
-          if (afterText) afterText.style.display = '';
-          infoArea.querySelectorAll('.dialogue-option').forEach(el => {
-            el.addEventListener('click', e => {
-              e.stopPropagation();
-              showFieldNotes();
-            });
-          });
-        });
-      }
-    }, 0);
   }
 
   function showFieldNotes() {
@@ -6269,7 +5382,7 @@
     // expect it before they've started turning up evidence.
     const lvlHints = (activeData().levels[STATE.currentLevel] || {}).taaCommsHints;
     const showComms = lvlHints && cs.cluesFound.length >= 1;
-    const callHomeHtml = showComms
+    const commsHtml = showComms
       ? '<span class="call-home-btn' + (STATE.taaCommsUsed ? ' used' : '') + '" onclick="SSS.taaComms()">\ud83d\udce1 TAA Comms</span>'
       : '';
 
@@ -6279,7 +5392,7 @@
       ? '<span id="dossier-btn" class="call-home-btn' + (dossierPulse ? ' dossier-new' : '') + '" onclick="SSS.showDossier()">\ud83d\uddc2 Case Dossier</span>'
       : '';
 
-    let html = '<div class="info-header cyan">' + callHomeHtml + dossierHtml + '<img class="fn-icon" src="UI/icon_field_guide.png" alt=""> Field Notes</div>';
+    let html = '<div class="info-header cyan">' + commsHtml + dossierHtml + '<img class="fn-icon" src="UI/icon_field_guide.png" alt=""> Field Notes</div>';
 
     if (cs.cluesFound.length === 0) {
       html += '<div class="info-body"><p>No clues yet. Start investigating!</p></div>';
@@ -6330,7 +5443,7 @@
   // its clue is logged; all facets found → the assembled profile (the delegate's
   // face + the confront cue). A presentational LENS over Field Notes — clues
   // still live there; this view only re-reads caseState. Author-tuned in the
-  // finale demo 2026-07-13 (design-locked: dossier UI fork).
+  // finale demo.
   function showDossier() {
     const caseData = GAME_DATA.cases[STATE.currentCase];
     const dz = caseData && caseData.dossier;
@@ -6699,7 +5812,7 @@
     // Three stance cards (title + one-line sublabel); the discipline-native card
     // carries the dim "training lens" tag (VERDICT_UI.lens \u2014 \u00a75b tinting, never
     // forcing). No score line here (the victory screen carries the numbers).
-    // Demo-first restyle, author-tuned 2026-07-13 (finale demo, Verdict tab).
+    // Author-tuned in the finale demo (Verdict tab).
     if (sc.finale) {
       let html = '<div class="info-header" style="color:' + C2_VALIDATE_ACCENT + ';text-shadow:0 0 6px ' + C2_VALIDATE_GLOW + ';">' +
         escHtml(sc.header || '\u2726 The Final Entry') + '</div>' +
@@ -7034,7 +6147,7 @@
   }
 
   // ── TAA Comms — HHH one-use Nova hint per level, tiered by clue progress ──
-  // HHH's replacement for the dead SSS callHome (gated to currentCampaign===1).
+  // HHH TAA Comms — the one-use companion hint.
   // Reads STATE.taaCommsUsed + the level's taaCommsHints {low,mid,full}. Uses the
   // HHH Nova spritesheet (npc/nova; file://-safe via HHH_FRAMES).
   // Per-level TAA Comms speaker (level.commsSpeaker). Default Nova (crew talk-anim sheet);
@@ -7125,8 +6238,8 @@
       '<div id="dialogue-after-text" style="display:none">' + optionsHtml + '</div>'
     );
 
-    // Defer typewriter start so the originating click finishes propagating (same
-    // reason as callHome — otherwise the bubble skips the typewriter immediately).
+    // Defer typewriter start so the originating click finishes propagating —
+    // otherwise it bubbles to infoArea and skips the typewriter immediately.
     setTimeout(() => {
       if (!speaker.alien) startTalkAnim(speaker.clue);   // crew sheets talk-animate; the alien portrait stays static
       const textTarget = document.getElementById('dialogue-text-target');
@@ -7416,8 +6529,8 @@
 
     if (inCampaign2()) {
       // ── HHH C2 victory — the FINALE close (impl §9 step 6: finale weight +
-      //    cross-rank acknowledgment if C1 was completed). Design-locked
-      //    2026-07-13: per-ending title, R6 Architect badge, C2 per-thread
+      //    cross-rank acknowledgment if C1 was completed): per-ending title,
+      //    R6 Architect badge, C2 per-thread
       //    breakdown, ending core + ONE companion coda (3 cores + 9 codas —
       //    the firewall shape), no extra hidden title (author call). Reads
       //    solutionIdx (set by confirmSolution) + companionSpecies.
@@ -7476,83 +6589,6 @@
           if (f) { const bx = cv.getContext('2d'); bx.imageSmoothingEnabled = false; bx.drawImage(sheet.img, f.x, f.y, f.w, f.h, 0, 0, 512, 512); }
         }
       });
-    } else if (STATE.currentCampaign === 1) {
-      // ── Campaign 2 victory (two-column layout) ─────────────────
-      saveState();
-      const rankColor = getActiveRankColors()[STATE.rank] || '#a855f7';
-
-      // Build C2 score breakdown with flex rows
-      let c2BreakdownHtml = '';
-      STATE.completedCases.forEach(cc => {
-        const cd = GAME_DATA.cases.find(c => c.id === cc.caseId);
-        if (!cd) return;
-        c2BreakdownHtml += '<div class="c2-case-line"><span>' + escHtml(cd.name) + '</span>' +
-          '<span class="pts">' + cc.score + ' pts</span></div>';
-      });
-
-      // Solution-dependent closing dialogue from Case 5
-      const lastCase = GAME_DATA.cases[GAME_DATA.cases.length - 1];
-      const solIdx = STATE.caseState.solutionIdx >= 0 ? STATE.caseState.solutionIdx : 0;
-      const solOpt = (lastCase.solutionChoice && lastCase.solutionChoice.options[solIdx]) || {};
-      const novaLine = solOpt.novaClosing || 'The Concord recognizes your service.';
-      const zelLine = solOpt.zelkethClosing || 'It has been an honor working with you, liaison.';
-
-      // Handler portraits
-      const novaPortraitHtml = '<canvas id="victory-nova" width="96" height="96" style="width:80px;height:80px;background:linear-gradient(180deg,#1a1a2e,#0f0f1a);border:3px outset #444;image-rendering:pixelated;"></canvas>';
-      const zelPortraitHtml = '<canvas id="victory-zel" width="96" height="96" style="width:80px;height:80px;background:linear-gradient(180deg,#1a1a2e,#0f0f1a);border:3px outset #444;image-rendering:pixelated;"></canvas>';
-
-      victoryScreen.innerHTML =
-        '<canvas id="victory-stars" width="960" height="640" style="position:absolute;inset:0;"></canvas>' +
-        '<div class="c2-victory-layout">' +
-          '<div class="c2-victory-header">' +
-            '<div class="victory-title" style="color:' + rankColor + ';">\ud83c\udf1f Federation Mission Complete \ud83c\udf1f</div>' +
-            '<div class="victory-rank" style="color:' + rankColor + ';">Rank: ' + escHtml(GAME_DATA.ranks[STATE.rank]) + '</div>' +
-          '</div>' +
-          '<div class="c2-victory-left">' +
-            '<div class="victory-score">Total Score: ' + STATE.totalScore + '</div>' +
-            '<div style="width:100%;">' + c2BreakdownHtml + '</div>' +
-            (best > 0 ? '<div style="font-size:18px;color:#4a6a8a;margin-top:8px;">Best: ' + best + '</div>' : '') +
-          '</div>' +
-          '<div class="c2-victory-right">' +
-            '<div class="briefing-handlers" style="margin-bottom:14px;">' +
-              '<div class="handler-portrait">' + novaPortraitHtml + '<div class="handler-name">Dr. Nova</div></div>' +
-              '<div class="handler-portrait">' + zelPortraitHtml + '<div class="handler-name">Zel\'keth</div></div>' +
-            '</div>' +
-            '<div class="c2-victory-dialogue" style="text-align:left;line-height:1.4;padding:0 8px;">' +
-              '<div class="line"><span class="speaker">Nova:</span> ' + escHtml(novaLine) + '</div>' +
-              '<div class="line"><span class="speaker">Zel\'keth:</span> ' + escHtml(zelLine) + '</div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="c2-victory-footer">' +
-            '<button class="retro-btn accent" onclick="SSS.backToTitle()" style="display:inline-block;">Back to Title</button>' +
-          '</div>' +
-        '</div>';
-
-      // Draw handler portraits
-      const novaCvs = document.getElementById('victory-nova');
-      if (novaCvs) {
-        const lastCase = GAME_DATA.cases[GAME_DATA.cases.length - 1];
-        const novaVSheet = (lastCase && lastCase.isBonus)
-          ? 'sprites/c2/nova/spritesheet_unmasked.png'
-          : 'sprites/c2/nova/spritesheet.png';
-        const novaVJson = (lastCase && lastCase.isBonus)
-          ? 'sprites/c2/nova/spritesheet_unmasked.json'
-          : 'sprites/c2/nova/spritesheet.json';
-        loadSpritesheet(novaVSheet, novaVJson)
-          .then(data => {
-            const ctx = novaCvs.getContext('2d');
-            ctx.imageSmoothingEnabled = false;
-            drawCrewFrame(ctx, data.img, data.frames[data.frames.length - 1].frame);
-          }).catch(() => {});
-      }
-      const zelCvs = document.getElementById('victory-zel');
-      if (zelCvs) {
-        if (alienSheetData) {
-          drawAlienFrame(zelCvs, 'portrait_alien_neutral.png');
-        } else {
-          loadAlienSheet().then(() => drawAlienFrame(zelCvs, 'portrait_alien_neutral.png'));
-        }
-      }
     } else {
       // ── Campaign 1 victory ──────────────────────────────────────
       // \u2500\u2500 HHH victory (the shipped end-of-game screen) \u2500\u2500
@@ -7612,222 +6648,6 @@
     nameInput.value = '';
     setScreen('TITLE');
     playTitleIntro();
-  }
-
-  // ════════════════════════════════════════════════════════════════
-  // DORMANT — RESERVED for a future HHH Campaign 2 (do NOT remove).
-  // showCharCreation / selectSpecies / confirmCharCreation / enterCampaign2 /
-  // callHome + the transmission-btn + the showVictory C2 branch are the SSS C2
-  // scaffolding, kept for HHH's planned second campaign. Unreachable today (the
-  // transmission button never shows; STATE.currentCampaign is never 1). The future
-  // C2 unlock will gate on the campaign1Complete "finished" flag; its in-world
-  // trigger on the HHH title is TBD. See HHH_HANDOFF.md "FUTURE — HHH Campaign 2".
-  // ════════════════════════════════════════════════════════════════
-  // Campaign 2 character creation popup (§8.6 of design doc).
-  // Triggered by the [INCOMING TRANSMISSION] button. Collects a new name and
-  // species, then hands off to enterCampaign2().
-
-  let selectedSpecies = null;
-
-  function showCharCreation() {
-    selectedSpecies = null;
-
-    // Auto-fill priority:
-    //   1. If the title-screen name field has something other than a "nova" match, use it
-    //   2. Else if saved playerName exists and isn't a "nova" match, use it
-    //   3. Else leave blank
-    const titleInputValue = nameInput.value.trim();
-    const savedName = (STATE.playerName || '').trim();
-    let prefillName = '';
-    if (titleInputValue && !/nova/i.test(titleInputValue)) {
-      prefillName = titleInputValue;
-    } else if (savedName && !/nova/i.test(savedName)) {
-      prefillName = savedName;
-    }
-
-    const speciesHtml = CAMPAIGN_2_DATA.species.map(s =>
-      '<div class="species-option" data-species="' + s.id + '" onclick="SSS.selectSpecies(\'' + s.id + '\')">' +
-        '<div class="species-portrait-placeholder">' +
-          '<canvas class="species-portrait-canvas" data-ui-frame="' + s.portrait + '" width="96" height="96" style="width:64px;height:64px;image-rendering:pixelated;"></canvas>' +
-        '</div>' +
-        '<div class="species-name">' + escHtml(s.name) + '</div>' +
-      '</div>'
-    ).join('');
-
-    charCreate.innerHTML =
-      '<div class="char-create-panel">' +
-        '<h2>\u2014 Incoming Transmission \u2014</h2>' +
-        '<div class="char-create-blurb">' +
-          "Years have passed. Dr. Nova has retired. The Solar Agricultural Authority " +
-          "has formed Federation Liaison \u2014 a new division pairing human and alien " +
-          "expertise on cross-species cases. Nova mentors you remotely. Your active " +
-          "handler is Zel'keth, our Concord Cultural Liaison. Who are you?" +
-        '</div>' +
-        '<div class="char-create-label">Agent Name</div>' +
-        '<input id="char-create-name" type="text" maxlength="20" autocomplete="off" value="' + escHtml(prefillName) + '">' +
-        '<div class="char-create-error" id="char-create-error"></div>' +
-        '<div class="char-create-label">Choose Your Species</div>' +
-        '<div class="species-grid">' + speciesHtml + '</div>' +
-        '<button class="retro-btn accent char-create-confirm disabled" id="char-create-confirm-btn" onclick="SSS.confirmCharCreation()">Begin Mission</button>' +
-        '<div style="margin-top:10px;">' +
-          '<span class="back-link" style="cursor:pointer;font-size:18px;" onclick="SSS.cancelCharCreation()">&larr; Back to Title</span>' +
-        '</div>' +
-      '</div>';
-
-    charCreate.classList.remove('hidden');
-
-    // Draw species portraits from C2 UI spritesheet
-    charCreate.querySelectorAll('.species-portrait-canvas').forEach(canvas => {
-      if (canvas.dataset.uiFrame) drawUiFrame(canvas, canvas.dataset.uiFrame);
-    });
-
-    const input = $('char-create-name');
-    input.focus();
-    input.select();
-    input.addEventListener('input', () => {
-      input.classList.remove('invalid');
-      $('char-create-error').textContent = '';
-      updateCharCreateConfirmState();
-    });
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') confirmCharCreation();
-    });
-
-    // Species tooltips — 500ms hover delay, follows cursor, flips above if near bottom
-    // Reuse a single tooltip element across calls to avoid DOM leaks
-    let tooltip = document.querySelector('.species-tooltip');
-    if (!tooltip) {
-      tooltip = document.createElement('div');
-      tooltip.className = 'species-tooltip';
-      document.body.appendChild(tooltip);
-    }
-    tooltip.classList.remove('visible');
-    tooltip.innerHTML = '';
-    let tipTimer = null;
-    let tipX = 0, tipY = 0;
-
-    function positionTooltip() {
-      const tipW = tooltip.offsetWidth;
-      const tipH = tooltip.offsetHeight;
-      const winW = window.innerWidth;
-      const winH = window.innerHeight;
-      const gap = 14;
-      // Vertical: center tooltip's midpoint on cursor Y, clamp to viewport
-      let top = tipY - tipH / 2;
-      if (top < 4) top = 4;
-      if (top + tipH > winH - 4) top = winH - tipH - 4;
-      // Horizontal: prefer right of cursor, flip left if it would go off-screen
-      const left = (tipX + gap + tipW < winW)
-        ? tipX + gap
-        : tipX - gap - tipW;
-      tooltip.style.left = left + 'px';
-      tooltip.style.top = top + 'px';
-    }
-
-    charCreate.querySelectorAll('.species-option').forEach(opt => {
-      opt.addEventListener('mouseenter', () => {
-        const species = CAMPAIGN_2_DATA.species.find(s => s.id === opt.dataset.species);
-        if (!species || !species.tip) return;
-        tipTimer = setTimeout(() => {
-          const lines = escHtml(species.tip).split('\n');
-          tooltip.innerHTML = lines.map(line => {
-            const ci = line.indexOf(':');
-            if (ci > 0) {
-              return '<span class="tip-label">' + line.substring(0, ci + 1) + '</span>' +
-                     '<span class="tip-value">' + line.substring(ci + 1) + '</span>';
-            }
-            return '<span class="tip-value" style="grid-column:1/-1">' + line + '</span>';
-          }).join('');
-          positionTooltip();
-          tooltip.classList.add('visible');
-        }, 500);
-      });
-      opt.addEventListener('mousemove', e => {
-        tipX = e.clientX;
-        tipY = e.clientY;
-        if (tooltip.classList.contains('visible')) positionTooltip();
-      });
-      opt.addEventListener('mouseleave', () => {
-        clearTimeout(tipTimer);
-        tooltip.classList.remove('visible');
-      });
-    });
-
-    updateCharCreateConfirmState();
-  }
-
-  function selectSpecies(id) {
-    selectedSpecies = id;
-    const opts = charCreate.querySelectorAll('.species-option');
-    opts.forEach(o => o.classList.toggle('selected', o.dataset.species === id));
-    updateCharCreateConfirmState();
-  }
-
-  function updateCharCreateConfirmState() {
-    const btn = $('char-create-confirm-btn');
-    const input = $('char-create-name');
-    if (!btn || !input) return;
-    const name = input.value.trim();
-    const ok = name.length > 0 &&
-               VALID_NAME_RE.test(name) &&
-               !/nova/i.test(name) &&
-               selectedSpecies !== null;
-    btn.classList.toggle('disabled', !ok);
-  }
-
-  function confirmCharCreation() {
-    const input = $('char-create-name');
-    const errEl = $('char-create-error');
-    const name = input.value.trim();
-    if (!name) {
-      input.classList.add('invalid');
-      errEl.textContent = 'Enter a name to begin.';
-      return;
-    }
-    if (!VALID_NAME_RE.test(name)) {
-      input.classList.add('invalid');
-      errEl.textContent = 'Letters, spaces, periods, apostrophes, hyphens only.';
-      return;
-    }
-    if (/nova/i.test(name)) {
-      input.classList.add('invalid');
-      errEl.textContent = 'That name belongs to your mentor now. Pick something else.';
-      return;
-    }
-    if (!selectedSpecies) {
-      errEl.textContent = 'Choose a species.';
-      return;
-    }
-
-    STATE.playerName = name;
-    STATE.playerSpecies = selectedSpecies;
-    charCreate.classList.add('hidden');
-    enterCampaign2();
-  }
-
-  function cancelCharCreation() {
-    charCreate.classList.add('hidden');
-    selectedSpecies = null;
-  }
-
-  // enter Campaign 2. Resets per-campaign progress (currentCase, rank,
-  // caseState, totalScore) to a fresh start, swaps GAME_DATA.cases/ranks pointers
-  // via setActiveCampaign, and drops into the Case 1 briefing.
-  //
-  // Not reset: completedCases (IDs don't collide between campaigns), campaign1Complete
-  // (must persist so the transmission button keeps showing), playerName/playerSpecies
-  // (set above in confirmCharCreation before we land here).
-  function enterCampaign2() {
-    stopTransmissionFx();
-    STATE.currentCampaign = 1;
-    STATE.currentCase = 0;
-    STATE.rank = 0;
-    STATE.caseState = defaultCaseState();
-    STATE.totalScore = 0;
-    setActiveCampaign(1);
-    lastLoadedCase = -1;
-    saveState();
-    showBriefing();
   }
 
   // ── Title screen ────────────────────────────────────────────────
@@ -8423,7 +7243,7 @@
               (Array.isArray(saved.completedLevels) && saved.completedLevels.length > 0)));
   }
 
-  // HHH C2 (author-locked 2026-07-15): a returning player's saved name GHOSTS in the
+  // HHH C2: a returning player's saved name GHOSTS in the
   // title box as its placeholder — empty box = stay who you were, typing renames.
   // Fresh/default profiles keep the generic placeholder.
   function savedPlayerName() {
@@ -8540,27 +7360,7 @@
     return String(idx + 1);
   }
 
-  // Returns the "of N" total for the banner, based on what's unlocked
-  function caseDisplayTotal() {
-    if (STATE.currentCampaign === 1) {
-      // Campaign 2: progressive reveal — Case 6 hidden until unlocked
-      if (isCaseUnlocked(5)) return '6';
-      return '5';
-    }
-    // Campaign 1: progressive reveal of bonus cases
-    if (isCaseUnlocked(6)) return '7';
-    if (isCaseUnlocked(5)) return '6';
-    return '5';
-  }
-
-  var DEV_UNLOCK_ALL = false;
-  var DEV_CAMPAIGN1_COMPLETE = false;
-  var _pf = (function() {
-    try { return localStorage.getItem('sss_p') === '1'; } catch(e) { return false; }
-  })();
-  if (_pf) { DEV_UNLOCK_ALL = true; DEV_CAMPAIGN1_COMPLETE = true; }
   function isCaseUnlocked(idx) {
-    if (DEV_UNLOCK_ALL) return true;
     // Main cases 0-4: unlocked if <= highest completed + 1
     if (idx <= 4) return idx <= STATE.currentCase || STATE.completedCases.some(cc => cc.caseId === GAME_DATA.cases[idx].id);
     // Case 6 (index 5): unlocked after all 5 main cases completed
@@ -8701,134 +7501,8 @@
     introTimers = [];
   }
 
-  // ── Transmission terminal animation (signal lock + glitch decode) ──
-  const TX_TARGET = 'INCOMING TRANSMISSION';
-  const TX_GLITCH_CHARS = '!@#$%^&*()_+-=[]{}|;:<>?/~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const TX_LOCK_MS = 3500;
-  const TX_GLITCH_INTERVAL = 4000;
-  const TX_GLITCH_PCT = 0.4;
-  let txTimers = [];
-  let txGlitchLoop = null;
-  const txText = $('tx-text');
-  const txCursor = $('tx-cursor');
-  const txLed = $('tx-led');
-  const txBarsEl = $('tx-bars');
-
-  function stopTransmissionFx() {
-    txTimers.forEach(clearTimeout);
-    txTimers = [];
-    if (txGlitchLoop) { clearInterval(txGlitchLoop); txGlitchLoop = null; }
-  }
-
-  function snapTransmissionFinal() {
-    stopTransmissionFx();
-    if (!txText || !txBarsEl) return;
-    txText.textContent = TX_TARGET;
-    txText.classList.add('visible');
-    txCursor.classList.add('active');
-    txLed.classList.add('active');
-    Array.from(txBarsEl.children).forEach(b => b.classList.add('active'));
-    startTxGlitchLoop();
-  }
-
-  function startTxGlitchLoop() {
-    if (txGlitchLoop) clearInterval(txGlitchLoop);
-    txGlitchLoop = setInterval(() => {
-      let frame = 0;
-      const scrambleFrames = 5;
-      const resolveFrames = 5;
-      const frameMs = 50;
-      txCursor.classList.remove('active');
-
-      function tick() {
-        if (frame < scrambleFrames) {
-          let t = '';
-          for (let i = 0; i < TX_TARGET.length; i++) {
-            if (TX_TARGET[i] === ' ') { t += ' '; continue; }
-            t += Math.random() < TX_GLITCH_PCT
-              ? TX_GLITCH_CHARS[Math.floor(Math.random() * TX_GLITCH_CHARS.length)]
-              : TX_TARGET[i];
-          }
-          txText.textContent = t;
-        } else if (frame < scrambleFrames + resolveFrames) {
-          const p = (frame - scrambleFrames) / resolveFrames;
-          let t = '';
-          for (let i = 0; i < TX_TARGET.length; i++) {
-            if (TX_TARGET[i] === ' ') { t += ' '; continue; }
-            t += (i / TX_TARGET.length) < p
-              ? TX_TARGET[i]
-              : TX_GLITCH_CHARS[Math.floor(Math.random() * TX_GLITCH_CHARS.length)];
-          }
-          txText.textContent = t;
-        } else {
-          txText.textContent = TX_TARGET;
-          txCursor.classList.add('active');
-          return;
-        }
-        frame++;
-        setTimeout(tick, frameMs);
-      }
-      tick();
-    }, TX_GLITCH_INTERVAL);
-  }
-
-  function runTransmissionSequence() {
-    stopTransmissionFx();
-    if (!txText || !txBarsEl) return;
-
-    txText.textContent = '';
-    txText.classList.remove('visible');
-    txCursor.classList.remove('active');
-    txLed.classList.remove('active');
-    txLed.style.background = '#333';
-    txLed.style.boxShadow = 'none';
-    Array.from(txBarsEl.children).forEach(b => b.classList.remove('active'));
-
-    const bars = txBarsEl.children;
-    const barCount = bars.length;
-    const barInterval = TX_LOCK_MS * 0.7 / barCount;
-    const decodeStart = TX_LOCK_MS * 0.3;
-    const decodeDuration = TX_LOCK_MS * 0.7;
-
-    for (let i = 0; i < barCount; i++) {
-      txTimers.push(setTimeout(() => bars[i].classList.add('active'), barInterval * (i + 1)));
-    }
-
-    txTimers.push(setTimeout(() => {
-      txLed.classList.add('active');
-      txLed.style.background = '';
-      txLed.style.boxShadow = '';
-    }, barInterval));
-
-    txTimers.push(setTimeout(() => {
-      txText.classList.add('visible');
-      const steps = 14;
-      const stepMs = decodeDuration / steps;
-      for (let s = 0; s <= steps; s++) {
-        txTimers.push(setTimeout(() => {
-          const progress = s / steps;
-          let t = '';
-          for (let i = 0; i < TX_TARGET.length; i++) {
-            if (TX_TARGET[i] === ' ') { t += ' '; continue; }
-            t += (i / TX_TARGET.length) < progress
-              ? TX_TARGET[i]
-              : TX_GLITCH_CHARS[Math.floor(Math.random() * TX_GLITCH_CHARS.length)];
-          }
-          txText.textContent = t;
-        }, stepMs * s));
-      }
-    }, decodeStart));
-
-    txTimers.push(setTimeout(() => {
-      txText.textContent = TX_TARGET;
-      txCursor.classList.add('active');
-      startTxGlitchLoop();
-    }, TX_LOCK_MS));
-  }
-
-  // ── HHH title intro (ported from demos/startup/) ────────────────
   // Icon pop-in → wordmark stagger → subtitle → name/Begin slide-up → prompt.
-  // Click/key skips. The transmission button is NOT in this flow (dormant C2).
+  // Click/key skips.
   const MARK_ALPHA = '0.45';   // insignia watermark resting opacity (matches CSS)
   const TITLE_GLOW = 'drop-shadow(0 0 14px rgba(232,184,74,0.55))';
   function titleEls() {
@@ -8931,7 +7605,7 @@
   }
 
   // Click anywhere on the title (not the input/button) skips the intro.
-  // HHH C2 (2026-07-15): skipping is TWO clicks when the bridge follows — the first
+  // HHH C2: skipping is TWO clicks when the bridge follows — the first
   // ends the C1 title intro (and boots the bridge), the second fast-forwards the
   // bridge animation. Never one click for both.
   titleScreen.addEventListener('click', (e) => {
@@ -8963,258 +7637,27 @@
     playTitleIntro();
   }
 
-  // ── Title screen sprite init ────────────────────────────────────
+  // ── Title-time sheet preloads ──────────────────────────────────
   function initTitleSprites() {
-    // Draw title sprout from UI spritesheet
-    loadUiSheet().then(() => {
-      const sproutCanvas = $('title-sprout-img');
-      if (sproutCanvas && uiSheetData) {
-        drawUiFrame(sproutCanvas, 'title_sprout.png');
-        sproutCanvas.classList.add('loaded');
-        const fallback = $('title-sprout');
-        if (fallback) fallback.classList.add('hidden');
-        // If intro is running, hide the sprite so the intro can animate it
-        if (introRunning) sproutCanvas.classList.add('intro-hidden');
-      }
-    });
-    // Preload badge spritesheet (used on rank-up screen)
-    loadBadgeSheet();
-    loadAlienSheet();
-    // Campaign 2 sheets loaded in parallel. Harmless for C1 players
-    // (they just sit unused until/unless [INCOMING TRANSMISSION] is clicked).
-    loadUiSheetC2();
-    loadBadgeSheetC2();
+    loadBadgeSheet();      // rank badges (C1 sheet)
+    loadAlienSheet();      // Zel'keth mood portraits
+    loadBadgeSheetC2();    // C2 rank badges
   }
 
   // ══════════════════════════════════════════════════════════════════
-  // Tutorial system — spotlight tour + SAA Agent Handbook
-  // Opening tour + briefing tip auto-fire on Case 1 first play (flag-gated).
-  // JIT tips fire once each, at the moment their trigger occurs.
-  // Help panel always accessible via SAA badge; replay clears flags.
+  // TAA Field Handbook (#help-overlay) — opened from the TAA badge (#saa-logo).
+  // Campaign-aware: openHelp() stamps .c2 on the overlay, which CSS-gates the
+  // hb-c1/hb-c2 panel pairs; the C2 capstone row stays [ SEALED ] until the
+  // hidden finale unlocks. Modal — the typewriter pauses while it's open.
   // ══════════════════════════════════════════════════════════════════
-  const SSS_Tutorial = (function() {
-    const VER = 'v1';
-    const F = {
-      briefing: 'sss_tutorial_' + VER + '_briefing',
-      opening:  'sss_tutorial_' + VER + '_opening',
-      speaker:  'sss_tutorial_' + VER + '_jit_speaker',
-      clue:     'sss_tutorial_' + VER + '_jit_clue',
-      diagnose: 'sss_tutorial_' + VER + '_jit_diagnose',
-    };
-    function flagSet(k) { try { return localStorage.getItem(k) === '1'; } catch(e) { return false; } }
-    function markFlag(k) { try { localStorage.setItem(k, '1'); } catch(e) {} }
-    function clearAllFlags() { try { Object.values(F).forEach(k => localStorage.removeItem(k)); } catch(e) {} }
-
-    // DOM refs (all elements exist in initial HTML)
-    const spotlight   = $('tour-spotlight');
-    const card        = $('tour-card');
-    const titleEl     = $('tour-title');
-    const bodyEl      = $('tour-body');
-    const nextBtn     = $('tour-next');
-    const skipBtn     = $('tour-skip');
-    const gameEl      = $('game');
+  (function() {
     const helpOverlay = $('help-overlay');
 
-    let tourActive = false;
-    let current = null;  // { steps, idx, onDone }
-    // Set by replayAll() when the player is on the briefing screen — tells
-    // onInvestigationStarted to fire OPENING_STEPS on Begin Investigation,
-    // even outside Case 1 (which the normal caseIdx gate would block).
-    let replayPendingOpening = false;
-
     function helpOpen() { return !helpOverlay.classList.contains('tour-hidden'); }
-    function isActive() { return tourActive || helpOpen(); }
 
-    function showSteps(steps, onDone) {
-      if (!steps || !steps.length) { if (onDone) onDone(); return; }
-      current = { steps: steps, idx: 0, onDone: onDone || null };
-      tourActive = true;
-      pauseTypewriter();
-      spotlight.classList.remove('tour-hidden');
-      card.classList.remove('tour-hidden');
-      renderStep();
-    }
-
-    function endTour() {
-      const onDone = current && current.onDone;
-      tourActive = false;
-      current = null;
-      spotlight.classList.add('tour-hidden');
-      card.classList.add('tour-hidden');
-      if (!isActive()) resumeTypewriter();
-      if (onDone) onDone();
-    }
-
-    function renderStep() {
-      if (!current) return;
-      const step = current.steps[current.idx];
-      const anchor = document.querySelector(step.anchor);
-      if (!anchor) { advanceStep(); return; }  // Skip missing anchors
-
-      // #scale-root has a transform: scale(s) applied for viewport fitting,
-      // so getBoundingClientRect returns post-transform viewport pixels. But
-      // the tour layer lives inside the scaled container, so it needs the
-      // logical (960-wide) coordinate space. Divide offsets by the scale.
-      const gameRect = gameEl.getBoundingClientRect();
-      const scale = gameRect.width / 960 || 1;
-      const r = anchor.getBoundingClientRect();
-      const pad = 1;
-      const top  = (r.top  - gameRect.top)  / scale - pad;
-      const left = (r.left - gameRect.left) / scale - pad;
-      const w = r.width  / scale + pad * 2;
-      const h = r.height / scale + pad * 2;
-
-      // Clamp to the 960×640 game bounds so no border is clipped off-screen
-      // (e.g. the location banner sits flush at left:0; without clamping the
-      // pad pushes its left border to -4 and its bottom border into the scene).
-      let sLeft = left, sTop = top, sW = w, sH = h;
-      if (sLeft < 0) { sW += sLeft; sLeft = 0; }
-      if (sTop  < 0) { sH += sTop;  sTop  = 0; }
-      if (sLeft + sW > 960) sW = 960 - sLeft;
-      if (sTop  + sH > 640) sH = 640 - sTop;
-      spotlight.style.top    = sTop + 'px';
-      spotlight.style.left   = sLeft + 'px';
-      spotlight.style.width  = sW + 'px';
-      spotlight.style.height = sH + 'px';
-
-      titleEl.textContent = step.title;
-      bodyEl.innerHTML = step.body;
-      nextBtn.textContent = (current.idx === current.steps.length - 1) ? 'FINISH' : 'NEXT →';
-
-      // Position card: try below → above → right → left, then clamp
-      const cardW = 300, gap = 12, margin = 10, gameW = 960, gameH = 640;
-      const cardH = card.offsetHeight || 160;
-      const candidates = [
-        { top: top + h + gap,                    left: left + (w / 2) - (cardW / 2) },
-        { top: top - cardH - gap,                left: left + (w / 2) - (cardW / 2) },
-        { top: top + (h / 2) - (cardH / 2),      left: left + w + gap },
-        { top: top + (h / 2) - (cardH / 2),      left: left - cardW - gap },
-      ];
-      const fits = (c) =>
-        c.top >= margin && c.top + cardH <= gameH - margin &&
-        c.left >= margin && c.left + cardW <= gameW - margin;
-      let chosen = candidates.find(fits);
-      if (!chosen) {
-        chosen = candidates[0];
-        chosen.top  = Math.max(margin, Math.min(chosen.top,  gameH - cardH - margin));
-        chosen.left = Math.max(margin, Math.min(chosen.left, gameW - cardW - margin));
-      }
-      card.style.top  = chosen.top + 'px';
-      card.style.left = chosen.left + 'px';
-    }
-
-    function advanceStep() {
-      if (!current) return;
-      if (current.idx < current.steps.length - 1) {
-        current.idx++;
-        renderStep();
-      } else {
-        endTour();
-      }
-    }
-
-    nextBtn.addEventListener('click', advanceStep);
-    skipBtn.addEventListener('click', endTour);
-
-    // ── Tour content ──────────────────────────────────────────────
-    const BRIEFING_STEPS = [{
-      anchor: '#briefing-after-text, .info-body',
-      title: 'YOUR DISPATCH',
-      body: "<b>This is a dispatch from SAA.</b> Your brief on what has gone wrong and where. Read it over, then click <b>Begin Investigation</b> to travel to the scene."
-    }];
-
-    const OPENING_STEPS = [
-      { anchor: '#location-banner', title: 'LOCATION',
-        body: "<b>Where you are.</b> Each case drops you somewhere new in the solar system &mdash; the setting itself often hints at what's gone wrong." },
-      { anchor: '#scene-wrap', title: 'THE SCENE',
-        body: "<b>Look around.</b> Environmental details often tell you something before anyone says a word." },
-      { anchor: '#action-grid', title: 'INVESTIGATE',
-        body: "<b>Your tools.</b> Crew, logs, sensors, plants &mdash; all available from the start of every case. Click any to dig in." },
-      { anchor: '#menu-right', title: 'RANK & CASE',
-        body: "<b>Your progress.</b> Solve cases well to climb from Trainee toward Xenobotanist." },
-      { anchor: '#saa-logo', title: 'HELP ANYTIME',
-        body: "<b>Stuck?</b> Click the SAA badge to reopen this tour or view the agent handbook." },
-    ];
-
-    // ── Public hooks (called from existing engine code) ───────────
-    function onBriefingShown(caseIdx) {
-      if (caseIdx !== 0) return;
-      if (flagSet(F.briefing)) return;
-      markFlag(F.briefing);
-      // Briefing tip fires after typewriter finishes + button appears; delay slightly
-      setTimeout(() => showSteps(BRIEFING_STEPS), 300);
-    }
-    function onInvestigationStarted(caseIdx) {
-      if (flagSet(F.opening)) return;
-      // Normally gated to Case 1 only, but a replay-from-briefing scenario
-      // sets replayPendingOpening so this fires regardless of which case.
-      if (!replayPendingOpening && caseIdx !== 0) return;
-      replayPendingOpening = false;
-      markFlag(F.opening);
-      setTimeout(() => showSteps(OPENING_STEPS), 250);
-    }
-    function onSpeakerSet(sourceKey) {
-      if (flagSet(F.speaker)) return;
-      if (sourceKey !== 'crew') return;  // Only crew speakers trigger this
-      markFlag(F.speaker);
-      setTimeout(() => showSteps([{
-        anchor: '#speaker-bar', title: "YOU'RE TALKING TO SOMEONE",
-        body: "<b>Crew have personalities and moods.</b> Stay patient and on-topic &mdash; push too hard and they'll close off."
-      }]), 200);
-    }
-    function onClueRevealed() {
-      // First clue → show clue explanation.
-      // Anchor on #info-area rather than .clue-extract because the clue panel
-      // is only inserted after the dialogue typewriter finishes; the info area
-      // is always present, and the tip pauses the typewriter so the player
-      // reads the tip first. After dismissal, the clue reveals itself.
-      if (!flagSet(F.clue)) {
-        markFlag(F.clue);
-        setTimeout(() => showSteps([{
-          anchor: '#info-area', title: 'A CLUE!',
-          body: "<b>Logged to your case file.</b> Clues unlock new questions and strengthen your final diagnosis."
-        }]), 300);
-        return;
-      }
-      // All clues found → show diagnose-ready tip (once)
-      if (flagSet(F.diagnose)) return;
-      try {
-        const caseData = GAME_DATA.cases[STATE.currentCase];
-        if (caseData && STATE.caseState.cluesFound.length >= caseData.clues.length) {
-          markFlag(F.diagnose);
-          setTimeout(() => showSteps([{
-            anchor: '#diagnose-btn', title: 'READY TO DIAGNOSE',
-            body: "<b>You've gathered enough evidence.</b> Click Diagnose when you're ready to call it. Guessing early still works, but you'll miss bonus insight."
-          }]), 600);
-        }
-      } catch(e) {}
-    }
-
-    // ── Replay ────────────────────────────────────────────────────
-    function replayAll() {
-      clearAllFlags();
-      replayPendingOpening = false;
-
-      if (currentScreen === 'BRIEFING') {
-        // Already on the briefing screen: show the briefing tip now, and defer
-        // the opening tour until the player clicks Begin Investigation
-        // (onInvestigationStarted will pick it up via replayPendingOpening).
-        markFlag(F.briefing);
-        replayPendingOpening = true;
-        setTimeout(() => showSteps(BRIEFING_STEPS), 200);
-      } else {
-        // Any other screen (investigating, dialogue, diagnosing, etc.): the
-        // briefing step is behind us — jump straight to the opening tour.
-        markFlag(F.briefing);
-        markFlag(F.opening);
-        setTimeout(() => showSteps(OPENING_STEPS), 200);
-      }
-    }
-
-    // ── Help panel ────────────────────────────────────────────────
     function updateRankHighlight() {
-      // HHH C2: the handbook is campaign-aware — .c2 on the overlay gates which
-      // panel pair (hb-c1 / hb-c2) renders; each campaign has its own ladder.
+      // The handbook is campaign-aware — .c2 on the overlay gates which panel
+      // pair (hb-c1 / hb-c2) renders; each campaign has its own rank ladder.
       const c2 = inCampaign2();
       helpOverlay.classList.toggle('c2', c2);
       const ladder = document.getElementById(c2 ? 'hb-rank-ladder-c2' : 'hb-rank-ladder');
@@ -9242,7 +7685,7 @@
     }
     function closeHelp() {
       helpOverlay.classList.add('tour-hidden');
-      if (!isActive()) resumeTypewriter();
+      resumeTypewriter();
     }
 
     $('help-close').addEventListener('click', closeHelp);
@@ -9258,35 +7701,13 @@
         });
       });
     });
-    // (HHH: the SSS "Replay Tutorial" tab/button was removed — HHH teaching is
-    // event-driven, not a linear replayable tour. replayAll() stays dormant.)
 
-    // The TAA badge (top-left) opens the Field Handbook
+    // The TAA badge (top-left) opens the Field Handbook; ESC closes it.
     $('saa-logo').addEventListener('click', openHelp);
-
-    // ESC closes whichever overlay is topmost
     document.addEventListener('keydown', (e) => {
-      if (e.key !== 'Escape') return;
-      if (helpOpen()) { closeHelp(); return; }
-      if (tourActive) { endTour(); return; }
+      if (e.key === 'Escape' && helpOpen()) closeHelp();
     });
-
-    return {
-      onBriefingShown,
-      onInvestigationStarted,
-      onSpeakerSet,
-      onClueRevealed,
-      openHelp,
-      closeHelp,
-      replayAll,
-      isActive,
-    };
   })();
-  // HHH: the SSS spotlight tutorial is SSS-specific (SAA handbook, SSS phrasing) and
-  // doesn't fit HHH's story. Neutralized by NOT exposing window.SSS_Tutorial — every
-  // call site is guarded by `if (window.SSS_Tutorial)`, so all tutorial popups are
-  // inert. HHH gets its own diegetic hints (e.g. the location-unlocked hint).
-  // window.SSS_Tutorial = SSS_Tutorial;   // ← intentionally disabled
 
   // ══════════════════════════════════════════════════════════════════
   // HHH_Teach — event-driven visual tutorial (amber spotlight + card).
@@ -9294,9 +7715,9 @@
   // fires the moment a dialogue node carrying teach:{target,note} finishes
   // typing. Modal — a transparent blocker makes the dimmed UI inert; the
   // spotlight box-shadow darkens everything but `target`; dismiss via the
-  // amber "Got it" button (or Esc). Geometry adapted from the dormant
-  // SSS_Tutorial spotlight math (scale-aware, clamped to the 960×640 stage,
-  // card auto-placed below→above→right→left).
+  // amber "Got it" button (or Esc). Geometry adapted from the SSS spotlight
+  // math (scale-aware, clamped to the 960×640 stage, card auto-placed
+  // below→above→right→left).
   //   Repeat policy = once per playthrough: `fired` is an in-memory Set
   //   (NOT persisted), reset on reset()/enterLevel. A page reload re-fires.
   //   Deferral: if a teach's target isn't on-screen yet (e.g. a future teach
@@ -9421,10 +7842,6 @@
   // ── Event wiring ────────────────────────────────────────────────
   beginBtn.addEventListener('click', startGame);
   nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') startGame(); });
-  // transmission button shows the character creation popup.
-  // showCharCreation() collects name + species, then calls enterCampaign2()
-  // which swaps state to Campaign 2 and drops into the Case 1 briefing.
-  transmissionBtn.addEventListener('click', showCharCreation);
   var devLogBtnEl = $('dev-log-btn');
   if (devLogBtnEl) devLogBtnEl.addEventListener('click', function() {
     if (window.DevLogViewer) window.DevLogViewer.open();
@@ -9552,10 +7969,10 @@
   // ── Dev unlock on the title (HHH) ──────────────────────────────
   // Shipped builds boot DEV_MODE=false (no dev jump menu, locked thread list).
   // On the title, typing "god" into the name box AND clicking the hero icon 10×
-  // within a few seconds flips DEV_MODE on at RUNTIME ONLY — NEVER persisted, a
-  // reload resets it (the SSS sss_p localStorage persistence is intentionally gone).
-  // Mirrors the SSS gesture. (The future C2 unlock is a separate, story-driven
-  // mechanism gated on the campaign1Complete "finished" flag — not this.)
+  // within a few seconds toggles DEV_MODE on; a single icon click while it's on
+  // turns it off. Persists in localStorage ('hhh_dev') so a reload keeps the
+  // choice. Mirrors the SSS gesture. (The C2 unlock is separate — the story
+  // bridge gated on the campaign1Complete "finished" flag — not this.)
   (function() {
     var clicks = 0, timer = null;
     var icon = $('title-icon');
@@ -9658,7 +8075,7 @@
     c2AnimActive = false;        // HHH C2: the bridge is settled — the title skip-click is spent
   }
 
-  // HHH C2 (author ask 2026-07-15): a SECOND title click fast-forwards the bridge
+  // HHH C2: a SECOND title click fast-forwards the bridge
   // animation to its settled state (two clicks skip both animations — one for the
   // C1 title intro, one for the C2 bridge; never one click for both).
   let c2AnimActive = false;
@@ -9989,11 +8406,6 @@
     beginC2Run,
     activateC2,
     backToTitle,
-    // character creation + call home onclick handlers
-    selectSpecies,
-    confirmCharCreation,
-    cancelCharCreation,
-    callHome
   };
 
   // ── Init ────────────────────────────────────────────────────────
