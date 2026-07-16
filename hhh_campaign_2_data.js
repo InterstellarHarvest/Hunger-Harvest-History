@@ -242,7 +242,7 @@ const HHH_C2_DATA = {
                   ],
                 },
                 task: {
-                  text: "You start on with what you'd know better than anyone: your own files.\n\nThe audit flagged a duplicate of your first field report. Two copies, both claiming to be yours. \nThe Thread Console has the pair loaded. Read the audit log first, and hear Zel'keth.\n\nWhen you've seen everything, Validate the Record at the console. Show that the Archive can still tell truth from forged lies.",
+                  text: "You start with what you'd know better than anyone: your own files.\n\nThe audit flagged a duplicate of your first field report. Two copies, both claiming to be yours. \nThe Thread Console has the pair loaded. Read the audit log first, and hear Zel'keth.\n\nWhen you've seen everything, Validate the Record at the console. Show that the Archive can still tell truth from forged lies.",
                   revealsClue: 'audit_briefed',
                   endsConversation: true, exitLabel: 'On it.',
                 },
@@ -284,7 +284,7 @@ const HHH_C2_DATA = {
                   ],
                 },
                 pattern: {
-                  text: "The flagged nodes are not scattered.\n\nEvery buried forgery sits at a crossing place. A moment where the knowledge of growing things passed over a boundary — hand to hand, village to village, your people to mine. \n\nSix nodes, six crossings. Random damage does not choose so carefully.\n\nSomeone is picking the crossings themselves.",
+                  text: "The flagged nodes are not scattered.\n\nEvery buried forgery sits at a crossing place. A moment where the knowledge of growing things passed over a boundary — hand to hand, village to village, your people to mine. \n\nFive nodes, five crossings. Random damage does not choose so carefully.\n\nSomeone is picking the crossings themselves.",
                   revealsClue: 'audit_current',
                   options: [
                     { label: 'I have other questions.', goto: 'start' },
@@ -319,7 +319,7 @@ const HHH_C2_DATA = {
               evidenceType: 'provenance',
               blindspotFor: 'forensics',
               clueTag: 'audit_logged', icon: '📜', label: 'Read the Audit Log',
-              learned: "Audit log: the buried layer reads non-random and expert — six nodes, one hand. \n\nCustody of the audit itself is verified end to end.",
+              learned: "Audit log: the buried layer reads non-random and expert — five nodes, one hand. \n\nCustody of the audit itself is verified end to end.",
               nodes: {
                 disfavoredStart: {
                   text: "Columns of transfer stamps, shelf assignments, signatures. No artifact to hold, no material to read. Just the long ledger of who touched what, and when.\n\nYou were trained to interrogate the object itself. This is not that.",
@@ -328,7 +328,7 @@ const HHH_C2_DATA = {
                   ],
                 },
                 start: {
-                  text: "TEMPORAL AGRICULTURAL ARCHIVE — AUDIT 7-KILO\n\nSCOPE: post-stabilization re-scan, human chain, threads 1–6.\nEXPECTED: residual decay within tolerance.\nFOUND: secondary record beneath all six stabilizations.\nDEPTH: consistent. \nAGE: falsified to match.\n\nSTATUS: chain integrity UNVERIFIED pending field review.",
+                  text: "TEMPORAL AGRICULTURAL ARCHIVE — AUDIT 7-KILO\n\nSCOPE: post-stabilization re-scan, human chain, threads 1–6.\nEXPECTED: residual decay within tolerance.\nFOUND: secondary record beneath the stabilized chain.\nDEPTH: consistent. \nAGE: falsified to match.\n\nSTATUS: chain integrity UNVERIFIED pending field review.",
                   options: [
                     { label: 'Open the signature analysis.', goto: 'signature' },
                     { label: "How were the forgeries found at all?", goto: 'method' },
@@ -336,7 +336,7 @@ const HHH_C2_DATA = {
                   ],
                 },
                 signature: {
-                  text: "ANALYSIS — INSERTION SIGNATURE\n\nPattern: NON-RANDOM. Six insertions, one hand.\nTarget profile: nodes of knowledge TRANSFER (flagged for field confirmation).\nIntent classification: not vandalism. Replacement.\n\nNOTE: audit custody chain verified end to end — this log may be trusted.",
+                  text: "ANALYSIS — INSERTION SIGNATURE\n\nPattern: NON-RANDOM. Five insertions, one hand.\nTarget profile: nodes of knowledge TRANSFER (flagged for field confirmation).\nIntent classification: not vandalism. Replacement.\n\nNOTE: audit custody chain verified end to end — this log may be trusted.",
                   revealsClue: 'audit_logged',
                   options: [
                     { label: 'Back to the summary.', goto: 'start' },
@@ -435,7 +435,7 @@ const HHH_C2_DATA = {
       ],
       explanation: {
         title: 'The Record Validates',
-        body: "Copy B holds. The pristine copy was complete, professional, internally coherent — and false. That is the shape of the enemy now. Finished-looking things, and the judgment to tell which finished thing is true.\n\nZel'keth heard the rest of it: six buried forgeries, six crossing places — every flagged node a moment where the knowledge of growing things passed over a boundary. Someone is unpicking the crossings.\n\nThe first flagged node anchors in a lake city of floating gardens. Tenochtitlan. The year 1487. Validate carefully.",
+        body: "Copy B holds. The pristine copy was complete, professional, internally coherent — and false. That is the shape of the enemy now. Finished-looking things, and the judgment to tell which finished thing is true.\n\nZel'keth heard the rest of it: five buried forgeries, five crossing places — every flagged node a moment where the knowledge of growing things passed over a boundary. Someone is unpicking the crossings.\n\nThe first flagged node anchors in a lake city of floating gardens. Tenochtitlan. The year 1487. Validate carefully.",
         funFact: "Authenticating documents is a real science with a name: diplomatics, founded in 1681 when Jean Mabillon published rules for telling genuine charters from forgeries. Modern examiners still treat 'too clean' as a warning sign — genuine working records accumulate corrections, and forgeries rarely do.",
       },
     },
@@ -488,7 +488,7 @@ const HHH_C2_DATA = {
         },
         vressk: {
           low:  "Korl: \"The gardens are loud with living — mud, roots, water moving where it is told. Listen to the place before the paper. Whatever the record claims, the ground itself is a witness.\"",
-          mid:  "Korl: \"The soil in your hands was alive. The account says this ground was dead salt six hundred years of harvests ago. Both cannot be true, and only one of them ever breathed.\"",
+          mid:  "Korl: \"The soil in your hands was alive. The account says this ground is dead salt. Both cannot be true, and only one of them ever breathed.\"",
           full: "Korl: \"Validate the codex. It grew here — season into season, hand into hand, like the gardens themselves. The collapse account was grown nowhere. You know that texture by now.\"",
         },
       },
@@ -585,7 +585,7 @@ const HHH_C2_DATA = {
           id: 'lake_causeway',
           label: 'Lake Causeway',
           requires: { clueFound: 'gardens_thriving' },
-          lockHint: "Hear the farmer out and find why he keeps pointing to the causeway.",
+          lockHint: "Hear the farmer out and find why she keeps pointing to the causeway.",
           anchorPoint: false,
           scene: 'c2/scene/scene_lake_causeway.jpg',
           locationFx: {
@@ -811,7 +811,7 @@ const HHH_C2_DATA = {
         vressk: {
           low:  "Korl: \"This place is heavy, friend. The vault most of all — it is full of held breath. Let the keeper speak at his own pace. Some testimony cannot be hurried.\"",
           mid:  "Korl: \"The vault remembers hands — tins opened for counting and sealed again, years of small careful touches. The report remembers one afternoon and one typewriter. Records that lived have texture. This one has none.\"",
-          full: "Korl: \"Validate her record. It breathes — grief and cold and duty, all of it still in the pages. The other was never alive, and it slanders people who chose to stop being.\"",
+          full: "Korl: \"Validate the keeper's record. It breathes — grief and cold and duty, all of it still in the pages. The other was never alive, and it slanders people who chose to stop being.\"",
         },
       },
       locations: [
@@ -1101,7 +1101,7 @@ const HHH_C2_DATA = {
       diagnosisPrompt: 'Which record is genuine?',
       diagnosisConfirmLabel: 'Validate',
       ranksUp: true,                       // third promotion: Trace Analyst → Thread Surgeon
-      rankUpText: "Thread Surgeon. You found the single false flaw made and the billion lives that hung on it.",
+      rankUpText: "Thread Surgeon. You found the single false flaw and the billion lives that hung on it.",
       teaches: {},                         // nothing new to teach
       taaCommsHints: {
         oolian: {
@@ -1180,7 +1180,7 @@ const HHH_C2_DATA = {
               learned: "The short-strawed wheat stands under the same heavy head that flattens the tall wheat beside it. Same grain, same field, same weather. The stiff straw (and its rust resistance) is what lets the plant be fed at all.",
               nodes: {
                 start: {
-                  text: "Two plots sit side by side under the plot-marker stakes. On the left, tall wheat is chest-high, tangled, most of it bent flat to the ground under the weight of its own grain. On the right, the same heavy heads exactly but on short and stiff stalks barely past your knees, standing upright in the wavering wind.\n\nSame grain. Same field. Same weather. \n\nOne crop is lost and one is standing. \nThe only difference is the height of the straw.",
+                  text: "Two plots sit side by side under the plot-marker stakes. On the left, tall wheat is chest-high, tangled, most of it bent flat to the ground under the weight of its own grain. On the right, the same heavy heads exactly but on short and stiff stalks barely past your hips, standing upright in the wavering wind.\n\nSame grain. Same field. Same weather. \n\nOne crop is lost and one is standing. \nThe only difference you can see is the height of the straw.",
                   options: [
                     { label: 'Run the TAA trait scan.', goto: 'scan' },
                     { label: 'Step back.', goto: '__exit__' },
@@ -1188,7 +1188,7 @@ const HHH_C2_DATA = {
                 },
                 scan: {
                   type: 'terminal',
-                  text: "> TAA TRAIT SCAN — comparative plots\n  tall variety:  stem ~120cm · LODGED under grain load · yield lost to rot\n  semi-dwarf:    stem ~60cm · stiff · STANDING under identical load\n  disease:       semi-dwarf carries stem-rust resistance · tall does not\n  fertilizer:    both take nitrogen — only the short straw survives the heavier head it makes\n\n  The short straw is not cosmetic.",
+                  text: "> TAA TRAIT SCAN — comparative plots\n  tall variety:  stem ~120cm · LODGED under grain load · yield lost to rot\n  semi-dwarf:    stem ~90cm · stiff · STANDING under identical load\n  disease:       semi-dwarf carries stem-rust resistance · tall does not\n  fertilizer:    both take nitrogen — only the short straw survives the heavier head it makes\n\n  The short straw is not cosmetic.",
                   revealsClue: 'lodging_resistance',
                   options: [
                     { label: 'Note the standing plot.', goto: '__exit__' },
@@ -1229,7 +1229,7 @@ const HHH_C2_DATA = {
                 },
                 crossref: {
                   type: 'terminal',
-                  text: "> TAA CROSS-REFERENCE — variety pedigree & harvest record\n  lineage:      continuous · dwarf parent → released lines, every cross documented\n  released seed: matches the varieties actually distributed to the field\n  yields:       recorded across multiple seasons, Mexico AND South Asia — RISING\n  independent:  national harvest figures agree with the trial figures\n\n  A variety that failed in the trials could not produce this pedigree, or these harvests.",
+                  text: "> TAA CROSS-REFERENCE — variety pedigree & harvest record\n  lineage:       continuous · dwarf parent → released lines, every cross documented\n  released seed: matches the varieties actually distributed to the field\n  yields:        recorded across multiple seasons, Mexico AND South Asia — RISING\n  independent:   national harvest figures agree with the trial figures\n\n  A variety that failed in the trials could not produce this pedigree, or these harvests.",
                   revealsClue: 'pedigree_verified',
                   options: [
                     { label: 'Note the unbroken lineage.', goto: '__exit__' },
@@ -1336,7 +1336,7 @@ const HHH_C2_DATA = {
               learned: 'Insight: the new crop runs to the horizon in every direction — one variety, one height, heavy-headed, standing. This is one field of thousands. The "buried disaster" of the forged report stretches past the curve of the earth.',
               nodes: {
                 start: {
-                  text: "You walk the field edge to take the size of it. The crop runs to the horizon in every direction. All one variety, one height, heavy-headed, standing firm. A cart waits at the margin, already stacked with grains. This goes on for thousands of fields to both horizons.\n\nThe report in the station called this a disaster and unproductive?!",
+                  text: "You walk the field edge to take the size of it. The crop runs to the horizon in every direction. All one variety, one height, heavy-headed, standing firm. A cart waits at the margin, already stacked with grain sacks. This goes on for thousands of fields to both horizons.\n\nThe report in the station called this a disaster and unproductive?!",
                   revealsClue: 'harvest_scale',
                   bonusInsight: true,
                   options: [
@@ -1351,12 +1351,12 @@ const HHH_C2_DATA = {
       // Candidate records — the forgery (crop-failure lie), the downside overcorrection
       // (true costs, wrong verdict), and the genuine trial record (correct, idx 2).
       diagnoses: [
-        { label: 'The Failure Report — the semi-dwarf trials lodged, took rust, and were quietly abandoned; the green revolution was a buried disaster.',
+        { label: "The Failure Report — the semi-dwarf trials lodged and were quietly abandoned; the green revolution was a buried disaster.",
           isCorrect: false,
           hint: "It reads well and its paperwork is perfect. But it describes wheat you watched stand upright in its own plot, against a verified pedigree and harvests recorded across seasons and two countries. Every number contradicts it. Do not validate the cut." },
         { label: 'The Reckoning — the wheat worked, but the green revolution was an ecological and social catastrophe not worth keeping in the record.',
           isCorrect: false,
-          hint: "The later costs are real such as monoculture, thirsty fields, fertilizers, and gains that reached some but not others. Whether the wheat stood and fed people. It did — a billion of them. A true criticism cannot validate a false failure." },
+          hint: "The later costs are real — monoculture, thirsty fields, fertilizers, and gains that reached some but not others. But that is a separate question from whether the wheat stood and fed people. It did — a billion of them. A true criticism cannot validate a false failure." },
         { label: "The Trial Record — the semi-dwarf varieties stood, resisted lodging and rust, and drove rising harvests across Mexico and South Asia.",
           isCorrect: true },
       ],
@@ -1413,7 +1413,7 @@ const HHH_C2_DATA = {
         oolian: {
           low:  "Yvi: \"Two questions, held apart: is the bloom's need for radiation real, and did the ratification actually precede the diagnosis? Read the vault and the witnesses before the ratification record — it is the one document with no one behind it to question.\"",
           mid:  "Yvi: \"The forged record makes one structural claim: the Universal Shielding Protocol was ratified permanent BEFORE the bloom was ever diagnosed. But the diagnosis is what the recovered testimony describes, and the regulator confirms an exemption followed it. A ratification cannot be both permanent-from-the-start and later amended. The dates cannot both be true.\"",
-          full: "Yvi: \"Complete. The bloom requires radiation — its repair enzymes are its medicine; the telemetry shows the vault starved it to zero. Nova's record diagnoses it; the regulator confirms the Protocol was amended after. The forgery inverts the order to erase the correction. Validate the diagnosis record. Note the precision of the inversion — one date, chosen to unmake a lesson.\"",
+          full: "Yvi: \"Complete. The bloom requires radiation — it drives the DNA-repair enzymes that also make its medicine; the telemetry shows the vault starved it to zero. Nova's record diagnoses it; the regulator confirms the Protocol was amended after. The forgery inverts the order to erase the correction. Validate the diagnosis record. Note the precision of the inversion — one date, chosen to unmake a lesson.\"",
         },
         rhessi: {
           low:  "Saren: \"Careful here — this forgery has no mouth to catch lying. It's a date on a document. Get the living voices first: the bloom, the instruments, the recorded one, the regulator. Then the paper won't fool you.\"",
@@ -1733,7 +1733,7 @@ const HHH_C2_DATA = {
       // per-case 'pattern_named' flag is reused; each level's caseState is separate).
       patternInterject: {
         lines: {
-          oolian: "Yvi cuts in, sharp: \"Archivist — stop. I am watching the record change as you hold it. This is not an old forgery you dug up. It is being written into the summit feed right now, this second, while the delegates speak. Every thread we chased before was planted centuries before you arrived. This one is live. Whoever is doing it is not a ghost in the past — they are reaching into the present, and they are close. Validate the true record before the overwrite finishes setting.\"",
+          oolian: "Yvi cuts in, sharp: \"Archivist — stop. I am watching the record change as you hold it. This is not an old forgery you dug up. It is being written into the summit feed right now, this second, while the delegates speak. Every thread we chased before was already set before you arrived. This one is live. Whoever is doing it is not a ghost in the past — they are reaching into the present, and they are close. Validate the true record before the overwrite finishes setting.\"",
           rhessi:  "Saren, urgent and low: \"Listen — it's happening NOW. I can see the record moving under your hands. Not a buried lie, not something they left behind — someone is writing over this summit live, while it happens. Every wound before this was already cold when we found it. This one is still warm. Whoever cuts these threads didn't stop centuries ago. They are here, in the present, doing it. Seal the true record. Fast.\"",
           vressk:  "Korl, breathless: \"Friend, feel it — the cold is moving. The false record is being pressed over the true one right now, not long ago, now, while the delegates are still speaking. Everything we found before was already cold when we came to it. This is warm. This is happening. The hand that cuts our reachings is not a memory — it is here, in this moment, with us. Choose the living record before it sets.\"",
         },
@@ -1801,7 +1801,7 @@ const HHH_C2_DATA = {
                   ],
                 },
                 ailing: {
-                  text: "\"Look at it. That terrace thrives. The one beside it is starving. Same seed stock, same water, same hands tending both, the same forty years of care. By everything a human gardener knows, they should be identical. One is alive and one is giving up, and I have tried every remedy I have.\n\nThe answer isn't in anything I know. That's why the Concord is here — three delegates, three species, none of them born to Earth soil. I asked them to read my garden with senses I don't have. They're down at the failing terrace now. Go and see what they see.\"",
+                  text: "\"Look at it. That terrace thrives. The one beside it is starving. Same seed stock, same water, same hands tending both, the same forty years of care. By everything a human gardener knows, they should be identical. One is alive and one is giving up, and I have tried every remedy I have.\n\nThe answer isn't in anything I know. That's why the Concord is here — three delegates, three species, none of them born to Earth soil. I asked them to read my garden with senses I don't have. One of them is down at the failing terrace now; the others are up at the pavilion. Go and see what they see.\"",
                   revealsClue: 'garden_ailing',
                   options: [
                     { label: 'I have another question.', goto: 'start' },
@@ -2022,7 +2022,7 @@ const HHH_C2_DATA = {
                   ],
                 },
                 now: {
-                  text: "\"And now I am the inconvenient witness. I watched a fungal reader from one world, a chemist from another, and a human archivist with a machine converge on the same severed network by three methods that share nothing. I came to prove strangers cannot read each other's ground. I have instead watched them do it, correctly, in an afternoon.\n\nA skeptic who authenticates against his own argument is worth more than a hundred friendly signatures. I will not let my doubt be used to bury that.\"",
+                  text: "\"And now I am the inconvenient witness. I watched a fungal reader from one world, a chemist from another, and a human archivist with a machine converge on the same severed network by three methods that share nothing. I came to prove strangers cannot read each other's ground. I have instead watched them do it, correctly, in an afternoon.\n\nA skeptic who authenticates against their own argument is worth more than a hundred friendly signatures. I will not let my doubt be used to bury that.\"",
                   options: [
                     { label: 'I have another question.', goto: 'start' },
                     { label: 'Thank you.', goto: '__exit__' },
@@ -2043,7 +2043,7 @@ const HHH_C2_DATA = {
       diagnoses: [
         { label: 'The Inconclusive Summit — the delegates’ alien methods proved incompatible with Earth soil; no fix was found; the garden’s decline is natural and beyond cross-species help.',
           isCorrect: false,
-          hint: "This is the record being written over the true one as you watch. It has no reasoning behind it, no severed network, no chemistry, no graft, only a verdict that three species failed. \n\nBut Kess felt the cut web, Vorn-Shael measured the islands, your own scan drew the severance, and Ilreth-Mar authenticated all of it against his own doubt. Do not seal it into permanence." },
+          hint: "This is the record being written over the true one as you watch. It has no reasoning behind it, no severed network, no chemistry, no graft, only a verdict that three species failed. \n\nBut Kess felt the cut web, Vorn-Shael measured the islands, your own scan drew the severance, and Ilreth-Mar authenticated all of it against their own doubt. Do not seal it into permanence." },
         { label: 'A Routine Revision — nothing is being erased; the record is simply updating itself as new data arrives, the ordinary way any live document corrects in real time.',
           isCorrect: false,
           hint: "It is tempting to call the overwrite housekeeping — records do change; live feeds do update.\n\nBut a real revision keeps its history: an author, a timestamp, a reason you can read. This change has none. It overwrites the moment three species succeeded with a bare assertion of failure, and leaves no trace of who changed it or why. \nNormalizing the overwrite is how you let it win." },
@@ -2052,8 +2052,8 @@ const HHH_C2_DATA = {
       ],
       explanation: {
         title: 'The Record Validates',
-        body: "The living diagnosis holds. Beneath Nova's garden ran a mycorrhizal network — a web of fungal threads laced between the roots of every plant, carrying water, nutrients, and chemical signal across the whole slope. One web, feeding many. It had been severed clean between the thriving terraces and the failing ones, leaving each an island that could not share what it had. And the fix was a graft of connected soil from mature ground, and the web reaches for itself and reconnects. \n\nThe forgery did not argue with any of that. It simply wrote FAILED over the top of it, in real time. No fix found, alien methods incompatible, the decline natural.\n\nEvery thread before this was cut centuries before you arrived to today. \n\nBut the thread does not end here. It turns, and points at its source of forgeries.",
-        funFact: "When the first plants crept from water onto bare rock some 450 million years ago, they did not do it alone. Fossils from that era already show simple plant tissue laced with fungal threads — the ancestors of today's mycorrhizae. The early plants had no true roots to mine the barren ground for water and minerals; the fungi could not make sugar from sunlight. Each did for the other what it could not do for itself, and together they made land livable. Nearly every plant lineage that followed — forests, grasslands, and the crops in every field you have walked — inherited that partnership, and most still depend on it: a mesh so fine that a single teaspoon of healthy soil can hold kilometres of fungal thread. Life did not colonize the land as separate species. It crossed the boundary together, root laced to thread — and it has been quietly sharing underground ever since. Nova's garden is invented; the partnership beneath it is older than trees.",
+        body: "The living diagnosis holds. Beneath Nova's garden ran a mycorrhizal network — a web of fungal threads laced between the roots of every plant, carrying water, nutrients, and chemical signal across the whole slope. One web, feeding many. It had been severed clean between the thriving terraces and the failing ones, leaving each an island that could not share what it had. And the fix was a graft of connected soil from mature ground, and the web reaches for itself and reconnects. \n\nThe forgery did not argue with any of that. It simply wrote FAILED over the top of it, in real time. No fix found, alien methods incompatible, the decline natural.\n\nEvery thread before this was already cut and cold by the time you arrived. \n\nBut the thread does not end here. It turns, and points at the source of the forgeries.",
+        funFact: "When the first plants crept from water onto bare rock some 450 million years ago, they did not do it alone. Rock from that era already holds those fungi's spores, and in the oldest plants preserved in fine detail — some 400 million years old — fungal threads run inside the tissue itself: the ancestors of today's mycorrhizae. The early plants had no true roots to mine the barren ground for water and minerals; the fungi could not make sugar from sunlight. Each did for the other what it could not do for itself, and together they made land livable. Nearly every plant lineage that followed — forests, grasslands, and the crops in every field you have walked — inherited that partnership, and most still depend on it: a mesh so fine that a single teaspoon of healthy soil can hold kilometres of fungal thread. Life did not colonize the land as separate species. It crossed the boundary together, root laced to thread — and it has been quietly sharing underground ever since. Nova's garden is invented; the partnership beneath it is older than trees.",
       },
     },
 
@@ -2160,7 +2160,7 @@ const HHH_C2_DATA = {
               ],
               codas: {
                 oolian: "I have checked your reasoning a hundred ways, and I cannot fault the caution — only mourn the data we will never gather. It was an honor to reach with you, while reaching was allowed.",
-                rhessi: "I won't pretend I'm not grieving the bigger world, friend. But you chose it awake, and that is more than most.",
+                rhessi: "I won't pretend I'm not grieving the bigger world. But you chose it awake, and that is more than most.",
                 vressk: "It is quiet now, friend. So quiet. I will keep the memory of how the threads felt when they were warm — someone should, and my kind remembers longest.",
               },
             },
@@ -2177,7 +2177,7 @@ const HHH_C2_DATA = {
               ],
               codas: {
                 oolian: "The data agreed with you: across every node we walked, reaching helped more than it harmed, and by margins that were not close. Now we defend the proof — rigorously, forever. I would not want other work.",
-                rhessi: "You called their bluff and signed your name to it. Stay sharp, friend — a believer who loses the argument doesn't stop believing, they start waiting. Fortunately, so do I.",
+                rhessi: "You called their bluff and signed your name to it. Stay sharp — a believer who loses the argument doesn't stop believing, they start waiting. Fortunately, so do I.",
                 vressk: "The threads are warm again, friend — all of them, every reaching we saved. Somewhere a hand my kind has never touched is planting something we have no name for yet. Because of you, we will get to learn it.",
               },
             },
@@ -2190,11 +2190,11 @@ const HHH_C2_DATA = {
               title: 'The Argument Is Kept',
               core: [
                 "The record holds the debate itself: the strongest case ever made against the chain, preserved intact beside the strongest case ever lived for it — and a keeper's note, in your hand, that the question belongs to whoever inherits it, each generation, every time. No forged answer. No imposed one either. The ARS's fear will never again need a forgery to be heard, and the chain's worth will never again rest on nobody asking.",
-                "It was never an archivist's place to settle the argument. It was an archivist's place to keep it true, and whole, and available — and you have, at the one moment in history when you could have written the ending instead. The job, made into the verdict. Of the four keepers this universe has trained, you are the first to understand that this IS the highest rank.",
+                "It was never an archivist's place to settle the argument. It was an archivist's place to keep it true, and whole, and available — and you have, at the one moment in history when you could have written the ending instead. The job, made into the verdict. There is no higher rank than that.",
               ],
               codas: {
                 oolian: "Recording both arguments at full strength was the only conclusion the evidence actually supported. You resolved it correctly, Archivist — by refusing to resolve what is not yet resolvable. That is not indecision. That is precision.",
-                rhessi: "You gave neither side the satisfaction of a verdict, and now every generation has to stay suspicious on its own. Ha. I taught you distrust, friend, and you built a monument out of it.",
+                rhessi: "You gave neither side the satisfaction of a verdict, and now every generation has to stay suspicious on its own. Ha. I taught you distrust, and you built a monument out of it.",
                 vressk: "You kept the question breathing, friend. Warm and scarred at once, the way true things are. Someone not yet born will stand where you stood, feel both, and choose again — and that is the longest reaching of all.",
               },
             },
@@ -2339,7 +2339,7 @@ const HHH_C2_DATA = {
                 },
                 scan: {
                   type: 'terminal',
-                  text: "> RESIDUE TRACE — compression signature, First Garden insertion\n  signature match: L1 chinampa forgery ......... EXACT\n  signature match: L2 consumption report ....... EXACT\n  signature match: L3 failure report ........... EXACT\n  signature match: L4 ratification record ...... EXACT\n  signature match: L5 live overwrite ........... ORIGIN\n  conclusion:      ONE HAND. FIVE FORGERIES.\n\n> WRITE-PATH ANALYSIS\n  vector:      TAA restoration channels (sanctioned)\n  direction:   PRESENT → PAST (reach-back writes)\n  credentials: CURRENT · VALID · UNREVOKED\n\n  They never traveled, never trespassed.",
+                  text: "> RESIDUE TRACE — compression signature, First Garden insertion\n  signature match: chinampa forgery ............ EXACT\n  signature match: consumption report .......... EXACT\n  signature match: failure report .............. EXACT\n  signature match: ratification record ......... EXACT\n  signature match: live overwrite .............. ORIGIN\n  conclusion:      ONE HAND. FIVE FORGERIES.\n\n> WRITE-PATH ANALYSIS\n  vector:      TAA restoration channels (sanctioned)\n  direction:   PRESENT → PAST (reach-back writes)\n  credentials: CURRENT · VALID · UNREVOKED\n\n  They never traveled, never trespassed.",
                   revealsClue: 'reachback_mapped',
                   options: [
                     { label: 'Cross-reference the credentials.', goto: '__exit__' },
@@ -2528,7 +2528,7 @@ const HHH_C2_DATA = {
       explanation: {
         title: 'The Source, On the Record',
         body: "The Agricultural Regression Study: chartered in the shadow of the karreth ruling, funded for seventy-eight patient years, staffed by people who watched one world die of a shared harvest and resolved that no world ever would again. They reached backward through the TAA's own restoration channels and cut the chain at every point where knowledge crossed a boundary — Tenochtitlan, Leningrad, the wheat, the bloom, the garden — not to destroy the truth, but to buy, at the truth's expense, futures they believed only isolation could protect. You traced them, named them, read their works, and heard their testimony from their own mouth. Then you did the one thing no forger, and no Study, could ever do: you entered your answer in the open, under your name, in a record anyone may read forever.\n\nThat entry — whatever it says — is the last line of this case and the first line of everything after it. The chain of agricultural knowledge now carries the full argument about its own worth, permanently, in the hand of the one archivist who walked all of it. The record holds. It holds even this.",
-        funFact: "Deep in the Arctic, on the island of Spitsbergen, the real world keeps something like an answer to the ARS: the Svalbard Global Seed Vault, where over 1.2 million seed samples from nearly every nation — including nations that do not speak to each other — sleep side by side in the permafrost. Founded in 2008, it exists precisely because seed-keepers refused to let any single disaster, war, or ideology decide the future of agriculture alone. Its first-ever withdrawal, in 2015, restored a seed bank destroyed by the Syrian civil war — knowledge crossing a boundary to heal, one more time, on the record.",
+        funFact: "Deep in the Arctic, on the island of Spitsbergen, the real world keeps something like an answer to the ARS: the Svalbard Global Seed Vault, where over 1.2 million seed samples from nearly every nation — including nations that do not speak to each other — sleep side by side in the permafrost. Founded in 2008, it exists precisely because seed-keepers refused to let any single disaster, war, or ideology decide the future of agriculture alone. Its first-ever withdrawal, in 2015, went to researchers cut off from their own genebank in Aleppo by the Syrian civil war; they rebuilt the collection in Lebanon and Morocco and have been depositing it back into the vault ever since — knowledge crossing a boundary to heal, one more time, on the record.",
       },
     },
   ],
