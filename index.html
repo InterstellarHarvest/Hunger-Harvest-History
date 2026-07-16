@@ -514,6 +514,107 @@
     display: block;
   }
 
+  /* ── HHH C2: recovered-archive figure treatment (sprite spec §2.5-lite) ──
+     Vavilov/Borlaug appear as RECOVERED RECORDS, not live NPCs: desaturated
+     under faint scanlines. Lighter than the Nova ghost (L4).
+     AUTHOR-TUNED 2026-07-06 in c2/resources/demos/locationfx/lvl2.html — keep in sync. */
+  .speaker-portrait.archive-figure canvas,
+  .speaker-portrait.archive-figure img {
+    filter: saturate(0.47) contrast(1.09) brightness(1.02);
+  }
+  .speaker-portrait .af-scan {
+    position: absolute; inset: 0; pointer-events: none; z-index: 2;
+    background: repeating-linear-gradient(0deg,
+      rgba(0,0,0,0) 0 2px, rgba(10,16,24,0.35) 2px 3px, rgba(0,0,0,0) 3px 4px);
+    mix-blend-mode: multiply;
+  }
+  /* slow CRT roll bar — soft band travelling top→bottom (vertical-hold roll);
+     position/opacity driven by the afMotion loop (AF_MOTION consts) */
+  .speaker-portrait .af-roll {
+    position: absolute; left: 0; right: 0; height: 18%; top: -25%;
+    pointer-events: none; z-index: 3; mix-blend-mode: screen; opacity: 0;
+    background: linear-gradient(180deg,
+      rgba(200,220,255,0) 0%, rgba(200,220,255,1) 50%, rgba(200,220,255,0) 100%);
+  }
+
+  /* ── HHH C2: Nova ARCHIVE-GHOST treatment (sprite spec §2.5, L4) ──
+     HEAVIER than the vavilov/borlaug archive-figure: a preserved *person*, not a
+     recovered document. Cyan-shifted desaturation + true transparency (you can see
+     the device through her) + stronger scanlines + an occasional 1-frame horizontal
+     GLITCH displacement (GHOST_MOTION.glitch*, driven by the afMotion loop). The
+     static filter/alpha here is the base; the loop overrides `filter` for the flicker
+     and `transform` for the glitch. AUTHOR-TUNABLE in c2/resources/demos/locationfx/lvl4.html
+     (Nova ghost tab) — keep GHOST_BASE (JS) in sync with the filter/opacity below. */
+  .speaker-portrait.archive-ghost canvas,
+  .speaker-portrait.archive-ghost img {
+    filter: saturate(0.30) contrast(1.05) brightness(0.96);
+    opacity: 0.88;
+  }
+  .speaker-portrait.archive-ghost .ag-tint {   /* cold archive tint, laid over the face */
+    position: absolute; inset: 0; pointer-events: none; z-index: 2;
+    background: rgba(90,150,190,0.22);
+    mix-blend-mode: screen;
+  }
+  .speaker-portrait.archive-ghost .af-scan {   /* stronger scanline pitch than archive-figure */
+    background: repeating-linear-gradient(0deg,
+      rgba(0,0,0,0) 0 1px, rgba(8,20,32,0.5) 1px 2px, rgba(0,0,0,0) 2px 3px);
+  }
+  .speaker-portrait.archive-ghost .af-roll {   /* cyan-white roll to match the tint */
+    background: linear-gradient(180deg,
+      rgba(170,230,255,0) 0%, rgba(170,230,255,1) 50%, rgba(170,230,255,0) 100%);
+  }
+
+  /* ── HHH C2 L5: LIVE-RECORD treatment (sprite spec — the record being written NOW) ──
+     Applied to portrait_live_record.png (already the split calm-feed / red-amber-forgery
+     image) when you examine the live summit record. Adds MOTION the static art can't: a
+     "LIVE" badge with a pulsing dot, and a red-amber glitch band that sweeps the forgery
+     side — sold via the afMotion loop (LIVE_MOTION consts). This is the record-panel
+     indicator impl §7 calls for — it lives in the TAA UI, NOT painted on the scene (the
+     pavilion art has no display). AUTHOR-TUNABLE in c2/resources/demos/locationfx/lvl5.html
+     (Live Record tab) — keep LR_BASE (JS) in sync with the filter below. */
+  .speaker-portrait.live-record canvas,
+  .speaker-portrait.live-record img {
+    filter: contrast(1.06) saturate(1.08);
+  }
+  /* All screen effects live inside .lr-fx, clipped to the SCREEN region of the bezel two ways:
+     (1) pixel-exact: the author's B/W LUMINANCE mask (white=screen, black=frame — the alpha-PNG
+     house-convention mask can't be CSS-consumed on file:// [canvas-taint gotcha, see L2], hence
+     the jpg variant); (2) fallback: a clip-path inset from LIVE_SCREEN (JS-driven, demo-tunable)
+     for browsers without mask-mode:luminance — there the jpg reads as an all-opaque alpha mask
+     (no-op) and the clip-path still holds the effects inside the frame. */
+  .speaker-portrait.live-record .lr-fx {
+    position: absolute; inset: 0; pointer-events: none; z-index: 3;
+    /* mask-image is applied by JS ONLY when not on file:// — a CSS mask fetch is
+       CORS-blocked from file:// (console error + no mask). clip-path is the base clip. */
+  }
+  .speaker-portrait.live-record .lr-jolt,      /* the always-on SCREEN COPY of the art — flicker filters it; jolt translates it (the bezel beneath never moves or flickers) */
+  .speaker-portrait.live-record .lr-tear {     /* signal TEAR — the image rips sideways in a thin band (clip+translate) */
+    position: absolute; inset: 0;
+    background-size: 100% 100%; image-rendering: pixelated;
+  }
+  .speaker-portrait.live-record .lr-tear { opacity: 0; }
+  .speaker-portrait.live-record .lr-band {     /* red-amber overwrite sweep band; top/height/opacity driven by the loop */
+    position: absolute; left: 0; right: 0; height: 14%; top: 0;
+    mix-blend-mode: screen; opacity: 0;
+    background: linear-gradient(180deg,
+      rgba(240,104,74,0) 0%, rgba(240,104,74,0.85) 50%, rgba(240,104,74,0) 100%);
+  }
+  .speaker-portrait.live-record .lr-live {     /* the "LIVE" badge — position/size driven by the loop (LIVE_BADGE) */
+    position: absolute; top: 3px; left: 3px; z-index: 4; pointer-events: none;
+    font-family: 'Press Start 2P', monospace; font-size: 6px; letter-spacing: 0.5px;
+    color: #ffd9cf; text-shadow: 0 0 3px rgba(240,104,74,0.9);
+    display: flex; align-items: center; gap: 3px;
+  }
+  .speaker-portrait.live-record .lr-live::before {   /* pulsing rec dot (size/speed via CSS vars from LIVE_BADGE) */
+    content: ''; width: var(--lr-dot, 5px); height: var(--lr-dot, 5px); border-radius: 50%;
+    background: #f0684a; box-shadow: 0 0 4px 1px rgba(240,104,74,0.9);
+    animation: lrPulse var(--lr-pulse, 1.1s) ease-in-out infinite;
+  }
+  @keyframes lrPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+  @media (prefers-reduced-motion: reduce) {
+    .speaker-portrait.live-record .lr-live::before { animation: none; }
+  }
+
   /* Emoji fallback when no PNG portrait */
   .speaker-portrait .portrait-fallback {
     width: 100%;
@@ -749,6 +850,37 @@
     background: rgba(192,57,43,0.06);
   }
 
+  /* ── HHH C2 L6: the FINALE VERDICT cards (showSolutionChoice, sc.finale) ──
+     Extends .diagnosis-option. Glow/gap/accent AUTHOR-TUNED 2026-07-13 in
+     c2/resources/demos/finale/index.html (VERDICT_UI: accent #c94ad0, glow 0.75,
+     gap 6, lens #8a94b8) — keep in sync with the VERDICT_UI const. */
+  .verdict-option { margin-bottom: 6px; box-shadow: 0 0 8px rgba(201,74,208,0.26); }
+  .verdict-option .v-title { font-family: 'Press Start 2P', cursive; font-size: 9px; letter-spacing: 1px; line-height: 1.6; color: #c8d0dc; }
+  .verdict-option .v-sub { font-size: 19px; color: #7a8290; margin-top: 6px; }
+  .verdict-option .v-lens { display: none; font-size: 17px; margin-top: 7px; letter-spacing: 1px; font-style: italic; color: #8a94b8; }
+  .verdict-option.lensed .v-lens { display: block; }
+  .verdict-option:hover { background: rgba(201,74,208,0.05); border-color: rgba(201,74,208,0.4); }
+  .verdict-option.selected { border-color: #c94ad0; background: rgba(201,74,208,0.10);
+    box-shadow: 0 0 17px rgba(201,74,208,0.75); }
+  .verdict-option.selected .v-title { color: #f0e8ff; }
+
+  /* ── HHH C2 L6: the CASE DOSSIER view (showDossier — the identity-assembly
+     surface; a lens over Field Notes, not a replacement). Author-tuned defaults
+     2026-07-13 (finale demo, Dossier tab): accentDone #c94ad0, portraitTreat none. */
+  .dz-sub { font-size: 18px; color: #8a8f9c; margin: -8px 0 14px; letter-spacing: 0.5px; }
+  .dz-facet { border: 2px solid rgba(74,106,138,0.3); padding: 9px 12px; margin-bottom: 8px; transition: border-color 0.4s; }
+  .dz-facet .dz-tag { font-family: 'Press Start 2P', cursive; font-size: 7px; letter-spacing: 2px; color: #4a6a8a; margin-bottom: 6px; }
+  .dz-facet .dz-title { font-size: 21px; color: #e8b84a; letter-spacing: 0.5px; }
+  .dz-facet .dz-line { font-size: 19px; color: #b0b8c8; line-height: 1.35; }
+  .dz-facet.filled { border-color: rgba(232,184,74,0.45); }
+  .dz-redact { display: inline-block; height: 14px; background: #232a38; vertical-align: middle; border-radius: 1px; }
+  #dz-profile { border: 2px solid #c94ad0; padding: 12px; margin-top: 4px; text-align: center; }
+  #dz-profile .dz-tag { font-family: 'Press Start 2P', cursive; font-size: 7px; letter-spacing: 2px; color: #c94ad0; margin-bottom: 6px; }
+  #dz-profile img { width: 96px; height: 96px; image-rendering: pixelated; display: block; margin: 8px auto;
+    border: 3px solid rgba(201,74,208,0.5); background: #0a0e1a; }
+  #dz-profile .dz-name { font-family: 'Press Start 2P', cursive; font-size: 9px; letter-spacing: 2px; color: #c94ad0; margin-top: 4px; }
+  #dz-profile .dz-cue { font-size: 19px; color: #8a8f9c; margin-top: 8px; }
+
   /* Hint box (wrong answer) */
   .hint-box {
     margin-top: 14px;
@@ -837,7 +969,13 @@
     gap: 8px;
     transition: background 0.1s, border-color 0.1s;
     position: relative;
-    height: 48px;
+    /* min-height (not fixed height): a 2-line label (e.g. "READ THE ACCESSION
+       LEDGER") grows the cell instead of spilling into the button below. The
+       grid's default align-items:stretch keeps each row's two cells even; the
+       flex-shrink:0 action-area grows and the scrollable info-area absorbs it. */
+    min-height: 48px;
+    line-height: 1.1;
+    overflow: hidden;
   }
 
   .action-btn .action-icon-img {
@@ -946,7 +1084,7 @@
     letter-spacing: 1px;
     padding: 8px 10px;
     margin: 0;
-    height: 48px;
+    min-height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1126,6 +1264,20 @@
     opacity: 0.35;
     pointer-events: none;
     border-style: inset;
+  }
+  /* HHH C2 L6: the Case Dossier button pulses while a newly-added facet is unseen
+     (cleared when the dossier is opened). Magenta to echo the C2 corruption accent. */
+  .call-home-btn.dossier-new {
+    color: #e879f5;
+    border-color: #c94ad0;
+    animation: dossierPulse 1.1s ease-in-out infinite;
+  }
+  @keyframes dossierPulse {
+    0%, 100% { box-shadow: 0 0 3px rgba(201,74,208,0.35); border-color: #7a4a6a; }
+    50%      { box-shadow: 0 0 12px 2px rgba(201,74,208,0.85); border-color: #e879f5; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .call-home-btn.dossier-new { animation: none; box-shadow: 0 0 9px rgba(201,74,208,0.7); }
   }
 
   /* Campaign 2: dual-portrait briefing frame (Nova + Zel'keth) */
@@ -1334,11 +1486,203 @@
   /* keep Begin above the vortex canvas once the intro clears its inline transform */
   #begin-btn { position: relative; z-index: 1; }
 
+  /* ══════════════════════════════════════════════════════════════════
+     HHH C2 — startup bridge (ported from c2/c2 intro demo.html, Animation A only).
+     #title-core groups the title block (icon → Begin) so it can lift as ONE rigid
+     unit when the Archive Integrity Alert boots in below it (c2 plan §4c). The
+     alert box is absolutely positioned, so revealing it never reflows the block.
+     ══════════════════════════════════════════════════════════════════ */
+  #title-core {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 22px; z-index: 1;
+    transition: transform 0.7s cubic-bezier(.2,.7,.2,1);
+  }
+  /* Only the hero mark changes on activation: it collapses + fades, pulling the
+     rigid block up as one. margin-bottom:-22 reclaims the gap the icon held. */
+  #title-core #title-icon { transition: height 0.7s cubic-bezier(.2,.7,.2,1), opacity 0.5s ease, margin 0.7s cubic-bezier(.2,.7,.2,1); }
+  #title-core.compact #title-icon { height: 0; opacity: 0; margin-bottom: -22px; overflow: hidden; }
+
+  #c2-alert {
+    position: absolute; left: 0; right: 0;
+    display: none;                 /* set to flex on activation */
+    justify-content: center;
+    z-index: 1;
+    opacity: 0; transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(.2,.7,.2,1);
+    pointer-events: none;
+  }
+  #c2-alert.reveal { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+  .c2-frame {
+    position: relative; width: 470px; max-width: 82%;
+    border: 2px solid rgba(232,184,74,0.50);
+    background: linear-gradient(180deg, rgba(16,26,40,0.94), rgba(6,12,22,0.94));
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.5), 0 0 22px rgba(232,184,74,0.10);
+    padding: 13px 16px 15px;
+    overflow: hidden;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  /* corrupted state — the C2 glitch-magenta signature */
+  .c2-frame.corrupt {
+    border-color: rgba(201,74,208,0.75);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.5), 0 0 28px rgba(201,74,208,0.32);
+  }
+  .c2-head {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px; letter-spacing: 1px; text-transform: uppercase;
+    color: #e8b84a; text-shadow: 0 0 8px rgba(232,184,74,0.55);
+    margin-bottom: 10px; line-height: 1.5; min-height: 14px; white-space: nowrap;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+  }
+  .c2-frame.corrupt .c2-head { color: #c94ad0; text-shadow: 0 0 10px rgba(201,74,208,0.55); }
+  .c2-body {
+    font-family: 'VT323', monospace;
+    font-size: 19px; line-height: 1.35; letter-spacing: 0.5px;
+    color: #cbd6c9; height: 78px;
+    white-space: pre-wrap;
+    transition: color 0.2s ease;
+  }
+  .c2-body .amber { color: #e8b84a; }
+  .c2-body .ok    { color: #8fd694; }
+  .c2-frame.corrupt .c2-body { color: #e7a6ea; }
+  .c2-body .bar   { color: #e8b84a; letter-spacing: 0; }
+  .c2-frame.corrupt .c2-body .bar { color: #c94ad0; }
+
+  /* the OPEN CASE FILE button */
+  .c2-cta {
+    margin-top: 11px; font-size: 19px; padding: 6px 20px;
+    border-color: #c94ad0; color: #c94ad0;
+    text-shadow: 0 0 6px rgba(201,74,208,0.55);
+    animation: c2-cta-pulse 1.5s infinite ease-in-out;
+  }
+  .c2-cta:disabled {
+    opacity: 0.32; pointer-events: none; animation: none;
+    border-color: #555; color: #888; text-shadow: 2px 2px 0 #000;
+  }
+  @keyframes c2-cta-pulse {
+    0%,100% { box-shadow: 0 0 4px rgba(201,74,208,0.15); }
+    50%     { box-shadow: 0 0 16px rgba(201,74,208,0.55); }
+  }
+
+  /* scan sweep bar (Animation A) */
+  .c2-scan {
+    position: absolute; left: 0; right: 0; height: 16px; top: -20px;
+    background: linear-gradient(180deg, transparent, rgba(232,184,74,0.38), transparent);
+    pointer-events: none; opacity: 0; z-index: 3;
+  }
+  .c2-scan.run { animation: c2-sweep 0.9s ease-in-out 1; }
+  @keyframes c2-sweep {
+    0% { top: -20px; opacity: 0; } 12% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+  /* the glitch "turn" (Animation A) */
+  .c2-frame.glitch { animation: c2-shake 0.42s steps(2) 1; }
+  @keyframes c2-shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-4px) skewX(-2deg); }
+    40% { transform: translateX(4px) skewX(2deg); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+    100% { transform: translateX(0); }
+  }
+  /* magenta flash overlay for the turn */
+  .c2-flash {
+    position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background: #c94ad0; opacity: 0;
+  }
+  .c2-flash.fire { animation: c2-flash 0.5s ease-out 1; }
+  @keyframes c2-flash { 0% { opacity: 0.5; } 100% { opacity: 0; } }
+
+  /* ══════════════════════════════════════════════════════════════════
+     HHH C2 — TAA FIELD INTAKE: the two Level 0 pop-ups fired by Open Case File
+     (clean amber onboarding — NOT the magenta alert state). Step 1 = companion
+     re-confirm/swap, step 2 = archivist discipline. Ported from the demo.
+     ══════════════════════════════════════════════════════════════════ */
+  #intake {
+    position: absolute; inset: 0; z-index: 60; display: none;
+    flex-direction: column; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at center, #0d1a2e 0%, #04070e 100%);
+    font-family: 'VT323', monospace;
+  }
+  #intake.show { display: flex; }
+  #intake .intake-scan {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,0.10) 3px, transparent 4px);
+    mix-blend-mode: multiply;
+  }
+  .intake-card {
+    position: relative; z-index: 2; width: 660px; max-width: 88%;
+    border: 2px solid rgba(232,184,74,0.55);
+    background: linear-gradient(180deg, rgba(16,26,40,0.96), rgba(6,12,22,0.96));
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.5), 0 0 30px rgba(232,184,74,0.12);
+    padding: 22px 24px 22px;
+  }
+  .intake-eyebrow {
+    font-family: 'Press Start 2P', cursive; font-size: 8px; letter-spacing: 2px;
+    color: #6a7a8a; text-transform: uppercase;
+  }
+  .intake-step {
+    float: right; font-family: 'Press Start 2P', cursive; font-size: 8px;
+    color: #55636e; letter-spacing: 2px;
+  }
+  .intake-title {
+    font-family: 'Press Start 2P', cursive; font-size: 13px; color: #e8b84a;
+    text-shadow: 0 0 12px rgba(232,184,74,0.55); letter-spacing: 2px;
+    text-transform: uppercase; margin: 12px 0 8px; line-height: 1.4;
+  }
+  .intake-carried { font-size: 17px; color: #8fd694; margin-bottom: 8px; letter-spacing: 0.5px; }
+  .intake-carried:empty { display: none; margin: 0; }
+  .intake-prompt { font-size: 19px; color: #cbd6c9; letter-spacing: 0.5px; margin-bottom: 16px; line-height: 1.35; }
+  .intake-opts { display: flex; gap: 12px; }
+  .opt {
+    flex: 1; cursor: pointer; text-align: left;
+    border: 2px solid rgba(232,184,74,0.3);
+    background: rgba(8,16,24,0.75); padding: 12px 13px;
+    transition: border-color 0.12s, background 0.12s, box-shadow 0.12s;
+  }
+  .opt:hover { border-color: rgba(232,184,74,0.6); background: rgba(30,26,16,0.85); }
+  .opt.selected {
+    border-color: #e8b84a; background: rgba(232,184,74,0.12);
+    box-shadow: 0 0 14px rgba(232,184,74,0.22);
+  }
+  .opt-head { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+  .opt-icon {
+    flex: 0 0 32px; width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(232,184,74,0.35); background: rgba(0,0,0,0.28);
+    overflow: hidden;
+  }
+  .opt.selected .opt-icon { border-color: #e8b84a; }
+  .opt-icon img { width: 32px; height: 32px; image-rendering: pixelated; display: block; }
+  .opt .opt-name {
+    font-family: 'Press Start 2P', cursive; font-size: 10px; color: #e8b84a;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .opt.selected .opt-name { text-shadow: 0 0 8px rgba(232,184,74,0.55); }
+  .opt .opt-blurb { font-size: 16px; color: #9fb0ba; line-height: 1.3; }
+  .opt .opt-tag { display: block; margin-top: 8px; font-size: 14px; color: #6a7a84; line-height: 1.3; }
+  .opt .opt-tag b { color: #c9b579; }
+  .intake-foot { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+  .intake-hint { flex: 1; font-size: 15px; color: #55636e; letter-spacing: 0.5px; }
+  .intake-back { font-size: 16px; padding: 5px 12px; }
+  #intake-confirm:disabled {
+    opacity: 0.32; pointer-events: none;
+    border-color: #555; color: #888; text-shadow: 2px 2px 0 #000;
+  }
+
   /* Victory screen */
   #victory-screen {
     background: radial-gradient(ellipse at center, #0d1a2e 0%, #050a14 70%, #000 100%);
     flex-direction: column;
     gap: 16px;
+  }
+  /* HHH C2 L6 finale: the ending core + coda make this screen taller than the
+     viewport — scroll it (top-aligned + padded) so the title and Return button
+     stay reachable. C1 victory is short enough to stay centered. */
+  #victory-screen.c2-finale {
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding: 30px 16px 34px;
   }
 
   .victory-title {
@@ -2085,6 +2429,36 @@
     opacity: 1;
     filter: drop-shadow(0 0 8px rgba(232,184,74,0.7));
   }
+  /* ── HHH C2: campaign-2 handbook ─────────────────────────────────
+     .badge2 = the C2 badge sheet (1536×1024, 512px frames → 1/8 scale, same 64px
+     cells as .badge). R0 (carried Keeper of the Chain) reuses the C1 .badge class.
+     Panels are campaign-gated: openHelp() stamps .c2 on #help-overlay. */
+  .hb-sprite.badge2 {
+    width: 64px; height: 64px;
+    background-image: url(c2/ui/spritesheet_badges.png);
+    background-size: 192px 128px;
+    opacity: 0.5;
+    filter: grayscale(0.5);
+    transition: all 0.2s;
+  }
+  .hb-sprite.badge2-r1 { background-position:  -64px    0px; }  /* Corruption Scout       (512,0)    */
+  .hb-sprite.badge2-r2 { background-position: -128px  -64px; }  /* Trace Analyst          (1024,512) */
+  .hb-sprite.badge2-r3 { background-position: -128px    0px; }  /* Thread Surgeon         (1024,0)   */
+  .hb-sprite.badge2-r4 { background-position:    0px  -64px; }  /* Temporal Advocate      (0,512)    */
+  .hb-sprite.badge2-r5 { background-position:  -64px  -64px; }  /* The Unforged           (512,512)  */
+  .hb-sprite.badge2-r6 { background-position:    0px    0px; }  /* Architect of the Chain (0,0)      */
+  .hb-rank.current .hb-sprite.badge2 {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(232,184,74,0.7));
+  }
+  /* The capstone row stays sealed until the hidden finale is unlocked (no spoilers
+     on a mid-campaign read) — blurred dark silhouette (the badge art bakes in its
+     rank name, so a dim-only treatment stays legible) + a dim magenta [ SEALED ].
+     clip-path keeps the blur bleed inside the 64px cell. */
+  .hb-rank.sealed .hb-sprite.badge2 { filter: grayscale(1) brightness(0.25) blur(3px); clip-path: inset(0); opacity: 0.8; }
+  .hb-rank.sealed .hb-rank-name { color: #b64fc8; opacity: 0.75; }
+  #help-overlay:not(.c2) .help-tab-panel.hb-c2 { display: none !important; }
+  #help-overlay.c2 .help-tab-panel.hb-c1 { display: none !important; }
   .hb-rank-name {
     font-family: 'Press Start 2P', cursive;
     font-size: 7px;
@@ -2197,6 +2571,10 @@
   <div id="title-screen" class="overlay">
     <canvas id="chrono-bg" aria-hidden="true"></canvas>
 
+    <!-- HHH C2 (§4c): #title-core groups the title block so the C2 bridge can lift
+         it as one rigid unit while the hero icon folds (.compact). -->
+    <div id="title-core">
+
     <img id="title-icon" src="UI/hhh_icon.png" alt="HHH" onerror="this.style.display='none'">
 
     <div id="title-logo">
@@ -2213,10 +2591,23 @@
 
     <button id="begin-btn" class="retro-btn accent">Begin</button>
 
-    <!-- DORMANT — reserved for a future HHH Campaign 2 (see C2 note in HHH_HANDOFF.md).
-         In SSS this was the "Incoming Transmission" pickup that appeared once the
-         first campaign was finished. Kept hidden until the in-world C2 manifestation
-         on the HHH startup screen is designed. Do NOT remove. -->
+    </div><!--/title-core-->
+
+    <!-- HHH C2: the ARCHIVE INTEGRITY ALERT bridge box (Animation A · Self-Scan).
+         Absolutely positioned — JS (layoutC2) sets its top to sit in the space the
+         lifted title block opens below Begin. Shows only when c1Finished(). -->
+    <div id="c2-alert" aria-live="polite">
+      <div class="c2-frame">
+        <div class="c2-scan"></div>
+        <div class="c2-flash"></div>
+        <div class="c2-head"></div>
+        <div class="c2-body"></div>
+        <button id="open-case-btn" class="retro-btn c2-cta" disabled>▶ Open Case File</button>
+      </div>
+    </div>
+
+    <!-- DORMANT — the SSS "Incoming Transmission" pickup this bridge supersedes
+         (#c2-alert above is the in-world C2 manifestation). Kept for reference. -->
     <div id="transmission-btn" class="hidden">
       <div class="tx-scanlines"></div>
       <div class="tx-led" id="tx-led"></div>
@@ -2234,7 +2625,9 @@
     <img id="insignia-mark" src="UI/taa_insignia.png" alt="TAA" onerror="this.style.display='none'">
     <div id="title-vignette"></div>
     <div id="title-scanlines"></div>
-    <div id="prompt">press enter or click begin</div>
+    <!-- (the "press enter or click begin" prompt line was removed 2026-07-15 — author
+         call: SSS had no equivalent and it was redundant. Every JS ref to #prompt is
+         null-guarded; Enter on the name field still begins.) -->
   </div>
 
   <!-- Victory screen overlay -->
@@ -2242,6 +2635,26 @@
 
   <!-- Resume prompt overlay -->
   <div id="resume-prompt" class="overlay hidden"></div>
+
+  <!-- HHH C2: TAA Field Intake — the two Level 0 pop-ups fired by Open Case File
+       (step 1 = companion carry-over/re-select, step 2 = archivist discipline).
+       Rendered by JS into this one card; options come from HHH_C2_DATA.meta. -->
+  <div id="intake">
+    <div class="intake-scan"></div>
+    <div class="intake-card">
+      <span class="intake-step" id="intake-step">STEP 1 / 2</span>
+      <div class="intake-eyebrow">TAA Field Intake</div>
+      <div class="intake-title" id="intake-title"></div>
+      <div class="intake-carried" id="intake-carried"></div>
+      <div class="intake-prompt" id="intake-prompt"></div>
+      <div class="intake-opts" id="intake-opts"></div>
+      <div class="intake-foot">
+        <button id="intake-back" class="retro-btn intake-back" style="display:none;">← Back</button>
+        <span class="intake-hint" id="intake-hint"></span>
+        <button id="intake-confirm" class="retro-btn accent" disabled>Confirm</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Campaign 2 character creation overlay -->
   <div id="char-create" class="overlay hidden"></div>
@@ -2258,7 +2671,7 @@
         <button class="help-tab" data-tab="file" type="button">AGENT FILE</button>
       </div>
       <div id="help-content">
-        <div class="help-tab-panel active" data-panel="how">
+        <div class="help-tab-panel hb-c1 active" data-panel="how">
           <h3>WALKING A THREAD</h3>
           <p>The Temporal Agricultural Archive sends you back along a <b>thread</b> to a moment where the story of food turned &mdash; and where the record is about to be sealed with the <i>wrong</i> cause. Your work is always the same: <b>look</b>, <b>ask</b>, <b>gather what really happened</b>, then <b>stabilize the record</b> so history keeps the truth.</p>
 
@@ -2289,7 +2702,7 @@
           <p>People are not interchangeable. Each has a temper &mdash; <b>patient</b>, <b>stressed</b>, <b>stoic</b>, <b>curious</b>, and more. Push too hard or too rudely and a mood can close a door on evidence. Some forgive; some don't.</p>
         </div>
 
-        <div class="help-tab-panel" data-panel="file">
+        <div class="help-tab-panel hb-c1" data-panel="file">
           <h3>THE CHAIN</h3>
           <p>The Archive keeps the <b>chain</b> &mdash; the unbroken line of how humankind learned to feed itself, from the first saved seed to the last. Break a link (let a moment be remembered wrongly) and everything downstream frays. Each thread you walk keeps one link whole.</p>
 
@@ -2332,6 +2745,97 @@
             <span class="name">SOMEONE VOUCHED FOR YOU</span>
             When you took your oath, one of three &mdash; <b>Yvi</b> the Oolian, <b>Saren</b> the Rhessi, or <b>Korl</b> the Vressk &mdash; put their name beside yours. The choice is yours, and it is permanent. They are waiting for you when the last thread is walked.
           </div>
+        </div>
+
+        <!-- ── HHH C2: campaign-2 handbook panels (shown when #help-overlay.c2;
+             the tab buttons are shared — CSS gates which campaign's copy renders).
+             NO ARS SPOILERS: this must read safely at any point from L0 on. -->
+        <div class="help-tab-panel hb-c2 active" data-panel="how">
+          <h3>WALKING THE SECOND LAYER</h3>
+          <p>The chain is stabilized &mdash; you sealed it yourself. But the audit has found threads where something waits <i>under</i> the seal: a <b>forged record</b>, planted where the true one should sit. You walk the thread again with fresh eyes. <b>Look</b>, <b>ask</b>, <b>gather what really happened</b> &mdash; then <b>validate the record</b>, so the layer that survives is the true one.</p>
+
+          <h3>YOUR SOURCES</h3>
+          <p>Each scene offers a few ways to learn. Work all of them &mdash; and revisit any as often as you like.</p>
+          <div class="hb-source-grid">
+            <div class="hb-source">
+              <div class="hb-source-label"><b>PEOPLE</b>Speak with the folk who live it. They answer in their own voice.</div>
+            </div>
+            <div class="hb-source">
+              <div class="hb-source-label"><b>THE SCENE</b>Examine the soil, the crop, the ground itself &mdash; up close, first-hand.</div>
+            </div>
+            <div class="hb-source">
+              <div class="hb-source-label"><b>TAA RECORDS</b>Read a device or archive: instrument readouts and the written record.</div>
+            </div>
+            <div class="hb-source">
+              <div class="hb-source-label"><b>TAA COMMS</b>Once per thread, reach your field partner for a nudge in the right direction.</div>
+            </div>
+          </div>
+
+          <h3>YOUR DISCIPLINE</h3>
+          <p>You declared how you were trained to read a record &mdash; <b>provenance</b>, <b>forensics</b>, or <b>testimony</b>. The Archive sorts what you find through that training: evidence your discipline favors opens to you easily. Lead with your strength &mdash; and work every source; a record answers best to a whole reading.</p>
+
+          <h3>TRAVELLING A THREAD</h3>
+          <p>A thread can span more than one place. Use the <b>location bar</b> above the scene to travel. New locations open up as you learn &mdash; a locked one is waiting on a clue you haven't found yet. Tap it to see what it needs.</p>
+
+          <h3>THE VERDICT</h3>
+          <p>Every clue you uncover is logged to your <b>Field Notes</b>. Some clues are <b>required</b> to settle the thread; others are <b>extra insight</b> &mdash; not needed, but worth points and worth knowing. When you have the required clues, return to the <b>anchor</b> location and <b>Validate the Record</b>: the candidate records go up, and you name the genuine one. Guess early if you dare &mdash; a wrong call costs you.</p>
+          <!-- (no READING THE ROOM here — C2 data has zero moodShift beats; the mood
+               system only fires in Campaign 1. Author call 2026-07-15.) -->
+        </div>
+
+        <div class="help-tab-panel hb-c2" data-panel="file">
+          <h3>THE SECOND LAYER</h3>
+          <p>The Archive keeps the <b>chain</b> &mdash; and the chain held. But an audit of the stabilized record has turned up forgeries <i>beneath</i> the seals: deliberate, patient, each one teaching the record a wrong lesson about what happens when knowledge crosses a boundary. The pattern has a shape. Walk enough threads, and the Archive will learn it.</p>
+
+          <h3>RANK LADDER</h3>
+          <p>You arrive carrying your rank from the first campaign &mdash; <b>Keeper of the Chain</b> &mdash; and the audit's ladder climbs from there.</p>
+          <div class="hb-rank-ladder" id="hb-rank-ladder-c2">
+            <div class="hb-rank" data-rank="0">
+              <div class="hb-sprite badge badge-r5"></div>
+              <div class="hb-rank-name">KEEPER OF THE CHAIN</div>
+            </div>
+            <div class="hb-rank-arrow">&rarr;</div>
+            <div class="hb-rank" data-rank="1">
+              <div class="hb-sprite badge2 badge2-r1"></div>
+              <div class="hb-rank-name">CORRUPTION SCOUT</div>
+            </div>
+            <div class="hb-rank-arrow">&rarr;</div>
+            <div class="hb-rank" data-rank="2">
+              <div class="hb-sprite badge2 badge2-r2"></div>
+              <div class="hb-rank-name">TRACE ANALYST</div>
+            </div>
+            <div class="hb-rank-arrow">&rarr;</div>
+            <div class="hb-rank" data-rank="3">
+              <div class="hb-sprite badge2 badge2-r3"></div>
+              <div class="hb-rank-name">THREAD SURGEON</div>
+            </div>
+            <div class="hb-rank-arrow">&rarr;</div>
+            <div class="hb-rank" data-rank="4">
+              <div class="hb-sprite badge2 badge2-r4"></div>
+              <div class="hb-rank-name">TEMPORAL ADVOCATE</div>
+            </div>
+            <div class="hb-rank-arrow">&rarr;</div>
+            <div class="hb-rank" data-rank="5">
+              <div class="hb-sprite badge2 badge2-r5"></div>
+              <div class="hb-rank-name">THE UNFORGED</div>
+            </div>
+            <div class="hb-rank-arrow">&rarr;</div>
+            <div class="hb-rank sealed" data-rank="6">
+              <div class="hb-sprite badge2 badge2-r6"></div>
+              <div class="hb-rank-name">[ SEALED ]</div>
+            </div>
+          </div>
+
+          <h3>YOUR FIELD PARTNER</h3>
+          <div class="hb-lore">
+            <span class="name">A VOICE BESIDE YOU</span>
+            One of three &mdash; <b>Yvi</b> the Oolian, <b>Saren</b> the Rhessi, or <b>Korl</b> the Vressk &mdash; signed onto this audit at your side. They are your comms, your second pair of eyes, and the one who will say out loud what the pattern is once you have both seen enough of it.
+          </div>
+
+          <h3>YOUR DISCIPLINE</h3>
+          <p><b>PROVENANCE</b> &mdash; you trust where a record came from: custody, seals, the hands it passed through. Strong on clear-origin records.</p>
+          <p><b>FORENSICS</b> &mdash; you trust the record itself: ink, fiber, signal. Strong on flaws in the artifact.</p>
+          <p><b>TESTIMONY</b> &mdash; you trust the witnesses. Strong where voices contradict the record.</p>
         </div>
       </div>
     </div>
@@ -2907,6 +3411,9 @@
 
 <!-- HHH: SSS data files (space_sprout_sleuth_data.js + campaign_2_data.js) replaced by a single HHH data file. -->
 <script src="hhh_data.js"></script>
+<!-- HHH C2: Campaign 2 "The Forward Thread" content tree (HHH_C2_DATA + HHH_C2_FRAMES).
+     Always loaded (small); the engine reads it only when STATE.campaign === 2. -->
+<script src="hhh_campaign_2_data.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════════════
 // SPACE SPROUT SLEUTH — Game Engine
@@ -2920,14 +3427,48 @@
   // (setActiveCampaign is neutralized below and reads only GAME_DATA.ranks/personalities).
   // It was the last load-time consumer of the CAMPAIGN_2_DATA stub. Dropped.
 
-  // HHH: neutralized — single-path game, no campaign switching. Pins the engine's
-  // GAME_DATA.ranks + GAME_DATA.personalities to the HHH data tree. (idx ignored;
-  // never swaps to a C2 campaign.) GAME_DATA.cases is fed one flattened level by
-  // enterLevel(). GAME_DATA.personalities is read by the dialogue/mood engine but
-  // defined nowhere else, so installing it here is load-bearing.
+  // ═══════════════════════════════════════════════════════════════
+  // ⚠️ HHH C2 BUILD MODE — TEMPORARY DEV SCAFFOLD. ★ FLIP TO false BEFORE SHIP ★
+  // While true (the whole C2 build): DEV_MODE is forced ON at every boot (ignoring
+  // the persisted hhh_dev off-state, and setDevMode(false) is a no-op — the god
+  // gesture cannot turn dev off), and the title's Archive Integrity Alert bridge
+  // treats Campaign 1 as always-finished so C2 is reachable on every load.
+  // Flipping this to false restores exactly the shipped behavior: dev defaults
+  // OFF, the god gesture toggles both ways, and the bridge gates on the real
+  // persisted STATE.campaign1Complete flag. See HHH_HANDOFF.md C2 session notes.
+  // ═══════════════════════════════════════════════════════════════
+  const C2_BUILD_MODE = false;
+
+  // ── HHH C2: active-campaign data accessor ──
+  // STATE.campaign (1 | 2) picks the content tree: hhh_data.js (C1) or
+  // hhh_campaign_2_data.js (C2). All live engine reads go through activeData();
+  // the dormant SSS branches keyed on STATE.currentCampaign === 1 stay dead
+  // forever (HHH C2 deliberately does NOT reuse the SSS C2 layout/victory paths).
+  function inCampaign2() { return STATE && STATE.campaign === 2; }
+  function activeData() {
+    return (inCampaign2() && window.HHH_C2_DATA) ? window.HHH_C2_DATA : HHH_DATA;
+  }
+  // The C2 bridge gate: real flag, or always-on while building C2.
+  // HHH C2 (ship fix 2026-07-15): ALSO consult the persisted save. STATE boots as
+  // defaultState() and is only hydrated on Resume, so on a fresh page load the title
+  // settles with STATE.campaign1Complete=false even for a finished-C1 profile — the
+  // bridge (and the C2-victory cross-rank line) must read the durable save-level fact,
+  // like savedPlayerName()/savedC1Companion() already do. (Masked under C2_BUILD_MODE,
+  // which short-circuits this gate true; caught by the shipped-mode live pass.)
+  function c1Finished() {
+    if (C2_BUILD_MODE || !!(STATE && STATE.campaign1Complete)) return true;
+    const saved = loadState();
+    return !!(saved && saved.campaign1Complete);
+  }
+
+  // HHH: neutralized — no SSS campaign registry. Pins the engine's GAME_DATA.ranks +
+  // GAME_DATA.personalities to the ACTIVE HHH data tree (C1 or C2 via activeData()).
+  // (idx ignored.) GAME_DATA.cases is fed one flattened level by enterLevel().
+  // GAME_DATA.personalities is read by the dialogue/mood engine but defined nowhere
+  // else, so installing it here is load-bearing.
   function setActiveCampaign(idx) {
-    GAME_DATA.ranks = HHH_DATA.meta.ranks;
-    GAME_DATA.personalities = HHH_DATA.meta.personalities;
+    GAME_DATA.ranks = activeData().meta.ranks;
+    GAME_DATA.personalities = activeData().meta.personalities;
   }
 
   // ── DOM refs ────────────────────────────────────────────────────
@@ -3002,6 +3543,10 @@
     if (!framesPromise && typeof HHH_FRAMES !== 'undefined' && HHH_FRAMES[spriteSrc]) {
       framesPromise = Promise.resolve(HHH_FRAMES[spriteSrc]);
     }
+    // HHH C2 embedded frame data (c2/npc/*, c2/ui/*) — same file:// trick.
+    if (!framesPromise && typeof HHH_C2_FRAMES !== 'undefined' && HHH_C2_FRAMES[spriteSrc]) {
+      framesPromise = Promise.resolve(HHH_C2_FRAMES[spriteSrc]);
+    }
     if (!framesPromise) {
       framesPromise = fetch(jsonSrc).then(r => r.json()).then(j => j.frames);
     }
@@ -3066,7 +3611,8 @@
   }
 
   function loadBadgeSheetC2() {
-    return loadSpritesheet('sprites/c2/badge_spritesheet_c2.png', 'sprites/c2/badge_spritesheet_c2.json').then(data => {
+    // HHH C2: rank badge sheet (frames embedded in HHH_C2_FRAMES → file:// safe, no fetch)
+    return loadSpritesheet('c2/ui/spritesheet_badges.png', 'c2/ui/spritesheet_badges.json').then(data => {
       const frameMap = {};
       data.frames.forEach(f => { frameMap[f.filename] = f.frame; });
       badgeSheetDataC2 = { img: data.img, frameMap: frameMap };
@@ -3075,7 +3621,7 @@
   }
 
   function getActiveBadgeSheet() {
-    return (STATE.currentCampaign === 1) ? badgeSheetDataC2 : badgeSheetData;
+    return inCampaign2() ? badgeSheetDataC2 : badgeSheetData;
   }
 
   let alienSheetData = null;
@@ -3135,24 +3681,206 @@
   // Build portrait HTML — canvas for spritesheet, or emoji fallback
   function portraitHtml(clue) {
     const sprites = clue.sprites || {};
+    // HHH C2: recovered-archive figures (vavilov/borlaug, sprite spec §2.5-lite) get a
+    // desaturating scanline treatment — CSS class + overlay; values live in the CSS block.
+    // The Nova ARCHIVE-GHOST (L4, §2.5 full) is a heavier sibling: same af-scan/af-roll
+    // overlays plus a cyan ag-tint, styled by .archive-ghost, glitched by the afMotion loop.
+    const af = clue.archiveGhost ? ' archive-ghost' : (clue.archiveFigure ? ' archive-figure' : (clue.liveRecord ? ' live-record' : ''));
+    // live-record overlays: .lr-fx = screen-clipped effect layer (jolt + tear are translated
+    // copies of the art itself; band = the red overwrite sweep), .lr-live = the LIVE badge.
+    const lrCopies = (clue.liveRecord && sprites.iconImg)
+      ? '<div class="lr-jolt" style="background-image:url(\'' + sprites.iconImg + '\')"></div>' +
+        '<div class="lr-tear" style="background-image:url(\'' + sprites.iconImg + '\')"></div>' : '';
+    const afScan = clue.archiveGhost ? '<div class="ag-tint"></div><div class="af-scan"></div><div class="af-roll"></div>'
+                 : clue.archiveFigure ? '<div class="af-scan"></div><div class="af-roll"></div>'
+                 : clue.liveRecord ? '<div class="lr-fx">' + lrCopies + '<div class="lr-band"></div></div><div class="lr-live">LIVE</div>' : '';
     if (sprites.alienPortrait) {
-      return '<div class="speaker-portrait" id="active-portrait">' +
-        '<canvas id="portrait-canvas" width="96" height="96" data-alien-frame="' + sprites.alienPortrait + '"></canvas></div>';
+      return '<div class="speaker-portrait' + af + '" id="active-portrait">' +
+        '<canvas id="portrait-canvas" width="96" height="96" data-alien-frame="' + sprites.alienPortrait + '"></canvas>' + afScan + '</div>';
     }
     if (sprites.spritesheet) {
-      return '<div class="speaker-portrait" id="active-portrait">' +
-        '<canvas id="portrait-canvas" width="96" height="96"></canvas></div>';
+      return '<div class="speaker-portrait' + af + '" id="active-portrait">' +
+        '<canvas id="portrait-canvas" width="96" height="96"></canvas>' + afScan + '</div>';
     }
     if (sprites.portrait) {
-      return '<div class="speaker-portrait" id="active-portrait">' +
-        '<canvas id="portrait-canvas" width="96" height="96" data-ui-frame="' + sprites.portrait + '"></canvas></div>';
+      return '<div class="speaker-portrait' + af + '" id="active-portrait">' +
+        '<canvas id="portrait-canvas" width="96" height="96" data-ui-frame="' + sprites.portrait + '"></canvas>' + afScan + '</div>';
     }
     if (sprites.iconImg) {                 // loose-PNG portrait (e.g. a specimen) — file:// safe
-      return '<div class="speaker-portrait" id="active-portrait">' +
-        '<img src="' + sprites.iconImg + '" alt=""></div>';
+      return '<div class="speaker-portrait' + af + '" id="active-portrait">' +
+        '<img src="' + sprites.iconImg + '" alt="">' + afScan + '</div>';
     }
     return '<div class="speaker-portrait"><div class="portrait-fallback">' + clue.icon + '</div></div>';
   }
+
+  // ── HHH C2: archive-figure MOTION — slow roll bar + subtle flicker ──
+  // Author call 2026-07-06 ("recovered tape", not a strobe). Values are TUNABLE —
+  // tuned in c2/resources/demos/locationfx/lvl2.html Archive tab (Copy values emits
+  // this const). Base filter numbers must match the .archive-figure CSS above.
+  // One guarded rAF: near-zero work unless an archive-figure portrait is on screen.
+  // Set rollOpacity/flickerAmt to 0 to disable either. Honors prefers-reduced-motion.
+  // AUTHOR-TUNED 2026-07-06 (lvl2 demo Archive tab): faint wide roll + low quick flicker.
+  const AF_MOTION = { rollOpacity: 0.09, rollSecs: 8.0, rollHeight: 24, flickerAmt: 0.06, flickerSpeed: 4.8 };
+  const AF_BASE = { sat: 0.47, con: 1.09, bri: 1.02 };   // = the .archive-figure CSS filter
+  // HHH C2 (L4): the Nova ARCHIVE-GHOST motion — heavier than AF, plus an occasional
+  // 1-frame horizontal GLITCH displacement (§2.5). GHOST_BASE must match the .archive-ghost
+  // CSS filter/opacity. glitchRate = expected glitches/sec; glitchPx = displacement at 3× render.
+  // AUTHOR-TUNED 2026-07-07 (lvl4 demo, Nova ghost tab): faint slow roll + stronger flicker +
+  // rarer/bigger glitch. Set any *0 to disable.
+  const GHOST_MOTION = { rollOpacity: 0.09, rollSecs: 9, rollHeight: 30, flickerAmt: 0.19, flickerSpeed: 5, glitchRate: 0.3, glitchPx: 10, glitchMs: 70 };
+  const GHOST_BASE = { sat: 0.30, con: 1.05, bri: 0.96 };  // = the .archive-ghost CSS filter
+  let ghostGlitchUntil = 0, ghostGlitchNext = 0, ghostGlitchDx = 0;
+  // HHH C2 (L5): the LIVE-RECORD motion — the record is being written NOW. Three glitch
+  // layers, each 0-able (author picks by feel in the lvl5 demo, like the L2 archive motion):
+  //   TEAR  — the image itself rips sideways in a thin band (the star of the treatment),
+  //   JOLT  — an occasional 1-frame whole-screen signal jump (a translated masked copy;
+  //           the bezel never moves),
+  //   BAND  — the red-amber overwrite sweep (the original "blinking line", now demoted).
+  // Plus a subtle face flicker, and the LIVE badge (position/size/pulse via LIVE_BADGE).
+  // All effects are clipped INSIDE the bezel: pixel-exact via the author's B/W luminance
+  // mask (c2/ui/portrait_live_record.mask.jpg, white=screen) + the LIVE_SCREEN clip-path
+  // inset fallback (values read from that mask's screen bbox). Math.random()-free
+  // (resume/harness safe). LR_BASE must match the .live-record CSS filter.
+  // AUTHOR-TUNABLE in c2/resources/demos/locationfx/lvl5.html (Live Record tab).
+  // AUTHOR-TUNED 2026-07-08 (lvl5 demo, Live Record tab): tear + jolt carry the glitch;
+  // the red sweep band is authored OFF (sweepOpacity 0 — layer kept, zeroed).
+  const LIVE_MOTION = {
+    tearPeriod: 2.7, tearMs: 140, tearPx: 3, tearHeight: 18,          // signal tear (px at 1×)
+    joltPeriod: 5.5, joltMs: 100, joltPx: 2,                          // whole-screen jump
+    sweepPeriod: 2.2, sweepMs: 520, sweepOpacity: 0.00, sweepHeight: 14,  // red overwrite band (OFF per author)
+    flickerAmt: 0.12, flickerSpeed: 10,
+  };
+  const LIVE_BADGE  = { x: 8, y: 3, font: 4, dot: 2.5, pulse: 1.5 };  // px at 1× (96×96 portrait)
+  const LIVE_SCREEN = { top: 10.4, right: 6.4, bottom: 10.4, left: 9.4, round: 6 };  // % insets, from the mask bbox
+  const LR_BASE = { sat: 1.08, con: 1.06, bri: 1.0 };   // = the .live-record CSS filter
+  const lrHash = (n) => ((n * 2654435761) >>> 0);       // deterministic per-cycle positions
+  // HHH C2 L6: finale UI consts — AUTHOR-TUNED 2026-07-13 in the finale demo
+  // (c2/resources/demos/finale/index.html). DOSSIER_UI drives the Case Dossier view
+  // (showDossier; redact flicker runs in afMotionLoop below, deterministic).
+  // VERDICT_UI.lens maps discipline → the ending index whose card carries the dim
+  // "training lens" tag (§5b finale tinting — colors, never forces). NOTE: the
+  // verdict/dossier COLORS live in the CSS (.verdict-option / #dz-profile) — this
+  // const carries only what JS needs at render time.
+  const DOSSIER_UI = { revealMs: 900, redactFlicker: 0.45 };
+  const VERDICT_UI = { lens: { provenance: 1, forensics: 2, testimony: 1 },
+                       lensText: 'Your training leans here.' };
+  function liveRecordMotion(wrap, t) {
+    const M = LIVE_MOTION, S = LIVE_SCREEN;
+    const badge = wrap.querySelector('.lr-live');
+    if (badge) {
+      badge.style.left = LIVE_BADGE.x + 'px'; badge.style.top = LIVE_BADGE.y + 'px';
+      badge.style.fontSize = LIVE_BADGE.font + 'px';
+      badge.style.setProperty('--lr-dot', LIVE_BADGE.dot + 'px');
+      badge.style.setProperty('--lr-pulse', LIVE_BADGE.pulse + 's');
+    }
+    const fx = wrap.querySelector('.lr-fx');
+    if (fx) {
+      const clip = 'inset(' + S.top + '% ' + S.right + '% ' + S.bottom + '% ' + S.left + '% round ' + S.round + '%)';
+      if (fx.style.clipPath !== clip) fx.style.clipPath = clip;
+      // Pixel-exact screen shape via the author's B/W luminance mask — hosted play only
+      // (a CSS mask fetch from file:// is CORS-blocked; there the clip-path carries it).
+      if (location.protocol !== 'file:' && !fx.style.maskImage) {
+        fx.style.maskImage = "url('c2/ui/portrait_live_record.mask.jpg')";
+        fx.style.maskMode = 'luminance'; fx.style.maskSize = '100% 100%'; fx.style.maskRepeat = 'no-repeat';
+      }
+    }
+    const tear = wrap.querySelector('.lr-tear');
+    if (tear) {
+      const on = M.tearPx > 0 && (t % M.tearPeriod) < (M.tearMs / 1000);
+      if (on) {
+        const cyc = Math.floor(t / M.tearPeriod),
+              span = Math.max(1, 100 - S.top - S.bottom - M.tearHeight),
+              ty = S.top + lrHash(cyc) % span,
+              dir = Math.sin(cyc * 12.9898) >= 0 ? 1 : -1;
+        tear.style.clipPath = 'inset(' + ty + '% 0 ' + Math.max(0, 100 - ty - M.tearHeight) + '% 0)';
+        tear.style.transform = 'translateX(' + (dir * M.tearPx) + 'px)';
+        tear.style.opacity = 1;
+      } else tear.style.opacity = 0;
+    }
+    // .lr-jolt = the always-on screen copy: the jolt translates it, the flicker filters it.
+    // Both stay inside the screen (the copy lives in the clipped .lr-fx); the bezel is inert.
+    const jolt = wrap.querySelector('.lr-jolt');
+    if (jolt) {
+      const on = M.joltPx > 0 && ((t + 1.7) % M.joltPeriod) < (M.joltMs / 1000);   // phase-offset from the tear
+      if (on) {
+        const dir = Math.sin(Math.floor((t + 1.7) / M.joltPeriod) * 78.233) >= 0 ? 1 : -1;
+        jolt.style.transform = 'translateX(' + (dir * M.joltPx) + 'px)';
+      } else if (jolt.style.transform) jolt.style.transform = '';
+    }
+    const band = wrap.querySelector('.lr-band');
+    if (band) {
+      const on = M.sweepOpacity > 0 && (t % M.sweepPeriod) < (M.sweepMs / 1000);
+      if (on) {
+        const cyc = Math.floor(t / M.sweepPeriod),
+              span = Math.max(1, 100 - S.top - S.bottom - M.sweepHeight);
+        band.style.height = M.sweepHeight + '%';
+        band.style.top = (S.top + lrHash(cyc) % span) + '%';
+        band.style.opacity = M.sweepOpacity;
+      } else band.style.opacity = 0;
+    }
+    // Flicker the SCREEN COPY, not the base art — the bezel must not flicker (author call
+    // 2026-07-08). The copy carries LR_BASE so it matches the base image's CSS filter.
+    const flickTarget = jolt || wrap.querySelector('canvas, img');
+    if (flickTarget && M.flickerAmt > 0) {
+      const fs = M.flickerSpeed,
+            nz = 0.5 + 0.5 * (0.6 * Math.sin(t * fs) + 0.4 * Math.sin(t * fs * 2.3 + 0.7)),
+            bri = LR_BASE.bri * (1 - M.flickerAmt + M.flickerAmt * nz);
+      flickTarget.style.filter = 'saturate(' + LR_BASE.sat + ') contrast(' + LR_BASE.con + ') brightness(' + bri.toFixed(3) + ')';
+    }
+  }
+  (function afMotionLoop() {
+    requestAnimationFrame(afMotionLoop);
+    const afReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // HHH C2 L6: dossier redaction flicker — deterministic (lrHash cycle, no
+    // Math.random), same guarded-early-exit pattern as the portrait treatments.
+    if (!afReduced && DOSSIER_UI.redactFlicker > 0) {
+      const dzBars = document.querySelectorAll('.dz-redact');
+      if (dzBars.length) {
+        const now = performance.now();
+        for (let i = 0; i < dzBars.length; i++) {
+          const h = lrHash(Math.floor(now / 90) + i * 7) % 1000 / 1000;
+          dzBars[i].style.opacity = (1 - DOSSIER_UI.redactFlicker * 0.6 * h).toFixed(3);
+        }
+      }
+    }
+    const wrap = document.querySelector('.speaker-portrait.archive-ghost, .speaker-portrait.archive-figure, .speaker-portrait.live-record');
+    if (!wrap) return;
+    if (afReduced) return;
+    if (wrap.classList.contains('live-record')) { liveRecordMotion(wrap, performance.now() / 1000); return; }
+    const ghost = wrap.classList.contains('archive-ghost');
+    const M = ghost ? GHOST_MOTION : AF_MOTION, B = ghost ? GHOST_BASE : AF_BASE;
+    const t = performance.now() / 1000;
+    const roll = wrap.querySelector('.af-roll');
+    if (roll) {
+      if (M.rollOpacity > 0) {
+        const rh = M.rollHeight, span = 100 + rh * 2;
+        roll.style.height = rh + '%';
+        roll.style.top = (((t / M.rollSecs) % 1) * span - rh).toFixed(2) + '%';
+        roll.style.opacity = M.rollOpacity;
+      } else roll.style.opacity = 0;
+    }
+    const face = wrap.querySelector('canvas, img');
+    if (face) {
+      if (M.flickerAmt > 0) {
+        const fs = M.flickerSpeed,
+              nz = 0.5 + 0.5 * (0.6 * Math.sin(t * fs) + 0.4 * Math.sin(t * fs * 2.7 + 1.3)),
+              bri = B.bri * (1 - M.flickerAmt + M.flickerAmt * nz);
+        face.style.filter = 'saturate(' + B.sat + ') contrast(' + B.con + ') brightness(' + bri.toFixed(3) + ')';
+      }
+      // Ghost only: occasional single-frame horizontal displacement ("data degradation").
+      if (ghost && GHOST_MOTION.glitchRate > 0) {
+        if (t >= ghostGlitchNext && ghostGlitchUntil === 0) {
+          ghostGlitchUntil = t + (GHOST_MOTION.glitchMs / 1000);
+          ghostGlitchDx = (Math.sin(t * 91.7) >= 0 ? 1 : -1) * GHOST_MOTION.glitchPx;   // Math.random()-free (harness/resume safe)
+          ghostGlitchNext = t + (1 / GHOST_MOTION.glitchRate);
+        }
+        if (ghostGlitchUntil > 0) {
+          if (t >= ghostGlitchUntil) { ghostGlitchUntil = 0; face.style.transform = ''; }
+          else face.style.transform = 'translateX(' + ghostGlitchDx + 'px)';
+        }
+      } else if (face.style.transform) { face.style.transform = ''; }
+    }
+  })();
 
   // Build action icon — small canvas from spritesheet portrait, or emoji fallback
   //
@@ -3431,10 +4159,15 @@
       completedLevels: [],       // HHH level ids completed (progression; pushed in step 4/5)
       level7Unlocked: false,     // true once Level 6 is completed
       locUnlockTutorialShown: false,  // first location-unlock shows the full "tap it…" tutorial hint, then short
-      // "Finished" flag — set true when the player completes the game (L7). RESERVED:
-      // a future HHH Campaign 2 reads this on the startup screen to unlock (the SSS
-      // pattern, kept name so the dormant C2 code gates on it unchanged). See HHH_HANDOFF.md.
+      // "Finished" flag — set true when the player completes the game (L7). The HHH C2
+      // startup bridge (Archive Integrity Alert) gates on this. See HHH_HANDOFF.md.
       campaign1Complete: false,
+      // ── HHH C2 fields ──
+      campaign: 1,               // 1 = C1 (threads back), 2 = C2 "The Forward Thread" — picks activeData()
+      discipline: null,          // 'provenance' | 'forensics' | 'testimony' — chosen at C2 intake, per-run
+      c1Companion: null,         // the companion bonded in C1 (set when C1 completes; survives resets) — C2 intake carry-over reads this
+      c2FinaleUnlocked: false,   // true once C2 Level 5 is completed (hidden finale gate, mirrors level7Unlocked)
+      c2Complete: false,         // HHH C2 L6: the finale has been finished (survives backToTitle; the title bridge shows its closed-case variant)
       // ── engine fields (kept) ──
       currentCase: 0,            // pinned to 0 — single-slot GAME_DATA.cases[] fed by the adapter
       rank: 0,                   // index into HHH_DATA.meta.ranks — HHH uses this (NOT a separate currentRank); engine rank-up writes here
@@ -3470,6 +4203,7 @@
         requires: loc.requires || null,     // {clueFound:...} | null → lock test
         lockHint: loc.lockHint || null,     // optional "why locked" message
         anchorPoint: !!loc.anchorPoint,     // where Stabilize/Initialize is allowed
+        bannerLocation: loc.bannerLocation || null,  // optional per-location geography override (L3 Mexico↔South Asia)
         scene: loc.scene || null,           // optional per-location bg (§4.1a)
         livingBg: loc.livingBg || null,     // optional 2-frame crossfade + glow (Thread Console / L7 grove)
         locationFx: loc.locationFx || null, // optional ambient FX (grain/birds/dust/shaft/fire/smoke)
@@ -3494,7 +4228,10 @@
           learned: src.learned,
           icon: src.icon,
           sprites: src.sprites || null,
-          insight: !!src.insight            // insight sources: found like clues but do NOT gate Stabilize
+          insight: !!src.insight,           // insight sources: found like clues but do NOT gate Stabilize
+          archiveFigure: !!src.archiveFigure, // HHH C2: recovered-record portrait treatment (portraitHtml)
+          archiveGhost: !!src.archiveGhost,  // HHH C2: Nova archive-ghost treatment (L4, §2.5 full)
+          liveRecord: !!src.liveRecord       // HHH C2: L5 live-record portrait treatment (LIVE badge + glitch band)
         });
         if (src.actionLabel) actionLabels[srcKey] = src.actionLabel;
       });
@@ -3526,8 +4263,17 @@
       resolveNag: levelData.resolveNag || 'The record is incomplete',   // "not enough yet" message on the resolve button
       hideResolveOffAnchor: !!levelData.hideResolveOffAnchor,  // §4.2/§4.3: hide resolve btn off the anchor (L0/L7)
       ranksUp: levelData.ranksUp,                    // undefined ⇒ rank-up; L0/L7 set false
-      connectionScreen: false                        // never use the connection screen
-      // Optional C2 fields (solutionChoice, callHomeHints, isBonus, rankUpText) left undefined.
+      connectionScreen: false,                       // never use the connection screen
+      // HHH C2 — Validate-the-Record framing on the reused diagnosis screen:
+      diagnosisPrompt: levelData.diagnosisPrompt || null,             // header ("Which record is genuine?")
+      diagnosisConfirmLabel: levelData.diagnosisConfirmLabel || null, // confirm button ("Validate")
+      rankUpText: levelData.rankUpText || null,      // flavor line under the rank-up badge (showRankUp)
+      isBonus: !!levelData.isBonus,                  // hidden-finale marker (C2 L6; informational)
+      // HHH C2 L6 — the finale's three surfaces (null on every other level):
+      solutionChoice: levelData.solutionChoice || null,  // the 3-way verdict (SSS screen, finale-restyled)
+      dossier: levelData.dossier || null,                // Case Dossier facets + assembled profile
+      confrontation: levelData.confrontation || null     // the resolve-triggered final exchange
+      // Other optional SSS C2 fields (callHomeHints) left undefined.
     };
   }
 
@@ -3540,7 +4286,7 @@
   // Event-triggered tutorial teaches for the current level (fired by the engine,
   // not attached to a dialogue node). See level.teaches in hhh_data.js.
   function currentLevelTeaches() {
-    const lvl = HHH_DATA.levels && HHH_DATA.levels[STATE.currentLevel];
+    const lvl = activeData().levels && activeData().levels[STATE.currentLevel];
     return (lvl && lvl.teaches) || {};
   }
   function getAnchorLocation() {
@@ -3562,9 +4308,10 @@
   // Load HHH_DATA.levels[idx] into the single-slot cases[] and open its briefing.
   function enterLevel(idx, deferBriefing) {
     idx = idx || 0;
-    if (!HHH_DATA.levels || !HHH_DATA.levels[idx]) return;
-    setActiveCampaign(0);                            // pins GAME_DATA.ranks + personalities
-    const levelData = HHH_DATA.levels[idx];
+    const data = activeData();                       // HHH C2: C1 or C2 tree by STATE.campaign
+    if (!data.levels || !data.levels[idx]) return;
+    setActiveCampaign(0);                            // pins GAME_DATA.ranks + personalities (active tree)
+    const levelData = data.levels[idx];
     STATE.currentLevel = idx;
     STATE.currentCase = 0;                           // engine reads cases[0]
     STATE.caseState = defaultCaseState();
@@ -3573,6 +4320,7 @@
     STATE.taaCommsHint = '';                         // clear the logged hint for the new level
     hhhEverLocked.clear(); hhhHinted.clear(); dismissHhhHint();   // reset per-level unlock hints
     pendingFirstClueTeach = false;                                // clear any dangling first-clue teach flag
+    dossierPulse = false;                                         // HHH C2 L6: reset the dossier "new facet" pulse per level
     GAME_DATA.cases[0] = getActiveCaseData(levelData);
     GAME_DATA.cases.length = 1;
     lastLoadedCase = -1;                             // force the clean (non-transition) briefing path
@@ -3582,6 +4330,10 @@
     if (!deferBriefing) showBriefing();
     refreshLevelSelect();                            // DEV dropdown follows the current level
     // NOTE: rank is intentionally NOT reset here — it persists across levels (set by defaultState, advanced by completeLevel).
+    // HHH C2 (fix, benefits both campaigns): persist the level entry. Without this, a
+    // reload between the thread-forward and the first in-level save resumed the player
+    // at the PREVIOUS level with stale per-level flags (e.g. taaCommsUsed).
+    saveState();
   }
 
   let STATE = defaultState();
@@ -3593,7 +4345,12 @@
   function loadState() {
     try {
       const s = localStorage.getItem(SAVE_KEY);
-      if (s) return JSON.parse(s);
+      if (s) {
+        const parsed = JSON.parse(s);
+        // HHH C2: normalize pre-C2 saves (no campaign field ⇒ a Campaign 1 save).
+        if (parsed && !parsed.campaign) parsed.campaign = 1;
+        return parsed;
+      }
     } catch(e) {}
     return null;
   }
@@ -3634,7 +4391,8 @@
     victoryScreen.classList.toggle('hidden', screen !== 'VICTORY');
 
     // HHH title runs the time-vortex background; victory keeps the plain starfield.
-    if (screen === 'TITLE') startTitleVortex(); else stopTitleVortex();
+    if (screen === 'TITLE') { startTitleVortex(); }
+    else { stopTitleVortex(); deactivateC2(); }   // HHH C2: leaving the title resets the bridge
     // Stop scene stars on title/victory (they restart in showBriefing)
     if (screen === 'TITLE' || screen === 'VICTORY') { stopSceneFx(); stopLocationFx(); }
 
@@ -3657,6 +4415,9 @@
   let activeSourceKey = null;
   let activeDialogueNodeId = null;  // tracks current node for text progress
   let pendingFirstClueTeach = false;  // set when the first clue is revealed; consumed after the node finishes typing
+  // HHH C2 L6: true when a new dossier facet has landed but the Case Dossier hasn't been
+  // opened since — drives the button's pulse. Runtime-only (cosmetic); reset per level.
+  let dossierPulse = false;
 
   // Initialize source states for a case (called once at investigation start)
   function initSourceStates() {
@@ -3818,6 +4579,12 @@
       // Event teach: the moment the FIRST field-notes entry is logged, flag it so
       // the dialogue render can point at the Field Notes button once typing finishes.
       if (wasFirstEver) pendingFirstClueTeach = true;
+      // HHH C2 L6: a new dossier facet just landed → pulse the Case Dossier button
+      // until the player opens it (showDossier clears the flag).
+      const _dzLvl = activeData().levels[STATE.currentLevel];
+      if (_dzLvl && _dzLvl.dossier && (_dzLvl.dossier.facets || []).some(f => f.clue === node.revealsClue)) {
+        dossierPulse = true;
+      }
       if (window.SSS_Tutorial) SSS_Tutorial.onClueRevealed();
     }
 
@@ -3868,6 +4635,24 @@
     saveState();
   }
 
+  // ── HHH C2: Archivist Discipline helpers (structural layer — impl plan §4b) ──
+  // relation: 'favored' (source.evidenceType === discipline), 'disfavored' (this
+  // source is the discipline's declared blind spot: source.blindspotFor === discipline),
+  // else 'neutral'. NEVER touches hint text (content firewall) and never gates a win.
+  function disciplineRelation(source) {
+    if (!source || !STATE.discipline) return 'neutral';
+    if (source.blindspotFor === STATE.discipline) return 'disfavored';
+    if (source.evidenceType === STATE.discipline) return 'favored';
+    return 'neutral';
+  }
+  function sortCluesByDiscipline(clues, caseData) {
+    if (!STATE.discipline || !inCampaign2()) return clues;
+    const weight = { favored: 0, neutral: 1, disfavored: 2 };
+    return clues.slice().sort((a, b) =>
+      weight[disciplineRelation(caseData.sources[a.action])] -
+      weight[disciplineRelation(caseData.sources[b.action])]);
+  }
+
   // Get the node to start a source conversation on
   function getStartNode(sourceKey) {
     const cs = STATE.caseState;
@@ -3886,6 +4671,16 @@
     if (source.revisit && source.nodes[source.revisit]) {
       const clue = caseData.clues.find(c => c.action === sourceKey);
       if (clue && cs.cluesFound.includes(clue.clueTag)) return source.revisit;
+    }
+
+    // HHH C2 — discipline blind spot: the FIRST visit to a source the active
+    // discipline is blind to routes through its `disfavoredStart` node (one extra
+    // authored step before the normal `start`). Once the clue is found the extra
+    // step never replays. Content contract: the disfavoredStart node's option(s)
+    // must goto 'start'.
+    if (source.nodes.disfavoredStart && disciplineRelation(source) === 'disfavored') {
+      const clue = caseData.clues.find(c => c.action === sourceKey);
+      if (!clue || !cs.cluesFound.includes(clue.clueTag)) return 'disfavoredStart';
     }
 
     // Otherwise restart at 'start' (conditional options reflect learned state)
@@ -4109,6 +4904,7 @@
       STATE.caseState.textProgress[progressKey] = -1;
       saveState();
       fireNodeTeaches(node);
+      maybePatternInterject();   // HHH C2: fire the one-shot pattern-naming beat if this clue completed the required set
     };
 
     if (node.translated && node.foreignText) {
@@ -4297,9 +5093,14 @@
 
     // HHH §4.1: render only the CURRENT location's sources. The Stabilize gate
     // below still counts ALL clues in the level (locked decision: found ≥ total).
-    const visibleClues = caseData.sourceLocation
+    let visibleClues = caseData.sourceLocation
       ? caseData.clues.filter(c => caseData.sourceLocation[c.action] === STATE.currentLocation)
       : caseData.clues;
+    // HHH C2 — Archivist Discipline foregrounding (STRUCTURAL layer only, impl plan
+    // §4b): the chosen discipline's favored evidenceType sorts FIRST in the grid,
+    // its blind spot (source.blindspotFor === discipline) sorts LAST. Stable within
+    // groups; no effect when no discipline is set (C1) or sources are untyped.
+    visibleClues = sortCluesByDiscipline(visibleClues, caseData);
 
     if (fullRebuild || !actionGrid.children.length) {
       // Full rebuild — only on first render or screen transitions.
@@ -4440,6 +5241,14 @@
   }
 
   function setLocation(locationId) {
+    // HHH: once the player has opened the Resolve choices (Validate/diagnosis screen,
+    // its wrong-pick loop, the L6 confrontation) OR committed a correct answer
+    // (explanation/verdict), travel is frozen — resolving is tied to standing at the
+    // anchor, so wandering off mid-verdict is incoherent. Keyed off currentScreen (no
+    // stored flag → nothing to get stuck): Back → showFieldNotes restores INVESTIGATING
+    // and re-enables; advancing to the next level rebuilds the bar fresh. The dots keep
+    // their normal look (not re-rendered here) — the click is simply inert. C1 + C2.
+    if (currentScreen === 'DIAGNOSING' || currentScreen === 'CORRECT_ANSWER') return;
     const loc = currentLevelLocations().find(l => l.id === locationId);
     if (!loc) return;
     if (!locationMeetsRequirements(loc)) return;        // locked dot: ignore
@@ -4448,6 +5257,7 @@
     if (currentScreen === 'CLUE_REVEAL') showFieldNotes();  // leave any open dialogue first
     STATE.currentLocation = locationId;
     saveState();
+    locationSub.textContent = levelTitleLine2(GAME_DATA.cases[STATE.currentCase], loc.bannerLocation || null);   // per-location geography (L3 Mexico↔South Asia)
     applyLocationScene(loc);                              // §4.1a per-location bg (static OR living)
     updateLocationBar();
     updateActionButtons(true);                           // rebuild grid for the new location's sources
@@ -4460,6 +5270,11 @@
     stopLocationFx();                            // clear any prior ambient FX
     if (loc && loc.livingBg) {
       startLivingBg(loc);
+      // HHH C2 (L4 vault): a living-bg location MAY also run ambient locationFx (the
+      // bloom-glow crossfade + instrument statusBlink together). Safe only when the livingBg
+      // has no `shimmer` — startLivingBg then leaves #scene-particles untouched, so
+      // startLocationFx owns it cleanly (no double-owner of the same canvas).
+      if (loc.locationFx && !loc.livingBg.shimmer) startLocationFx(loc);
     } else {
       stopLivingBg();
       const cd = GAME_DATA.cases[STATE.currentCase];
@@ -4491,11 +5306,19 @@
   //   shimmer{}?, activate{ settle, duration, startPeriod, endPeriod, pulseSharpness,
   //   endBOpacity, endGlowOpacity, ease, particleBoost, flash }? }
   let livingBgRAF = null, livingPs = [], livingAct = null, livingLastB = 0, livingLastG = 0, livingFlashV = 0;
+  // HHH C2 fix: generation token. stopLivingBg() can be called from INSIDE the loop's
+  // own frame (the activation flash's onDone → enterLevel → loadScene → stopLivingBg on
+  // a thread-forward) — cancelAnimationFrame alone couldn't stop it, because the running
+  // callback re-scheduled itself afterward and resurrected the loop (the L0→L1 lingering
+  // console-shimmer bug). Each start bumps the generation; a stale loop sees the mismatch
+  // and refuses to re-schedule.
+  let livingBgGen = 0;
   function hexToRgbStr(h) { const n = parseInt(h.slice(1), 16); return ((n>>16)&255)+','+((n>>8)&255)+','+(n&255); }
   function lerpN(a, b, t) { return a + (b - a) * t; }
 
   function startLivingBg(loc) {
     stopLivingBg();
+    const myGen = livingBgGen;        // this loop's generation (stopLivingBg bumps it)
     const spec = loc.livingBg;
     const imgB = document.getElementById('scene-img-b');
     const glow = document.getElementById('scene-glow');
@@ -4600,7 +5423,7 @@
         pctx.globalAlpha = 1; pctx.shadowBlur = 0; pctx.globalCompositeOperation = 'source-over';
       }
       if (flashEl) { if (livingFlashV > 0) livingFlashV = Math.max(0, livingFlashV - dt*1.8); flashEl.style.opacity = livingFlashV.toFixed(3); }
-      livingBgRAF = requestAnimationFrame(loop);
+      if (myGen === livingBgGen) livingBgRAF = requestAnimationFrame(loop);   // stale generation ⇒ stopped mid-frame; don't resurrect
     })();
   }
 
@@ -4615,6 +5438,7 @@
   }
 
   function stopLivingBg() {
+    livingBgGen++;                    // invalidate any loop mid-frame (see livingBgGen note)
     if (livingBgRAF) { cancelAnimationFrame(livingBgRAF); livingBgRAF = null; }
     livingPs = []; livingAct = null; livingFlashV = 0;
     const imgB = document.getElementById('scene-img-b');
@@ -4631,8 +5455,54 @@
   // Tuned in demos/locationfx/lvl1.html (L1) + lvl2.html (L2); spec lives on loc.locationFx. Draws to the shared
   // #scene-particles canvas (480×560 — the demo's space, so tuned values port 1:1) plus the
   // #scene-glow div for fire. Mutually exclusive with livingBg per location.
-  let locFxRAF = null, locFxBirds = [], locFxDust = [], locFxSmoke = [], locFxNextBird = 0,
+  let locFxRAF = null, locFxBirds = [], locFxDust = [], locFxSmoke = [], locFxSnow = [], locFxNextBird = 0,
       locFxMask = null, locFxMaskPath = null;
+  // ── HHH C2 L6: fx.holo — the dais hologram (wireframe polyhedron) ────────
+  // Author-picked 2026-07-13 from the lvl6 demo's 4-way comparison (thread-diagram /
+  // records / Virel / wireframe — variants 1–3 remain DEMO-ONLY; only type 4 ships).
+  // Chunky-pixel rule: drawn on a tiny offscreen canvas (holo.size logical px) and
+  // blitted at EXACTLY ×2 with smoothing OFF — one hologram pixel = one art pixel,
+  // always on the painting's grid. fps-stepped (retro motion), fully deterministic
+  // (lrHash): red segment pulses (#e22f34 — matches the wall-display blink) flash a
+  // hash-picked edge subset each ~0.9s window; flicker dims the odd single frame.
+  const ICO = (() => {
+    const gt = (1 + Math.sqrt(5)) / 2, raw = [];
+    [[-1,gt,0],[1,gt,0],[-1,-gt,0],[1,-gt,0],[0,-1,gt],[0,1,gt],[0,-1,-gt],[0,1,-gt],[gt,0,-1],[gt,0,1],[-gt,0,-1],[-gt,0,1]]
+      .forEach(v => { const L = Math.hypot(v[0], v[1], v[2]); raw.push([v[0] / L, v[1] / L, v[2] / L]); });
+    const d2 = (a, b) => Math.pow(raw[a][0]-raw[b][0], 2) + Math.pow(raw[a][1]-raw[b][1], 2) + Math.pow(raw[a][2]-raw[b][2], 2);
+    let min = 1e9;
+    for (let a = 0; a < 12; a++) for (let b = a + 1; b < 12; b++) if (d2(a, b) < min - 1e-6) min = d2(a, b);
+    const edges = [];
+    for (let a = 0; a < 12; a++) for (let b = a + 1; b < 12; b++) if (d2(a, b) < min * 1.1) edges.push([a, b]);
+    return { v: raw, e: edges };
+  })();
+
+  // ── HHH C2 L6: statusBlink `regions` helpers ─────────────────────────────
+  // A blink with `regions: [poly, poly…]` (percent-space corner lists) appears at
+  // a pseudo-random point INSIDE one of the polygons each cycle. Deterministic
+  // (lrHash — resume/harness safe, no Math.random): same cycle → same point.
+  function pointInPoly(px, py, poly) {
+    let inside = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const xi = poly[i][0], yi = poly[i][1], xj = poly[j][0], yj = poly[j][1];
+      if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi)) inside = !inside;
+    }
+    return inside;
+  }
+  function blinkRegionPoint(regions, cycle) {
+    const poly = regions[lrHash(cycle) % regions.length];
+    const xs = poly.map(p => p[0]), ys = poly.map(p => p[1]);
+    const x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs),
+          y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+    for (let i = 0; i < 30; i++) {   // bbox rejection sample, deterministic try sequence
+      const x = x0 + (lrHash(cycle * 61 + i * 2 + 1) % 1000 / 1000) * (x1 - x0),
+            y = y0 + (lrHash(cycle * 61 + i * 2 + 2) % 1000 / 1000) * (y1 - y0);
+      if (pointInPoly(x, y, poly)) return [x, y];
+    }
+    // degenerate polygon fallback — centroid
+    return [xs.reduce((a, b) => a + b, 0) / xs.length, ys.reduce((a, b) => a + b, 0) / ys.length];
+  }
+
   function startLocationFx(loc) {
     stopLocationFx();
     const fx = loc && loc.locationFx;
@@ -4644,14 +5514,17 @@
     const W = pcv.width, H = pcv.height;                // 480 × 560
     pcv.style.display = 'block';
     pcv.style.imageRendering = (fx.grain || fx.water) ? 'pixelated' : '';   // crisp wheat/water; soft dust/smoke
-    const maskPath = (fx.water && fx.water.mask) || (fx.dust && fx.dust.mask) || (fx.windowHaze && fx.windowHaze.mask);   // water shimmer, dust & window-haze all clip to a mask
+    const maskPath = (fx.water && fx.water.mask) || (fx.dust && fx.dust.mask) || (fx.windowHaze && fx.windowHaze.mask) || (fx.grain && fx.grain.mask);   // water shimmer, dust, window-haze & grain sway all clip to a mask
     if (maskPath && locFxMaskPath !== maskPath) {
       locFxMask = new Image(); locFxMask.src = maskPath; locFxMaskPath = maskPath;
     }
     // hill-occluder clip path for river birds (loc.locationFx.birds.occludeBelow): %→canvas, sorted L→R
     const birdClip = (fx.birds && fx.birds.occludeBelow && fx.birds.occludeBelow.length >= 2)
       ? fx.birds.occludeBelow.map(p => [p[0] / 100 * W, p[1] / 100 * H]).sort((a, b) => a[0] - b[0]) : null;
-    locFxBirds = []; locFxDust = []; locFxSmoke = []; locFxNextBird = 0;
+    locFxBirds = []; locFxDust = []; locFxSmoke = []; locFxSnow = []; locFxNextBird = 0;
+    // HHH C2 L6: fx.holo offscreen canvas (variant 4 wireframe only; per-run closure
+    // state — dies with the loop on stopLocationFx).
+    let holoCv = null, holoCx = null, holoLast = -1;
     const rnd = (a, b) => a + Math.random() * (b - a), rndInt = (a, b) => Math.round(rnd(a, b));
     function spawnFlock() {
       const f = fx.birds, n = rndInt(f.flock[0], f.flock[1]),
@@ -4678,6 +5551,10 @@
                 dx = Math.round(a * Math.sin(y / wav + t * gr.speed)),
                 sy = Math.round(y / H * natH), sh = Math.ceil(strip / H * natH) + 1;
           try { pctx.drawImage(sceneImg, 0, sy, natW, sh, dx, y, W, strip + 1); } catch (e) {}
+        }
+        if (gr.mask && locFxMask && locFxMask.complete) {   // HHH C2: keep the sway off roads/posts (mask: black=block)
+          pctx.save(); pctx.globalCompositeOperation = gr.invert ? 'destination-in' : 'destination-out';
+          pctx.drawImage(locFxMask, 0, 0, W, H); pctx.restore();
         }
       }
       if (fx.water) {                                   // water shimmer (channels/river), mask-clipped
@@ -4777,6 +5654,28 @@
         if (d.mask && locFxMask && locFxMask.complete) {     // clip to the lit shaft (mask: black=block)
           pctx.save(); pctx.globalCompositeOperation = 'destination-out'; pctx.drawImage(locFxMask, 0, 0, W, H); pctx.restore();
         }
+      }
+      if (fx.snow) {                                    // HHH C2 (L2 Leningrad): full-frame falling snow —
+        // NO mask, per the author's 2026-07-04 correction: flakes fall across the whole
+        // frame and fade out approaching the bottom edge. Tuned in c2/resources/demos/
+        // locationfx/lvl2.html. Spec: { count, speed, drift, size, opacity, color, fadeBottom% }.
+        const s = fx.snow, col = hexToRgbStr(s.color), count = Math.round(s.count);
+        while (locFxSnow.length < count) locFxSnow.push({ x: Math.random() * W, y: Math.random() * H,
+          ph: Math.random() * Math.PI * 2, vy: 0.55 + Math.random() * 0.9, s: s.size * (0.5 + Math.random()) });
+        if (locFxSnow.length > count) locFxSnow.length = count;
+        const fadeY = (s.fadeBottom / 100) * H;
+        pctx.fillStyle = 'rgba(' + col + ',1)';
+        for (let i = 0; i < locFxSnow.length; i++) { const p = locFxSnow[i];
+          p.y += s.speed * dt * p.vy;
+          p.x += Math.sin(t * 0.5 + p.ph) * s.drift * dt;
+          if (p.y > H + 4) { p.y = -4; p.x = Math.random() * W; }
+          let a = s.opacity;
+          if (p.y > fadeY) a *= Math.max(0, 1 - (p.y - fadeY) / Math.max(1, H - fadeY));
+          if (a <= 0) continue;
+          pctx.globalAlpha = Math.min(1, a);
+          pctx.beginPath(); pctx.arc(p.x, p.y, p.s, 0, Math.PI * 2); pctx.fill();
+        }
+        pctx.globalAlpha = 1;
       }
       if (fx.fire && glow) {                            // flickering fire glow on the #scene-glow div
         const f = fx.fire, rgb = hexToRgbStr(f.color),
@@ -4896,13 +5795,72 @@
         const blinks = Array.isArray(fx.statusBlink) ? fx.statusBlink : [fx.statusBlink];
         pctx.save(); pctx.globalCompositeOperation = 'screen';
         for (const sb of blinks) {
-          const rgb = hexToRgbStr(sb.color || '#ff3030'), x = sb.x / 100 * W, y = sb.y / 100 * H,
-                sz = sb.size || 3, period = sb.period || 1.6;
+          const rgb = hexToRgbStr(sb.color || '#ff3030'), sz = sb.size || 3, period = sb.period || 1.6;
           if ((t % period) < period * 0.5) {
+            // HHH C2 L6: `regions` mode — the pulse appears at a deterministic
+            // pseudo-random point inside one of the author-drawn polygons each
+            // cycle, held while lit ("never twice in the same place"; tuned in
+            // lvl6.html). Same-cycle recompute is stable (lrHash), so no cache.
+            // Fixed {x,y} blinks (C1 + L4 vault) take the original path.
+            let x, y;
+            if (sb.regions && sb.regions.length) {
+              const pt = blinkRegionPoint(sb.regions, Math.floor(t / period));
+              x = pt[0] / 100 * W; y = pt[1] / 100 * H;
+            } else {
+              x = sb.x / 100 * W; y = sb.y / 100 * H;
+            }
             pctx.shadowColor = 'rgba(' + rgb + ',1)'; pctx.shadowBlur = sz * 2.5;
             pctx.fillStyle = 'rgba(' + rgb + ',1)'; pctx.fillRect(x - sz / 2, y - sz / 2, sz, sz);
           }
         }
+        pctx.restore();
+      }
+      // HHH C2 L6: the dais hologram — wireframe polyhedron (fx.holo, type 4 ONLY;
+      // variants 1–3 live in the lvl6 demo for comparison and never shipped).
+      // AUTHOR-TUNED 2026-07-13. Offscreen recompute is fps-stepped; the ×2 blit
+      // runs every frame (cheap). Deterministic throughout (lrHash, time-based
+      // rotation — no accumulated state, resume-safe).
+      if (fx.holo && fx.holo.type === 4) {
+        const hz = fx.holo, S = hz.size || 44;
+        if (!holoCv) {
+          holoCv = document.createElement('canvas'); holoCv.width = holoCv.height = S;
+          holoCx = holoCv.getContext('2d');
+        }
+        if (t - holoLast >= 1 / (hz.fps || 12)) {
+          holoLast = t;
+          const c = S / 2, r = S * 0.38, rgb = hexToRgbStr(hz.color || '#7fe8ff');
+          holoCx.clearRect(0, 0, S, S);
+          const ang = t * (hz.rot || 0.35), cs = Math.cos(ang), sn = Math.sin(ang);
+          const wobA = Math.sin(t * 0.35) * 0.35, cw = Math.cos(wobA), sw = Math.sin(wobA);
+          const proj = ICO.v.map(p => {
+            const x = p[0] * cs + p[2] * sn; let z = p[2] * cs - p[0] * sn;
+            const y = p[1] * cw - z * sw; z = p[1] * sw + z * cw;
+            return [c + x * r, c + y * r, z];
+          });
+          // red segment pulses: each ~0.9s window a hash-picked edge subset flashes
+          // ARS-red (#e22f34 — matches the wall-display blink) with a rise/fall envelope.
+          const WIN = 0.9, bucket = Math.floor(t / WIN), env = Math.sin(((t / WIN) % 1) * Math.PI);
+          ICO.e.forEach((ed, idx) => {
+            const A = proj[ed[0]], B = proj[ed[1]], near = (A[2] + B[2]) > 0;
+            const red = (hz.pulse || 0) > 0 && (lrHash(bucket * 97 + idx * 13) % 100 / 100) < hz.pulse * 0.30;
+            holoCx.strokeStyle = red
+              ? 'rgba(226,47,52,' + ((near ? 0.95 : 0.45) * (0.35 + 0.65 * env)).toFixed(2) + ')'
+              : 'rgba(' + rgb + ',' + (near ? 0.75 : 0.28) + ')';
+            holoCx.lineWidth = 1;
+            holoCx.beginPath(); holoCx.moveTo(A[0], A[1]); holoCx.lineTo(B[0], B[1]); holoCx.stroke();
+          });
+        }
+        // hologram flicker: occasional 1-frame dim + 1px horizontal jitter (deterministic)
+        let hAlpha = (hz.opacity != null ? hz.opacity : 0.75), jx = 0;
+        if ((hz.flicker || 0) > 0) {
+          const f = lrHash(Math.floor(t * 30)) % 100 / 100;
+          if (f < hz.flicker * 0.12) { hAlpha *= 0.45; jx = (lrHash(Math.floor(t * 30) + 7) % 3) - 1; }
+        }
+        const dw = holoCv.width * 2,
+              hdx = Math.round((hz.x || 50) / 100 * W - dw / 2) + jx,
+              hdy = Math.round((hz.y || 50) / 100 * H - dw / 2);
+        pctx.save(); pctx.globalAlpha = hAlpha; pctx.imageSmoothingEnabled = false;
+        pctx.drawImage(holoCv, hdx, hdy, dw, dw);
         pctx.restore();
       }
       if (fx.cameraFlash) {                             // occasional press-camera flash on a random timer (L6 Press Briefing)
@@ -4926,7 +5884,7 @@
   }
   function stopLocationFx() {
     if (locFxRAF) { cancelAnimationFrame(locFxRAF); locFxRAF = null; }
-    locFxBirds = []; locFxDust = []; locFxSmoke = []; locFxNextBird = 0;
+    locFxBirds = []; locFxDust = []; locFxSmoke = []; locFxSnow = []; locFxNextBird = 0;
     const pcv = document.getElementById('scene-particles'), glow = document.getElementById('scene-glow');
     if (pcv) { const c = pcv.getContext('2d'); if (c) c.clearRect(0, 0, pcv.width, pcv.height); pcv.style.display = 'none'; pcv.style.imageRendering = ''; }
     if (glow && !livingBgRAF) { glow.style.opacity = '0'; glow.style.display = 'none'; }   // don't clobber a running livingBg glow
@@ -4940,17 +5898,32 @@
   //   line 1 (#location-name) = level name  [ • tagline ]
   //   line 2 (#location-subtitle) = location  [ - date ]   (legacy fallback: location — subtitle)
   function levelTitleLine1(cd) { return cd.name + (cd.tagline ? ' • ' + cd.tagline : ''); }
-  function levelTitleLine2(cd) {
-    if (cd.date) return cd.location + ' - ' + cd.date;
-    return cd.subtitle ? (cd.location + ' — ' + cd.subtitle) : cd.location;
+  // HHH: line 2 = geography - date. A location may override the geography via
+  // loc.bannerLocation (e.g. L3 spans Mexico → South Asia: the deployment field
+  // reads "South Asia" while the Mexico locations read the level default). The
+  // date stays constant across locations.
+  function levelTitleLine2(cd, locOverride) {
+    const geo = locOverride || cd.location;
+    if (cd.date) return geo + ' - ' + cd.date;
+    return cd.subtitle ? (geo + ' — ' + cd.subtitle) : geo;
+  }
+  // The banner geography for the current location (its override, else the level default).
+  function currentBannerLocation() {
+    const cd = GAME_DATA.cases[STATE.currentCase];
+    const loc = cd && (cd.locations || []).find(l => l.id === STATE.currentLocation);
+    return (loc && loc.bannerLocation) || null;
   }
 
   function loadScene(caseData, caseIdx) {
     stopLivingBg();   // reset any living bg from a previous level/location
     stopLocationFx(); // and any ambient location FX
+    // HHH C2 fix: clear the PREVIOUS level's location dots — they lingered through the
+    // thread-forward arrival/briefing until Begin Investigation rebuilt the bar.
+    const locBar = document.getElementById('location-banner');
+    if (locBar) locBar.innerHTML = '';
     // Update location
     locationName.textContent = levelTitleLine1(caseData);
-    locationSub.textContent = levelTitleLine2(caseData);
+    locationSub.textContent = levelTitleLine2(caseData, currentBannerLocation());   // per-location geography (L3 Mexico↔South Asia)
 
     // Apply palette to scene
     sceneWrap.style.background = caseData.palette.bg;
@@ -4960,8 +5933,14 @@
     updateStabilizeButton();
 
     // Scene window effects (stars through porthole, dust on Mars, etc.)
-    if (caseData.sceneWindow || caseData.sceneFx) {
-      startSceneFx(caseData);
+    // HHH C2 fix (both campaigns): the STARTING — or resumed — location may carry the
+    // level's only sceneWindow (L4 vault twinkle, L6 archive drift). loadScene runs
+    // BEFORE any setLocation, so honor the per-location override here exactly like
+    // applyLocationScene does on travel; otherwise those windows boot dark.
+    const bootLoc = (caseData.locations || []).find(l => l.id === STATE.currentLocation) || null;
+    const bootWin = (bootLoc && bootLoc.sceneWindow) || caseData.sceneWindow || null;
+    if (bootWin || caseData.sceneFx) {
+      startSceneFx(bootWin === caseData.sceneWindow ? caseData : Object.assign({}, caseData, { sceneWindow: bootWin }));
     } else {
       stopSceneFx();
     }
@@ -4977,10 +5956,15 @@
     }
 
     // HHH: start the current location's ambient FX so it runs DURING the briefing too,
-    // not only after Begin Investigation. (livingBg/locationFx are mutually exclusive.)
+    // not only after Begin Investigation. A livingBg location may ALSO run locationFx
+    // when it has no `shimmer` (L4 vault: bloom crossfade + instrument statusBlink) —
+    // mirror applyLocationScene so the combined case works on first entry, not only on
+    // a location switch.
     const curLoc = currentLevelLocations().find(l => l.id === STATE.currentLocation);
-    if (curLoc && curLoc.livingBg) startLivingBg(curLoc);
-    else if (curLoc && curLoc.locationFx) startLocationFx(curLoc);
+    if (curLoc && curLoc.livingBg) {
+      startLivingBg(curLoc);
+      if (curLoc.locationFx && !curLoc.livingBg.shimmer) startLocationFx(curLoc);
+    } else if (curLoc && curLoc.locationFx) startLocationFx(curLoc);
 
     lastLoadedCase = caseIdx;
   }
@@ -4997,7 +5981,7 @@
     if (needsTransition) {
       // Glitch the location text while static plays
       const newName = levelTitleLine1(caseData);
-      const newSub = levelTitleLine2(caseData);
+      const newSub = levelTitleLine2(caseData, currentBannerLocation());   // HHH C2: honor the arrival location's banner override (L6 archive = TAA Facility)
       glitchText(locationName, newName, { duration: 550 });
       glitchText(locationSub, newSub, { duration: 600 });
 
@@ -5283,13 +6267,19 @@
     // (replaces the dead SSS Campaign-2 "Call Home"). Greyed once used.
     // Comms button appears WITH the first clue (same moment as its teach) \u2014 players don't
     // expect it before they've started turning up evidence.
-    const lvlHints = (HHH_DATA.levels[STATE.currentLevel] || {}).taaCommsHints;
+    const lvlHints = (activeData().levels[STATE.currentLevel] || {}).taaCommsHints;
     const showComms = lvlHints && cs.cluesFound.length >= 1;
     const callHomeHtml = showComms
       ? '<span class="call-home-btn' + (STATE.taaCommsUsed ? ' used' : '') + '" onclick="SSS.taaComms()">\ud83d\udce1 TAA Comms</span>'
       : '';
 
-    let html = '<div class="info-header cyan">' + callHomeHtml + '<img class="fn-icon" src="UI/icon_field_guide.png" alt=""> Field Notes</div>';
+    // HHH C2 L6: the Case Dossier button \u2014 a lens over Field Notes (the identity-
+    // assembly surface), shown for any level defining `dossier` (only the finale).
+    const dossierHtml = caseData.dossier
+      ? '<span id="dossier-btn" class="call-home-btn' + (dossierPulse ? ' dossier-new' : '') + '" onclick="SSS.showDossier()">\ud83d\uddc2 Case Dossier</span>'
+      : '';
+
+    let html = '<div class="info-header cyan">' + callHomeHtml + dossierHtml + '<img class="fn-icon" src="UI/icon_field_guide.png" alt=""> Field Notes</div>';
 
     if (cs.cluesFound.length === 0) {
       html += '<div class="info-body"><p>No clues yet. Start investigating!</p></div>';
@@ -5312,7 +6302,7 @@
     if (STATE.taaCommsHint) {
       html += '<div class="field-note" style="border-left:3px solid #2f6f9a; background:rgba(47,111,154,0.08)">' +
         '<span class="field-note-icon">📡</span>' +
-        '<span class="field-note-text"><b style="color:#9fd0ff">' + escHtml(commsSpeakerConfig((HHH_DATA.levels[STATE.currentLevel] || {}).commsSpeaker).name) + ' · TAA Comms:</b> ' + escHtml(STATE.taaCommsHint) + '</span>' +
+        '<span class="field-note-text"><b style="color:#9fd0ff">' + escHtml(commsSpeakerConfig((activeData().levels[STATE.currentLevel] || {}).commsSpeaker).name) + ' · TAA Comms:</b> ' + escHtml(STATE.taaCommsHint) + '</span>' +
         '</div>';
     }
 
@@ -5334,6 +6324,55 @@
 
   let fieldNotesScroll = 0;
 
+  // ── HHH C2 L6: the CASE DOSSIER view ────────────────────────────────────
+  // The finale's identity-assembly surface: the level's 5 required clues ARE the
+  // facets (TRACE/METHOD/IDENTITY/WORKS/MOTIVE). A facet renders redacted until
+  // its clue is logged; all facets found → the assembled profile (the delegate's
+  // face + the confront cue). A presentational LENS over Field Notes — clues
+  // still live there; this view only re-reads caseState. Author-tuned in the
+  // finale demo 2026-07-13 (design-locked: dossier UI fork).
+  function showDossier() {
+    const caseData = GAME_DATA.cases[STATE.currentCase];
+    const dz = caseData && caseData.dossier;
+    if (!dz) { showFieldNotes(); return; }
+    dossierPulse = false;   // HHH C2 L6: opening the dossier clears the "new facet" pulse
+    saveTextProgress(); stopTalkAnim(); stopTypewriter();
+    activeSourceKey = null; activeDialogueNodeId = null;
+    speakerBar.innerHTML = '';
+    setScreen('INVESTIGATING');
+    const found = STATE.caseState.cluesFound || [];
+    let filled = 0;
+    let html =
+      '<span class="back-link" onclick="SSS.showFieldNotes()">← <img class="fn-icon" src="UI/icon_field_guide.png" alt=""> Field Notes</span>' +
+      '<div class="info-header amber">🗂 ' + escHtml(dz.title || 'Case Dossier') + '</div>' +
+      '<div class="dz-sub">' + escHtml(dz.sub || 'Assemble the source of the forgeries.') + '</div>';
+    (dz.facets || []).forEach(f => {
+      const got = found.indexOf(f.clue) >= 0;
+      if (got) filled++;
+      html += '<div class="dz-facet ' + (got ? 'filled' : 'empty') + '">' +
+        '<div class="dz-tag">' + escHtml(f.tag) + (got ? '' : ' · UNRESOLVED') + '</div>' +
+        (got
+          ? '<div class="dz-title">' + escHtml(f.title) + '</div><div class="dz-line">' + escHtml(f.line) + '</div>'
+          : '<div class="dz-line"><span class="dz-redact" style="width:78%;"></span><br>' +
+            '<span class="dz-redact" style="width:56%;margin-top:5px;"></span></div>') +
+        '</div>';
+    });
+    const complete = dz.facets && filled === dz.facets.length;
+    if (complete && dz.profile) {
+      html += '<div id="dz-profile" style="opacity:0;transition:opacity ' + DOSSIER_UI.revealMs + 'ms ease;">' +
+        '<div class="dz-tag">PROFILE COMPLETE</div>' +
+        '<img src="' + dz.profile.img + '" alt="">' +
+        '<div class="dz-name">' + escHtml(dz.profile.name) + '</div>' +
+        '<div class="dz-cue">' + escHtml(dz.profile.cue) + '</div></div>';
+    }
+    renderInfo(html);
+    if (complete && dz.profile) {
+      const prof = document.getElementById('dz-profile');
+      requestAnimationFrame(() => requestAnimationFrame(() => { if (prof) prof.style.opacity = '1'; }));
+    }
+    fillActionIcons(); updateActionButtons(true); updateLocationBar(false); updateStabilizeButton();
+  }
+
   // Save current typewriter position before navigating away
   function saveTextProgress() {
     if (!activeSourceKey || !activeDialogueNodeId) return;
@@ -5351,15 +6390,23 @@
   // Routed from the diagnose-btn handler AFTER the all-clues gate passes.
   function handleStabilizeClick() {
     const anchor = getAnchorLocation();
-    // §4.3 Level-0 special case: Initialize Thread (no diagnosis screen).
-    if (STATE.currentLevel === 0) {
+    // §4.3 CAMPAIGN-1 Level-0 special case: Initialize Thread (no diagnosis screen).
+    // (C2's Level 0 teaches Validate the Record, so it takes the normal diagnosis route.)
+    if (!inCampaign2() && STATE.currentLevel === 0) {
       if (anchor && STATE.currentLocation !== anchor.id) { showWrongLocationMessage(anchor.label); return; }
       confirmInitializeThread(); return;
     }
-    // Level-7 finale: no diagnosis — Stabilize is a choice that ENDS THE GAME (grove anchor only).
-    if (STATE.currentLevel === 7) {
+    // CAMPAIGN-1 Level-7 finale: no diagnosis — Stabilize is a choice that ENDS THE GAME (grove anchor only).
+    if (!inCampaign2() && STATE.currentLevel === 7) {
       if (anchor && STATE.currentLocation !== anchor.id) { showWrongLocationMessage(anchor.label); return; }
       confirmFinalStabilize(); return;
+    }
+    // HHH C2 Level-6 finale: NOT a Validate — Confront the Source (chamber anchor only).
+    // The dossier is complete (the all-clues gate passed to get here); the resolve
+    // plays the final exchange, then the 3-way verdict (solution-choice screen).
+    if (inCampaign2() && STATE.currentLevel === 6) {
+      if (anchor && STATE.currentLocation !== anchor.id) { showWrongLocationMessage(anchor.label); return; }
+      confirmConfrontation(); return;
     }
     // §4.2 normal levels: resolve only at the anchor location.
     if (anchor && STATE.currentLocation !== anchor.id) { showWrongLocationMessage(anchor.label); return; }
@@ -5417,7 +6464,8 @@
   function confirmFinalStabilize() {
     saveTextProgress();
     if (STATE.completedLevels.indexOf(7) < 0) STATE.completedLevels.push(7);
-    STATE.campaign1Complete = true;   // game finished — future-C2 unlock flag (see HHH_HANDOFF.md)
+    STATE.campaign1Complete = true;   // game finished — the C2 bridge unlock flag (see HHH_HANDOFF.md)
+    STATE.c1Companion = STATE.companionSpecies || STATE.c1Companion || null;   // HHH C2: remember the C1 bond for intake carry-over
     saveState();
     // NO thread-forward flash and NO "where you're going" travel beat — the game isn't going
     //   anywhere this time. Settle straight into the ending (it opens on keeping the moment).
@@ -5442,7 +6490,39 @@
     );
   }
 
+  // ── HHH C2 L6 finale ── Confront the Source: the resolve-triggered final exchange,
+  //   then the 3-way verdict. No diagnosis, no wrong answers — the bible's "no path
+  //   is punished." Data: level.confrontation {title, lines[], button}.
+  function confirmConfrontation() {
+    saveTextProgress(); stopTalkAnim(); stopTypewriter();
+    activeSourceKey = null; speakerBar.innerHTML = '';
+    setScreen('DIAGNOSING');                              // hide the action grid
+    const cd = GAME_DATA.cases[STATE.currentCase];
+    const conf = cd.confrontation || {};
+    const lines = (conf.lines || []).map(p => '<p>' + p + '</p>').join('');   // author-controlled HTML (allow <b>/<i>)
+    renderInfo(
+      '<div class="info-header" style="color:' + C2_VALIDATE_ACCENT + ';text-shadow:0 0 6px ' + C2_VALIDATE_GLOW + ';">' +
+        escHtml(conf.title || 'Confront the Source') + '</div>' +
+      '<div class="info-body">' + lines + '</div>' +
+      '<button class="retro-btn accent" onclick="SSS.showFinalChoice()">' + escHtml(conf.button || 'Give your answer') + '</button>'
+    );
+  }
+
+  // The verdict entry: does the completion bookkeeping a correct diagnosis would
+  // have done (recordCaseCompletion), then opens the finale-styled solution choice.
+  function showFinalChoice() {
+    setScreen('CORRECT_ANSWER');
+    const caseData = GAME_DATA.cases[STATE.currentCase];
+    const score = recordCaseCompletion(caseData);
+    showSolutionChoice(caseData, score);
+  }
+
   // §4.2 — amber styling + presence of the resolve button for the current location.
+  // HHH C2: Validate-button accent (ONE-LINE TUNABLE — author decides in the feel pass;
+  // placeholder = the C2 corruption-signature magenta used by the title bridge CTA).
+  const C2_VALIDATE_ACCENT = '#c94ad0';
+  const C2_VALIDATE_GLOW = 'rgba(201,74,208,0.4)';
+
   function updateStabilizeButton() {
     const cd = GAME_DATA.cases[STATE.currentCase];
     if (!cd) return;
@@ -5453,10 +6533,14 @@
     diagnoseBtn.style.display = '';
     const atAnchor = !anchor || STATE.currentLocation === anchor.id;
     const ready = allRequiredCluesFound(cd, STATE.caseState);
-    if (atAnchor && ready) {                             // active + at anchor → amber
-      diagnoseBtn.style.color = '#e8b84a';
-      diagnoseBtn.style.borderColor = '#e8b84a';
-      diagnoseBtn.style.textShadow = '0 0 6px rgba(232,184,74,0.4)';
+    if (atAnchor && ready) {                             // active + at anchor → campaign accent
+      // HHH C2: Validate the Record gets its own accent — PLACEHOLDER corruption
+      // magenta; the author locks the final color in the in-browser feel pass
+      // (tune C2_VALIDATE_ACCENT / C2_VALIDATE_GLOW below).
+      const accent = inCampaign2() ? C2_VALIDATE_ACCENT : '#e8b84a';
+      diagnoseBtn.style.color = accent;
+      diagnoseBtn.style.borderColor = accent;
+      diagnoseBtn.style.textShadow = '0 0 6px ' + (inCampaign2() ? C2_VALIDATE_GLOW : 'rgba(232,184,74,0.4)');
     } else {
       diagnoseBtn.style.color = '';
       diagnoseBtn.style.borderColor = '';
@@ -5477,8 +6561,10 @@
     const caseData = GAME_DATA.cases[STATE.currentCase];
     const elim = STATE.caseState.eliminatedDiagnoses || [];
 
+    // HHH C2: data-driven header \u2014 Validate-the-Record levels ask "which record is
+    // genuine?" instead of the C1 "what's the problem?" (same screen, reframed).
     let html = '<span class="back-link" onclick="SSS.showFieldNotes()">\u2190 Back</span>' +
-      '<div class="info-header cyan">What\'s the Problem?</div>';
+      '<div class="info-header cyan">' + escHtml(caseData.diagnosisPrompt || "What's the Problem?") + '</div>';
 
     if (wrongIdx != null && caseData.diagnoses[wrongIdx]) {   // feedback from the pick just made
       html += '<div class="hint-box">' + escHtml(caseData.diagnoses[wrongIdx].hint) + '</div>' +
@@ -5494,7 +6580,8 @@
       }
     });
 
-    html += '<button id="confirm-btn" class="retro-btn accent disabled" onclick="SSS.confirmDiagnosis()">Confirm Diagnosis</button>';
+    html += '<button id="confirm-btn" class="retro-btn accent disabled" onclick="SSS.confirmDiagnosis()">' +
+      escHtml(caseData.diagnosisConfirmLabel || 'Confirm Diagnosis') + '</button>';
 
     renderInfo(html);
 
@@ -5535,9 +6622,10 @@
     }
   }
 
-  function showCorrectAnswer() {
-    setScreen('CORRECT_ANSWER');
-    const caseData = GAME_DATA.cases[STATE.currentCase];
+  // HHH C2 L6: the case-completion bookkeeping, extracted from showCorrectAnswer so
+  // the finale's no-diagnosis route (showFinalChoice) can share it verbatim.
+  // Returns the case score.
+  function recordCaseCompletion(caseData) {
     const score = calculateCaseScore();
 
     STATE.caseState.diagnosed = true;
@@ -5563,6 +6651,13 @@
     STATE.totalScore += score;
     saveState();
     PlayLog.caseComplete(STATE.currentCase, score, STATE.caseState.wrongGuesses);
+    return score;
+  }
+
+  function showCorrectAnswer() {
+    setScreen('CORRECT_ANSWER');
+    const caseData = GAME_DATA.cases[STATE.currentCase];
+    const score = recordCaseCompletion(caseData);
 
     // Crossfade to healthy/awakening scene variant if available
     const altScene = caseData.sprites && caseData.sprites.sceneAlt;
@@ -5599,6 +6694,30 @@
 
   function showSolutionChoice(caseData, baseScore) {
     const sc = caseData.solutionChoice;
+
+    // \u2500\u2500 HHH C2 L6: the FINALE VERDICT (sc.finale) \u2014 the same screen, finale-weight \u2500\u2500
+    // Three stance cards (title + one-line sublabel); the discipline-native card
+    // carries the dim "training lens" tag (VERDICT_UI.lens \u2014 \u00a75b tinting, never
+    // forcing). No score line here (the victory screen carries the numbers).
+    // Demo-first restyle, author-tuned 2026-07-13 (finale demo, Verdict tab).
+    if (sc.finale) {
+      let html = '<div class="info-header" style="color:' + C2_VALIDATE_ACCENT + ';text-shadow:0 0 6px ' + C2_VALIDATE_GLOW + ';">' +
+        escHtml(sc.header || '\u2726 The Final Entry') + '</div>' +
+        '<div class="info-body"><p>' + escHtml(sc.prompt) + '</p></div>';
+      const lensIdx = (STATE.discipline && VERDICT_UI.lens[STATE.discipline] !== undefined)
+        ? VERDICT_UI.lens[STATE.discipline] : -1;
+      sc.options.forEach((opt, i) => {
+        html += '<div class="diagnosis-option verdict-option' + (i === lensIdx ? ' lensed' : '') + '" data-idx="' + i + '" onclick="SSS.selectSolution(' + i + ')">' +
+          '<div class="v-title">' + escHtml(opt.label) + '</div>' +
+          '<div class="v-sub">' + escHtml(opt.sub || '') + '</div>' +
+          '<div class="v-lens">\u25c6 ' + escHtml(VERDICT_UI.lensText) + '</div></div>';
+      });
+      html += '<button id="confirm-solution-btn" class="retro-btn disabled" style="border-color:' + C2_VALIDATE_ACCENT + ';color:' + C2_VALIDATE_ACCENT + ';text-shadow:0 0 6px ' + C2_VALIDATE_GLOW + ';" onclick="SSS.confirmSolution()">' +
+        escHtml(sc.confirmLabel || 'Enter the Record') + '</button>';
+      renderInfo(html);
+      return;
+    }
+
     let html = '<div class="info-header green">\u2713 Case Solved!</div>' +
       '<div class="score-line">+' + baseScore + ' points</div>' +
       '<div class="info-body"><p>' + escHtml(sc.prompt) + '</p></div>';
@@ -5643,6 +6762,18 @@
       saveState();
     }
 
+    // HHH C2 L6 finale: the response reads as the record accepting the entry \u2014
+    // no score line (the victory screen carries the numbers), magenta header.
+    if (caseData.solutionChoice.finale) {
+      renderInfo(
+        '<div class="info-header" style="color:' + C2_VALIDATE_ACCENT + ';text-shadow:0 0 6px ' + C2_VALIDATE_GLOW + ';">\u2726 Entered Into the Record</div>' +
+        '<div class="info-body"><p>' + escHtml(opt.response).replace(/\n/g, '<br>') + '</p></div>' +
+        '<button class="retro-btn green" onclick="SSS.showExplanationScreen()">Continue \u2192</button>'
+      );
+      selectedSolution = -1;
+      return;
+    }
+
     // Show the response, then proceed to explanation
     const baseScore = (STATE.completedCases.find(c => c.caseId === caseData.id) || {}).score || 0;
     let html = '<div class="info-header green">\u2713 Case Solved!</div>' +
@@ -5669,7 +6800,7 @@
     // SSS victory/title screens.
     // Button: a promoting level (L2\u2013L6) goes to the rank-up badge first ("Continue \u2192");
     // a non-promoting level (L0, L1) threads straight forward ("Thread Forward \u2192").
-    const _lvl = HHH_DATA.levels[STATE.currentLevel] || {};
+    const _lvl = activeData().levels[STATE.currentLevel] || {};
     const _willRankUp = _lvl.ranksUp !== false && STATE.rank < GAME_DATA.ranks.length - 1;
     renderInfo(
       '<div class="info-header green">\u2713 Case Solved!</div>' +
@@ -5693,11 +6824,13 @@
   // level (or an HHH "coming soon" when content ends). Bypasses the SSS
   // victory/title screens entirely (those are torn out in the title pass).
   function completeLevel() {
-    const lvl = HHH_DATA.levels[STATE.currentLevel] || {};
+    const lvl = activeData().levels[STATE.currentLevel] || {};
     if (STATE.completedLevels.indexOf(STATE.currentLevel) < 0) {
       STATE.completedLevels.push(STATE.currentLevel);
     }
-    if (STATE.currentLevel === 6) STATE.level7Unlocked = true;   // L6 done \u2192 unlock L7
+    if (!inCampaign2() && STATE.currentLevel === 6) STATE.level7Unlocked = true;   // C1: L6 done \u2192 unlock L7
+    if (inCampaign2() && STATE.currentLevel === 5) STATE.c2FinaleUnlocked = true;  // C2: L5 done \u2192 unlock the hidden finale (L6)
+    if (inCampaign2() && STATE.currentLevel === 6) STATE.c2Complete = true;        // C2: the finale is finished (title bridge \u2192 closed-case variant)
     const shouldRankUp = lvl.ranksUp !== false && STATE.rank < GAME_DATA.ranks.length - 1;
     saveState();
     refreshLevelSelect();                                         // dev dropdown reflects new completion
@@ -5782,8 +6915,11 @@
   }
 
   function gotoNextLevel() {
+    // HHH C2 L6: after the finale's rank-up (R6 Architect of the Chain), the thread
+    // doesn't go anywhere — the campaign closes on the C2 victory screen.
+    if (inCampaign2() && STATE.currentLevel === 6) { showVictory(); return; }
     const nextIdx = STATE.currentLevel + 1;
-    const nextLvl = HHH_DATA.levels && HHH_DATA.levels[nextIdx];
+    const nextLvl = activeData().levels && activeData().levels[nextIdx];
     // "Where we're going" \u2014 read during the flash; name the destination era if known.
     const dest = nextLvl
       ? '<p>The record holds. The thread pulls you forward through time \u2014 toward <b style="color:#e8b84a">' + escHtml(nextLvl.name) + '</b>' + (nextLvl.date ? ', ' + escHtml(nextLvl.date) : '') + '.</p>'
@@ -5820,7 +6956,10 @@
   //   "god" in the name box + click the hero icon 10×) — it TOGGLES and PERSISTS in
   //   localStorage ('hhh_dev'), so a Cmd-R keeps your choice. SSS.devToggle() also flips it.
   const DEV_KEY = 'hhh_dev';
-  let DEV_MODE = (function() { try { return localStorage.getItem(DEV_KEY) === '1'; } catch (e) { return false; } })();
+  // ⚠️ C2_BUILD_MODE (see the flag at the top): forces DEV_MODE ON at every boot for
+  // the duration of the C2 build, regardless of the persisted hhh_dev state.
+  let DEV_MODE = C2_BUILD_MODE ||
+    (function() { try { return localStorage.getItem(DEV_KEY) === '1'; } catch (e) { return false; } })();
   // Swap the startup hero icon when god mode is active (SSS parity: it shows a
   // distinct devmode sprite). hhh_icon_god.png when ON, hhh_icon.png when OFF.
   function updateTitleIcon() {
@@ -5830,6 +6969,9 @@
     if (icon.getAttribute('src') !== src) icon.setAttribute('src', src);
   }
   function setDevMode(v) {
+    // ⚠️ C2_BUILD_MODE: dev mode cannot be turned OFF while building C2 (the god
+    // gesture still runs, but its single-click-off path is inert until ship).
+    if (C2_BUILD_MODE && !v) return;
     DEV_MODE = !!v;
     try { localStorage.setItem(DEV_KEY, DEV_MODE ? '1' : '0'); } catch (e) {}
     updateTitleIcon();
@@ -5859,6 +7001,12 @@
   // Top-bar counter "Thread N of M" (HHH equivalent of SSS "Case N of M"). L0 = the
   //   orientation prologue (not a numbered thread). Total = 6 until hidden L7 unlocks, then 7.
   function threadCounterLabel() {
+    if (inCampaign2()) {
+      // C2: L0 = the Audit prologue; 5 numbered threads; hidden finale reveals a 6th.
+      if (STATE.currentLevel === 0) return 'The Audit';
+      const totalC2 = (STATE.c2FinaleUnlocked || STATE.currentLevel === 6) ? 6 : 5;
+      return 'Thread ' + STATE.currentLevel + ' of ' + totalC2;
+    }
     if (STATE.currentLevel === 0) return 'Orientation';
     const total = (STATE.level7Unlocked || STATE.currentLevel === 7) ? 7 : 6;
     return 'Thread ' + STATE.currentLevel + ' of ' + total;
@@ -5867,9 +7015,22 @@
   // DEV ONLY: jump to any level from the menu (rows are read-only in shipped play).
   function devJumpLevel(idx) {
     idx = parseInt(idx, 10);
-    if (isNaN(idx) || !HHH_DATA.levels || !HHH_DATA.levels[idx]) return;
+    if (isNaN(idx) || !activeData().levels || !activeData().levels[idx]) return;
     closeLevelSelect();
     enterLevel(idx);
+  }
+  // DEV ONLY (HHH C2): jump into a Campaign 2 level from anywhere (harnesses + the
+  // dev thread menu's campaign toggle). Fills identity picks with defaults if unset
+  // so mid-campaign levels are testable without walking the intake.
+  function devJumpC2Level(idx, companion, discipline) {
+    idx = parseInt(idx, 10) || 0;
+    if (!window.HHH_C2_DATA || !HHH_C2_DATA.levels[idx]) return;
+    STATE.campaign = 2;
+    if (companion || !STATE.companionSpecies) STATE.companionSpecies = companion || 'oolian';
+    if (discipline || !STATE.discipline) STATE.discipline = discipline || 'forensics';
+    closeLevelSelect();
+    enterLevel(idx);
+    saveState();   // persist the campaign switch (boot/resume reads it)
   }
 
   // ── TAA Comms — HHH one-use Nova hint per level, tiered by clue progress ──
@@ -5884,15 +7045,28 @@
       return { name: "Zel'keth", role: 'TAA — Temporal Liaison', alien: true,
         clue: { icon: '📡', sprites: { alienPortrait: 'portrait_alien_neutral.png' } } };
     }
+    // HHH C2: the comms voice is the player's companion (the "phone a friend" of the
+    // bible §5) — named per species, talk-animated from the reused C1 companion sheet.
+    if (inCampaign2() && STATE.companionSpecies) {
+      const sp = STATE.companionSpecies;
+      const cMeta = (activeData().meta.companions || {})[sp] || {};
+      return { name: cMeta.name || cMeta.label || sp, role: 'TAA Comms — Field Partner', alien: false,
+        clue: { icon: '📡', sprites: { spritesheet: 'npc/companion/' + sp + '/spritesheet.png', spritesheetJson: 'npc/companion/' + sp + '/spritesheet.json' } } };
+    }
     return { name: 'Nova', role: 'TAA — Remote Handler', alien: false,
       clue: { icon: '📡', sprites: { spritesheet: 'npc/nova/spritesheet_unmasked.png', spritesheetJson: 'npc/nova/spritesheet_unmasked.json' } } };
   }
 
   function taaComms() {
     if (STATE.taaCommsUsed) return;
-    const lvl = HHH_DATA.levels[STATE.currentLevel] || {};
-    const hints = lvl.taaCommsHints;
-    if (!hints) return;
+    const lvl = activeData().levels[STATE.currentLevel] || {};
+    let hints = lvl.taaCommsHints;
+    // HHH C2: species-keyed hints — { oolian:{low,mid,full}, rhessi:{…}, vressk:{…} }.
+    // The companion IS the comms voice in C2; a flat {low,mid,full} still works (C1 shape).
+    if (hints && !hints.low && STATE.companionSpecies && hints[STATE.companionSpecies]) {
+      hints = hints[STATE.companionSpecies];
+    }
+    if (!hints || !hints.low) return;
     STATE.taaCommsUsed = true;
     saveState();
     refreshFieldNotesCommsBtn();   // grey the button if Field Notes is showing later
@@ -5969,6 +7143,75 @@
     }, 0);
   }
 
+  // ── HHH C2: the PATTERN-NAMING comms interject (bible §6 L4 "the companion names it") ──
+  // A one-shot, scripted comms beat: when a level with `patternInterject` reaches all its
+  // REQUIRED clues, TAA Comms auto-opens ONCE and the companion speaks the campaign's central
+  // turn in their own voice (species-keyed line) — BEFORE the player reaches Validate. Does NOT
+  // consume the tiered-hint budget (taaCommsUsed untouched); fires once, gated by a caseState flag.
+  function maybePatternInterject() {
+    if (!inCampaign2()) return;
+    const lvl = activeData().levels[STATE.currentLevel];
+    if (!lvl || !lvl.patternInterject) return;
+    const cs = STATE.caseState;
+    if (!cs.flags) cs.flags = [];
+    if (cs.flags.includes('pattern_named')) return;
+    const cd = GAME_DATA.cases[STATE.currentCase];
+    if (!allRequiredCluesFound(cd, cs)) return;             // land it only once the case is provable
+    const lines = lvl.patternInterject.lines || {};
+    const sp = STATE.companionSpecies;
+    const line = (sp && lines[sp]) || lines.oolian || lines.rhessi || lines.vressk;
+    if (!line) return;
+    cs.flags.push('pattern_named');
+    saveState();
+    showPatternInterject(line, lvl);
+  }
+
+  // Render the scripted interject in the comms voice (companion talk-anim, one Continue option).
+  function showPatternInterject(line, lvl) {
+    stopTalkAnim();
+    stopTypewriter();
+    setScreen('CLUE_REVEAL');
+    const speaker = commsSpeakerConfig(lvl.commsSpeaker);   // C2 default = the companion
+    speakerBar.innerHTML =
+      '<div class="speaker-header">' +
+        portraitHtml(speaker.clue) +
+        '<div class="speaker-info">' +
+          '<div class="speaker-name">' + escHtml(speaker.name) + '</div>' +
+          '<div class="speaker-role">' + escHtml(speaker.role) + '</div>' +
+        '</div>' +
+        '<span class="back-link" onclick="SSS.showFieldNotes()">← <img class="fn-icon" src="UI/icon_field_guide.png" alt=""> Field Notes</span>' +
+      '</div>';
+    const portraitCanvas = document.getElementById('portrait-canvas');
+    if (portraitCanvas && !speaker.alien && speaker.clue.sprites.spritesheet) {
+      loadSpritesheet(speaker.clue.sprites.spritesheet, speaker.clue.sprites.spritesheetJson)
+        .then(data => {
+          const ctx = portraitCanvas.getContext('2d');
+          ctx.imageSmoothingEnabled = false;
+          drawCrewFrame(ctx, data.img, data.frames[data.frames.length - 1].frame);
+        }).catch(() => {});
+    }
+    const optionsHtml = '<div class="dialogue-options">' +
+      '<div class="dialogue-option" data-opt-idx="0">Continue →</div></div>';
+    renderInfo(
+      '<div class="info-body"><p id="dialogue-text-target"></p></div>' +
+      '<div id="dialogue-after-text" style="display:none">' + optionsHtml + '</div>'
+    );
+    setTimeout(() => {
+      if (!speaker.alien) startTalkAnim(speaker.clue);
+      const textTarget = document.getElementById('dialogue-text-target');
+      const afterText = document.getElementById('dialogue-after-text');
+      if (textTarget) {
+        typewriteText(textTarget, escHtml(line), 0, () => {
+          if (!speaker.alien) stopTalkAnim();
+          if (afterText) afterText.style.display = '';
+          infoArea.querySelectorAll('.dialogue-option').forEach(el => {
+            el.addEventListener('click', e => { e.stopPropagation(); showFieldNotes(); });
+          });
+        });
+      }
+    }, 0);
+  }
+
   // If Field Notes is on screen, reflect the "used" state on the TAA Comms button.
   function refreshFieldNotesCommsBtn() {
     const btn = infoArea && infoArea.querySelector('.call-home-btn');
@@ -6008,27 +7251,37 @@
     'badge_temporal_archivist.jpg',  // R4  Temporal Archivist
     'badge_keeper_of_the_chain.jpg'  // R5  Keeper of the Chain
   ];
-  // Campaign 2 rank badge frame names (in badge_spritesheet_c2.png)
+  // HHH C2 rank badges, ladder order R0→R6. R0 = the CARRIED C1 terminal badge
+  // (Keeper of the Chain) — that frame lives on the C1 sheet; runBadgePixelate's
+  // renderBadge falls back to the C1 sheet when a frame is missing from the C2
+  // sheet, which is exactly the cross-sheet R0→R1 pixelate we want on L1's rank-up.
+  // Frames 1–6 match c2/ui/spritesheet_badges.json EXACTLY (packed names end .jpg
+  // even though the sheet is .png). Order per sprite spec §6 author correction:
+  // The Unforged = R5 (L5), Architect of the Chain = R6 capstone (hidden L6).
   const RANK_BADGE_FRAMES_C2 = [
-    'badge_federation_trainee.png',
-    'badge_concord_field_agent.png',
-    'badge_cross_species_specialist.png',
-    'badge_senior_liaison.png',
-    'badge_galactic_botanist.png'
+    'badge_keeper_of_the_chain.jpg',       // R0  carried from C1 (C1 sheet fallback)
+    'badge_corruption_scout.jpg',          // R1
+    'badge_trace_analyst.jpg',             // R2
+    'badge_thread_surgeon.jpg',            // R3
+    'badge_temporal_advocate.jpg',         // R4
+    'badge_the_unforged.jpg',              // R5
+    'badge_architect_of_the_chain.jpg'     // R6
   ];
 
   // pick the active campaign's rank badge frame array + colors.
   function getActiveRankBadgeFrames() {
-    return (STATE.currentCampaign === 1) ? RANK_BADGE_FRAMES_C2 : RANK_BADGE_FRAMES;
+    return inCampaign2() ? RANK_BADGE_FRAMES_C2 : RANK_BADGE_FRAMES;
   }
   function getActiveRankColors() {
-    return HHH_DATA.meta.rankColors;   // HHH amber rank ladder (6 entries)
+    return activeData().meta.rankColors;   // C1 amber ladder (6) or C2 slate→gold ladder (7)
   }
 
   function showRankUp(oldRank) {
     setScreen('RANK_UP');
     if (oldRank === undefined) oldRank = Math.max(0, STATE.rank - 1);
-    const completedCase = GAME_DATA.cases[STATE.currentCase - 1];
+    // SSS multi-case flow advanced currentCase BEFORE ranking up (completed = idx-1);
+    // HHH's single-slot flow ranks up with currentCase still 0 (completed = idx 0).
+    const completedCase = GAME_DATA.cases[STATE.currentCase - 1] || GAME_DATA.cases[STATE.currentCase];
     const flavorText = completedCase && completedCase.rankUpText ? completedCase.rankUpText : '';
 
     renderInfo(
@@ -6047,7 +7300,11 @@
     // on-demand pattern as loadAlienSheet for portraits.) Cached after first use, so later
     // rank-ups are instant; the "Rank Up!" header shows immediately and the badge resolves
     // within the 1.25s hold before the pixelate animation begins.
-    loadBadgeSheet().then(function () { runBadgePixelate(oldRank, STATE.rank); });
+    // HHH C2: campaign 2 needs BOTH sheets (its R0 badge is the carried C1 badge).
+    const badgeLoads = inCampaign2()
+      ? Promise.all([loadBadgeSheet(), loadBadgeSheetC2()])
+      : loadBadgeSheet();
+    Promise.resolve(badgeLoads).then(function () { runBadgePixelate(oldRank, STATE.rank); });
   }
 
   function runBadgePixelate(oldRankIdx, newRankIdx) {
@@ -6061,17 +7318,23 @@
     const oldFrame = activeFrames[oldRankIdx];
     const newFrame = activeFrames[newRankIdx];
 
-    // Render badge to offscreen canvas
+    // Render badge to offscreen canvas.
+    // HHH C2: a frame missing from the active sheet falls back to the C1 sheet —
+    // that's how C2's R0 (the carried Keeper of the Chain badge) renders during
+    // the first C2 rank-up pixelate.
     function renderBadge(frameName) {
       const c = document.createElement('canvas');
       c.width = 512; c.height = 512;
-      if (activeSheet) {
-        const f = activeSheet.frameMap[frameName];
-        if (f) {
-          const bCtx = c.getContext('2d');
-          bCtx.imageSmoothingEnabled = false;
-          bCtx.drawImage(activeSheet.img, f.x, f.y, f.w, f.h, 0, 0, 512, 512);
-        }
+      let sheet = activeSheet;
+      let f = sheet && sheet.frameMap[frameName];
+      if (!f && badgeSheetData && badgeSheetData !== sheet) {
+        sheet = badgeSheetData;
+        f = sheet.frameMap[frameName];
+      }
+      if (sheet && f) {
+        const bCtx = c.getContext('2d');
+        bCtx.imageSmoothingEnabled = false;
+        bCtx.drawImage(sheet.img, f.x, f.y, f.w, f.h, 0, 0, 512, 512);
       }
       return c;
     }
@@ -6120,6 +7383,7 @@
 
   function showVictory() {
     setScreen('VICTORY');
+    victoryScreen.classList.toggle('c2-finale', inCampaign2());   // C2 finale scrolls; C1 stays centered
     saveBestScore(STATE.totalScore);
     PlayLog.gameComplete(
       STATE.totalScore,
@@ -6127,9 +7391,15 @@
       STATE.completedCases.length
     );
     const best = getBestScore();
-    // Mark the game finished \u2014 the "finished" flag a future HHH Campaign 2 reads
-    // to unlock on the startup screen (see HHH_HANDOFF.md C2 note).
-    STATE.campaign1Complete = true;
+    if (!inCampaign2()) {
+      // Mark the game finished \u2014 the flag the HHH C2 startup bridge reads to unlock.
+      // HHH C2 L6: C1-ONLY \u2014 a C2 victory must never touch campaign1Complete, and
+      // must NOT clobber c1Companion with the C2 pick (the C1 bond is durable).
+      STATE.campaign1Complete = true;
+      STATE.c1Companion = STATE.companionSpecies || STATE.c1Companion || null;   // HHH C2: C1 bond for intake carry-over
+    } else {
+      STATE.c2Complete = true;    // belt-and-braces (completeLevel also sets it)
+    }
     saveState();
 
     // HHH per-thread breakdown: map completedCases \u2192 HHH level NAMES (the engine's
@@ -6144,7 +7414,69 @@
         '</div>';
     });
 
-    if (STATE.currentCampaign === 1) {
+    if (inCampaign2()) {
+      // ── HHH C2 victory — the FINALE close (impl §9 step 6: finale weight +
+      //    cross-rank acknowledgment if C1 was completed). Design-locked
+      //    2026-07-13: per-ending title, R6 Architect badge, C2 per-thread
+      //    breakdown, ending core + ONE companion coda (3 cores + 9 codas —
+      //    the firewall shape), no extra hidden title (author call). Reads
+      //    solutionIdx (set by confirmSolution) + companionSpecies.
+      const rankColor = getActiveRankColors()[STATE.rank] || '#f6d27a';
+      const rankName = (GAME_DATA.ranks && GAME_DATA.ranks[STATE.rank]) || '';
+      const who = escHtml(STATE.playerName || 'The Archivist');
+      const c2lvls = activeData().levels || [];
+      let c2Breakdown = '';
+      c2lvls.forEach(lvl => {
+        const cc = STATE.completedCases.find(c => c.caseId === lvl.id);
+        if (!cc) return;
+        c2Breakdown += '<div class="victory-case-line">' +
+          escHtml(lvl.name) + ' — ' + cc.score + ' pts' +
+          (cc.wrongGuesses > 0 ? ' (' + cc.wrongGuesses + ' wrong)' : ' (clean)') +
+          '</div>';
+      });
+      // The chosen ending flavors the close (3 cores) + the companion's stance coda
+      // (one line, in the voice the player has carried all campaign — 9 authored).
+      const finaleLvl = c2lvls[6] || {};
+      const solIdx = STATE.caseState.solutionIdx >= 0 ? STATE.caseState.solutionIdx : 2;
+      const solOpt = ((finaleLvl.solutionChoice || {}).options || [])[solIdx] || {};
+      const ending = solOpt.ending || {};
+      const endCore = (ending.core || []).map(p => '<p>' + p + '</p>').join('');
+      const compMeta = ((activeData().meta || {}).companions || {})[STATE.companionSpecies] || {};
+      const coda = (ending.codas || {})[STATE.companionSpecies] || '';
+      const codaHtml = coda
+        ? '<div class="victory-coda" style="font-size:19px;color:#9fd0ff;margin-top:8px;z-index:1;max-width:620px;text-align:center;">' +
+          '<b>' + escHtml(compMeta.name || 'Your companion') + ':</b> ' + escHtml(coda) + '</div>'
+        : '';
+      // Cross-rank acknowledgment — both terminal ranks honored when C1 is done.
+      // Gated on c1Finished() (the same predicate the C2 bridge uses): post-ship this
+      // is exactly campaign1Complete for any C2 player; under C2_BUILD_MODE it also
+      // shows for a dev-jumped finale (C1 treated as finished by design).
+      const crossRank = c1Finished()
+        ? '<div style="font-size:18px;color:#c8a24a;z-index:1;letter-spacing:1px;">Keeper of the Chain · Architect of the Chain — both records bear your name.</div>'
+        : '';
+      victoryScreen.innerHTML =
+        '<canvas id="victory-stars" width="960" height="640" style="position:absolute;inset:0;"></canvas>' +
+        '<div class="victory-title" style="color:' + C2_VALIDATE_ACCENT + ';">✦ ' + escHtml(ending.title || 'The Case File Closes') + ' ✦</div>' +
+        '<canvas id="victory-badge" width="512" height="512" style="width:96px;height:96px;image-rendering:pixelated;z-index:1;"></canvas>' +
+        '<div class="victory-rank" style="color:' + rankColor + ';">' + who + ' — ' + escHtml(rankName) + '</div>' +
+        crossRank +
+        '<div class="victory-score">Total Score: ' + STATE.totalScore + '</div>' +
+        '<div class="victory-breakdown">' + c2Breakdown + '</div>' +
+        '<div class="info-body" style="z-index:1;max-width:640px;text-align:center;font-size:19px;">' + endCore + '</div>' +
+        codaHtml +
+        (best > 0 ? '<div style="font-size:20px;color:#6a7a8a;z-index:1;">Best: ' + best + '</div>' : '') +
+        '<button class="retro-btn accent" onclick="SSS.backToTitle()" style="z-index:1;">Return to Title</button>';
+      // Final rank badge — the R6 Architect capstone, from the C2 sheet.
+      loadBadgeSheetC2().then(function() {
+        const cv = document.getElementById('victory-badge');
+        const sheet = getActiveBadgeSheet();
+        const frameName = (getActiveRankBadgeFrames() || [])[STATE.rank];
+        if (cv && sheet && frameName) {
+          const f = sheet.frameMap[frameName];
+          if (f) { const bx = cv.getContext('2d'); bx.imageSmoothingEnabled = false; bx.drawImage(sheet.img, f.x, f.y, f.w, f.h, 0, 0, 512, 512); }
+        }
+      });
+    } else if (STATE.currentCampaign === 1) {
       // ── Campaign 2 victory (two-column layout) ─────────────────
       saveState();
       const rankColor = getActiveRankColors()[STATE.rank] || '#a855f7';
@@ -6267,9 +7599,13 @@
   function backToTitle() {
     const flag = STATE.campaign1Complete;
     const name = STATE.playerName;
+    const bond = STATE.c1Companion;               // HHH C2: the C1 bond survives resets
+    const c2done = STATE.c2Complete;              // HHH C2 L6: the closed case survives resets (title bridge variant)
     STATE = defaultState();
     STATE.campaign1Complete = flag;
     STATE.playerName = name;
+    STATE.c1Companion = bond || null;
+    STATE.c2Complete = !!c2done;
     setActiveCampaign(0);
     saveState();
     lastLoadedCase = -1;
@@ -6715,11 +8051,22 @@
     sceneFxWin = win;
     sceneFxType = win.twinkle ? 'twinkle' : 'stars';
     sceneFxParticles = [];
+    // HHH C2 (L4 corridor): optional horizontal density ramp + count scale.
+    //   win.densityRamp r (default 0 = uniform): star density grows linearly left→right,
+    //   pdf ∝ 1 + r·t — so small windows at the right edge of a wide strip reliably catch
+    //   stars without overloading a large left window. Inverse-CDF sample keeps it exact.
+    //   win.starScale (default 1): multiplies each layer's count.
+    const ramp = win.densityRamp || 0, scale = win.starScale || 1;
+    const sampleT = () => {
+      const u = Math.random();
+      return ramp > 0 ? (Math.sqrt(1 + ramp * (ramp + 2) * u) - 1) / ramp : u;
+    };
     SCENE_STAR_LAYERS.forEach(layer => {
-      for (let i = 0; i < layer.count; i++) {
+      const n = Math.round(layer.count * scale);
+      for (let i = 0; i < n; i++) {
         const baseAlpha = layer.minAlpha + Math.random() * (layer.maxAlpha - layer.minAlpha);
         sceneFxParticles.push({
-          x:     win.x + Math.random() * win.w,
+          x:     win.x + sampleT() * win.w,
           y:     win.y + Math.random() * win.h,
           dx:    0,
           dy:    win.twinkle ? 0 : -layer.speed,
@@ -6988,6 +8335,7 @@
     if (amberPulseRAF) { cancelAnimationFrame(amberPulseRAF); amberPulseRAF = null; }
     sceneFxMask = null;
     sceneFxType = null;
+    sceneFxWin = null;   // HHH C2 fix: stale window let sameWindow() veto the restart on a windowed→windowless→windowed round trip (L6 chamber revisit)
     windowSprite = null;
     amberPulseImg = null;
     sceneStarsCvs.classList.remove('active');
@@ -7070,8 +8418,21 @@
 
   // HHH "finished" detector — does a saved state represent in-progress play?
   function savedHasProgress(saved) {
-    return !!(saved && ((saved.currentLevel || 0) > 0 ||
+    return !!(saved && (saved.campaign === 2 ||                        // any C2 run counts (even at its L0)
+              (saved.currentLevel || 0) > 0 ||
               (Array.isArray(saved.completedLevels) && saved.completedLevels.length > 0)));
+  }
+
+  // HHH C2 (author-locked 2026-07-15): a returning player's saved name GHOSTS in the
+  // title box as its placeholder — empty box = stay who you were, typing renames.
+  // Fresh/default profiles keep the generic placeholder.
+  function savedPlayerName() {
+    const s = loadState();
+    const n = (s && typeof s.playerName === 'string') ? s.playerName.trim() : '';
+    return (n && n !== 'The Archivist' && VALID_NAME_RE.test(n)) ? n : '';
+  }
+  function refreshNamePlaceholder() {
+    nameInput.setAttribute('placeholder', savedPlayerName() || 'The Archivist');
   }
 
   // Begin button. Resume is offered automatically on load (see maybeShowResume) and
@@ -7087,15 +8448,18 @@
       return;
     }
     finishIntro();
-    beginFreshGame(raw || 'The Archivist');
+    beginFreshGame(raw || savedPlayerName() || 'The Archivist');   // empty box honors the ghosted name
   }
 
   // Fresh start at Level 0 (preserves the "finished" unlock flag across replays).
   function beginFreshGame(name) {
-    const wasFinished = (loadState() || {}).campaign1Complete || STATE.campaign1Complete || false;
+    const prev = loadState() || {};
+    const wasFinished = prev.campaign1Complete || STATE.campaign1Complete || false;
+    const bond = prev.c1Companion || STATE.c1Companion || null;   // HHH C2: keep the C1 bond across fresh runs
     STATE = defaultState();
     STATE.playerName = name || 'The Archivist';
     STATE.campaign1Complete = wasFinished;
+    STATE.c1Companion = bond;
     setActiveCampaign(0);
     saveState();
     PlayLog.startSession(STATE.playerName);
@@ -7107,13 +8471,21 @@
   let pendingTitleName = null;   // name typed on the title, carried into the resume prompt
   function showResumePrompt(saved) {
     if (!saved) return;
-    const total = (saved.level7Unlocked || (saved.currentLevel === 7)) ? 7 : 6;
     const lvl = saved.currentLevel || 0;
-    const threadLabel = lvl === 0 ? 'Orientation' : ('Thread ' + lvl + ' of ' + total);
+    let threadLabel, heading = 'Thread In Progress';
+    if (saved.campaign === 2) {
+      // HHH C2: a Forward Thread run in progress.
+      heading = 'Case File Open';
+      const totalC2 = (saved.c2FinaleUnlocked || lvl === 6) ? 6 : 5;
+      threadLabel = lvl === 0 ? 'The Audit' : ('Thread ' + lvl + ' of ' + totalC2 + ' — The Forward Thread');
+    } else {
+      const total = (saved.level7Unlocked || (lvl === 7)) ? 7 : 6;
+      threadLabel = lvl === 0 ? 'Orientation' : ('Thread ' + lvl + ' of ' + total);
+    }
     resumePrompt.classList.remove('hidden');
     resumePrompt.innerHTML =
       '<div class="resume-panel">' +
-        '<h2>Thread In Progress</h2>' +
+        '<h2>' + heading + '</h2>' +
         '<p><span style="color:#e8b84a;">' + escHtml(saved.playerName || 'The Archivist') + '</span> \u2014 ' + threadLabel + '</p>' +
         '<p>Score: ' + (saved.totalScore || 0) + '</p>' +
         '<div class="resume-btns">' +
@@ -7211,15 +8583,17 @@
   //   play the menu is a READ-ONLY status display (no travel to past or future levels).
   function buildLevelSelect() {
     levelSelectEl.innerHTML = '';
-    const levels = HHH_DATA.levels || [];
+    const levels = activeData().levels || [];
     for (let i = 0; i < levels.length; i++) {
       const lvl = levels[i];
       const done = STATE.completedLevels.indexOf(i) >= 0;
       const here = i === STATE.currentLevel;
       const revealed = DEV_MODE || i <= STATE.currentLevel || done;
       const locked = !revealed;
-      // Hidden finale: L7 does not appear at all until it unlocks (or in dev).
-      if (i === 7 && !DEV_MODE && !STATE.level7Unlocked) continue;
+      // Hidden finales don't appear at all until unlocked (or in dev):
+      // C1's L7, and C2's L6 ("The Source").
+      if (!inCampaign2() && i === 7 && !DEV_MODE && !STATE.level7Unlocked) continue;
+      if (inCampaign2() && i === 6 && !DEV_MODE && !STATE.c2FinaleUnlocked) continue;
 
       const realName = lvl.menuName || lvl.name || lvl.id;
       const opt = document.createElement('div');
@@ -7257,6 +8631,34 @@
       // DEV ONLY: clicking a row jumps to that level. Read-only in shipped play.
       if (DEV_MODE) opt.addEventListener('click', (function(t){ return function(){ devJumpLevel(t); }; })(i));
       levelSelectEl.appendChild(opt);
+    }
+
+    // HHH C2 — DEV ONLY: cross-campaign jump rows for the OTHER campaign's levels
+    // (build/testing convenience; never rendered in shipped play).
+    if (DEV_MODE && window.HHH_C2_DATA) {
+      const otherCamp = inCampaign2() ? 1 : 2;
+      const otherLevels = (otherCamp === 2 ? HHH_C2_DATA.levels : HHH_DATA.levels) || [];
+      if (otherLevels.length) {
+        const div = document.createElement('div');
+        div.className = 'level-option';
+        div.style.cssText = 'pointer-events:none;opacity:0.55;border-top:1px solid rgba(232,184,74,0.35);margin-top:4px;';
+        div.textContent = otherCamp === 2 ? '— CAMPAIGN 2 · The Forward Thread —' : '— CAMPAIGN 1 —';
+        levelSelectEl.appendChild(div);
+        otherLevels.forEach((lvl, i) => {
+          const opt = document.createElement('div');
+          opt.className = 'level-option dev-click';
+          const numEl = document.createElement('span');
+          numEl.className = 'level-option-num';
+          numEl.textContent = String(i);
+          const nameEl = document.createElement('span');
+          nameEl.className = 'level-option-name';
+          nameEl.textContent = lvl.menuName || lvl.name || lvl.id;
+          opt.appendChild(numEl);
+          opt.appendChild(nameEl);
+          opt.addEventListener('click', (function(c, t){ return function(){ devJumpCampaignLevel(c, t); }; })(otherCamp, i));
+          levelSelectEl.appendChild(opt);
+        });
+      }
     }
   }
 
@@ -7457,7 +8859,9 @@
   async function playTitleIntro() {
     if (introRunning) return;
     introRunning = true;
+    deactivateC2();              // HHH C2: the bridge is closed during the intro (re-fires when it settles)
     updateTitleIcon();           // reflect god mode (hhh_icon_god.png) if it's active
+    refreshNamePlaceholder();    // HHH C2: a returning player's saved name ghosts in the box
     const e = titleEls();
     [e.icon, e.insignia, ...e.words, e.universe, e.inputW, beginBtn, e.prompt].forEach(el => {
       if (el) el.classList.add('intro-hidden');
@@ -7523,14 +8927,22 @@
     await introDelay(200);
     finishIntro();
     maybeShowResume();          // offer resume once the intro settles
+    maybeActivateC2Bridge();    // HHH C2: boot the Archive Integrity Alert if C1 is finished
   }
 
-  // Click anywhere on the title (not the input/button) skips the intro
+  // Click anywhere on the title (not the input/button) skips the intro.
+  // HHH C2 (2026-07-15): skipping is TWO clicks when the bridge follows — the first
+  // ends the C1 title intro (and boots the bridge), the second fast-forwards the
+  // bridge animation. Never one click for both.
   titleScreen.addEventListener('click', (e) => {
-    if (!introRunning) return;
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
-    finishIntro();
-    maybeShowResume();          // skipping the intro also offers resume
+    if (introRunning) {
+      finishIntro();
+      maybeShowResume();          // skipping the intro also offers resume
+      maybeActivateC2Bridge();    // HHH C2: skip path boots the bridge too
+      return;
+    }
+    if (c2AnimActive) skipC2Anim();   // second click: fast-forward the bridge to its settled state
   });
 
   // After the intro (or a skip), if a save is in progress, pop the resume window
@@ -7801,12 +9213,27 @@
 
     // ── Help panel ────────────────────────────────────────────────
     function updateRankHighlight() {
-      const ladder = document.getElementById('hb-rank-ladder');
+      // HHH C2: the handbook is campaign-aware — .c2 on the overlay gates which
+      // panel pair (hb-c1 / hb-c2) renders; each campaign has its own ladder.
+      const c2 = inCampaign2();
+      helpOverlay.classList.toggle('c2', c2);
+      const ladder = document.getElementById(c2 ? 'hb-rank-ladder-c2' : 'hb-rank-ladder');
       if (!ladder) return;
       const rank = (STATE && typeof STATE.rank === 'number') ? STATE.rank : 0;
       ladder.querySelectorAll('.hb-rank').forEach(el => {
         el.classList.toggle('current', parseInt(el.dataset.rank, 10) === rank);
       });
+      if (c2) {
+        // The capstone row stays [ SEALED ] until the hidden finale is unlocked —
+        // the handbook must survive a mid-campaign read without spoiling L6.
+        const r6 = ladder.querySelector('.hb-rank[data-rank="6"]');
+        if (r6) {
+          const unsealed = !!(STATE && (STATE.c2FinaleUnlocked || STATE.c2Complete));
+          r6.classList.toggle('sealed', !unsealed);
+          const nm = r6.querySelector('.hb-rank-name');
+          if (nm) nm.textContent = unsealed ? 'ARCHITECT OF THE CHAIN' : '[ SEALED ]';
+        }
+      }
     }
     function openHelp() {
       updateRankHighlight();
@@ -8153,6 +9580,381 @@
     });
   })();
 
+  // ══════════════════════════════════════════════════════════════════
+  // HHH C2 — STARTUP BRIDGE (Archive Integrity Alert) + TAA FIELD INTAKE
+  // Ported from c2/c2 intro demo.html — Animation A ("Self-Scan") ONLY, per the
+  // author lock. The demo's dev panel + animations B/C/D were NOT ported.
+  // Flow: title intro settles → c1Finished() → title block lifts (#title-core
+  // .compact) → alert box boots amber/all-clear → THE TURN (magenta) → Open Case
+  // File → intake pop-up 1 (companion carry-over) → pop-up 2 (discipline) →
+  // beginC2Run() → C2 Level 0. See c2 plan §4a/§4c.
+  // ══════════════════════════════════════════════════════════════════
+  const titleCore   = $('title-core');
+  const c2alert     = $('c2-alert');
+  const c2frame     = c2alert.querySelector('.c2-frame');
+  const c2scan      = c2alert.querySelector('.c2-scan');
+  const c2flash     = c2alert.querySelector('.c2-flash');
+  const c2head      = c2alert.querySelector('.c2-head');
+  const c2body      = c2alert.querySelector('.c2-body');
+  const openCaseBtn = $('open-case-btn');
+  const c2ReduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let c2Timers = [];
+  let c2RunToken = 0;                                  // cancels a stale animation if state changes
+  const c2Delay = (ms) => new Promise(res => c2Timers.push(setTimeout(res, ms)));
+  const clearC2Timers = () => { c2Timers.forEach(clearTimeout); c2Timers = []; };
+
+  // reset the panel's inner state between runs
+  function c2Reset() {
+    clearC2Timers();
+    c2frame.classList.remove('corrupt', 'glitch');
+    c2scan.classList.remove('run');
+    c2flash.classList.remove('fire');
+    c2head.textContent = '';
+    c2body.textContent = '';
+    openCaseBtn.disabled = true;
+  }
+
+  let c2HideTimer = null;   // pending display:none after a deactivate (cleared on re-activate)
+  function deactivateC2() {
+    c2RunToken++;
+    c2AnimActive = false;
+    c2Reset();
+    c2alert.classList.remove('reveal');
+    titleCore.classList.remove('compact');       // icon returns
+    titleCore.style.transform = '';              // drop the lift → back to centred
+    clearTimeout(c2HideTimer);
+    c2HideTimer = setTimeout(() => { if (!c2alert.classList.contains('reveal')) c2alert.style.display = 'none'; }, 620);
+  }
+
+  // Compute the final geometry, lift the title block, and place the (absolute) box
+  // in the space that opens below it. Box placement is independent of the block.
+  function layoutC2() {
+    const STAGE_H = 640, CORE_TOP = 12, GAP = 22, PROMPT_TOP = 590;
+    // measure the block at full size (icon present) for a clean base
+    titleCore.classList.remove('compact');
+    titleCore.style.transform = '';
+    void titleCore.offsetWidth;
+    const fullCoreH = titleCore.offsetHeight;
+    const iconH = $('title-icon').offsetHeight;
+    const finalCoreH = fullCoreH - iconH - 22;    // once the icon folds, this is the block height
+
+    // lift so the compacted block's top sits at ~CORE_TOP (block stays as one; icon fades)
+    const restTop = (STAGE_H - finalCoreH) / 2;   // where the compact block would centre
+    const lift = Math.max(0, restTop - CORE_TOP);
+    titleCore.classList.add('compact');
+    titleCore.style.transform = 'translateY(' + (-Math.round(lift)) + 'px)';
+
+    // place the box just below the lifted block, clamped to stay above the prompt
+    const boxH = c2frame.offsetHeight;
+    let boxTop = CORE_TOP + finalCoreH + GAP;
+    if (boxTop + boxH > PROMPT_TOP) boxTop = PROMPT_TOP - boxH;
+    c2alert.style.top = Math.round(boxTop) + 'px';
+  }
+
+  function enableCTA(token) {
+    if (token !== c2RunToken) return;
+    openCaseBtn.disabled = false;
+    c2AnimActive = false;        // HHH C2: the bridge is settled — the title skip-click is spent
+  }
+
+  // HHH C2 (author ask 2026-07-15): a SECOND title click fast-forwards the bridge
+  // animation to its settled state (two clicks skip both animations — one for the
+  // C1 title intro, one for the C2 bridge; never one click for both).
+  let c2AnimActive = false;
+  function skipC2Anim() {
+    const token = ++c2RunToken;      // orphans every pending timer/typewriter/bar frame
+    clearTimeout(c2HideTimer);
+    c2Reset();
+    c2alert.style.display = 'flex';
+    layoutC2();                      // re-asserts the lift; a mid-flight transition just settles
+    c2alert.classList.add('reveal');
+    if (STATE.c2Complete) {
+      c2head.textContent = C2_CLOSED_HEAD;
+      c2body.textContent = C2_CLOSED_BODY;
+    } else {
+      c2frame.classList.add('corrupt');
+      c2head.textContent = C2_FAULT_HEAD;
+      c2body.textContent = C2_FAULT_BODY;
+    }
+    enableCTA(token);
+  }
+
+  // typewriter into an element (token-guarded)
+  function typeInto(el, text, speed, token, done) {
+    let i = 0;
+    (function step() {
+      if (token !== c2RunToken) return;
+      el.textContent = text.slice(0, i);
+      if (i++ < text.length) c2Timers.push(setTimeout(step, speed));
+      else done && done();
+    })();
+  }
+
+  // ASCII progress bar fill into a target line inside c2body
+  function fillBar(target, dur, token, done) {
+    const N = 22; const start = performance.now();
+    (function frame(now) {
+      if (token !== c2RunToken) return;
+      const p = Math.min(1, (now - start) / dur);
+      const k = Math.round(p * N);
+      target.textContent = '[' + '█'.repeat(k) + '░'.repeat(N - k) + '] ' + Math.round(p * 100) + '%';
+      if (p < 1) requestAnimationFrame(frame);
+      else done && done();
+    })(start);
+  }
+
+  // ── Animation A · Self-Scan — boots amber & clear, then TURNS magenta ──
+  // (The reassure-then-reveal fake-out is the entire point of choosing A.)
+  const C2_FAULT_HEAD = 'TAA ARCHIVE · INTEGRITY FAULT';
+  const C2_FAULT_BODY = '> ANOMALY DETECTED\n> Corruption signature present.\n> Pattern is non-random.';
+  async function runAnimA(token) {
+    // The box is already present. A beat, then the scan sweeps it.
+    await c2Delay(300); if (token !== c2RunToken) return;
+
+    c2scan.classList.add('run');
+    await c2Delay(1000); if (token !== c2RunToken) return;   // 0.9s sweep + a beat
+
+    // Header, then the re-scan line + progress bar; the bar fills.
+    typeInto(c2head, 'TAA ARCHIVE · POST-STABILIZATION AUDIT', 26, token);
+    await c2Delay(950); if (token !== c2RunToken) return;
+    c2body.innerHTML = '<span class="amber">&gt; Re-scanning stabilized nodes…</span>\n<span class="bar"></span>';
+    const barEl = c2body.querySelector('.bar');
+    await c2Delay(350); if (token !== c2RunToken) return;
+    fillBar(barEl, 1600, token, async () => {
+      if (token !== c2RunToken) return;
+
+      await c2Delay(750); if (token !== c2RunToken) return;   // beat to notice the filled bar
+
+      // The "all clear" report…
+      c2body.innerHTML = '<span class="amber">&gt; Nodes stabilized: 6 / 6</span>\n<span class="ok">&gt; Integrity nominal · 100%</span>';
+
+      // …pause — let the all-clear be read and believed…
+      await c2Delay(1300); if (token !== c2RunToken) return;
+
+      // …THE TURN.
+      c2flash.classList.add('fire');
+      c2frame.classList.add('glitch', 'corrupt');
+      c2Timers.push(setTimeout(() => c2frame.classList.remove('glitch'), 440));
+      c2head.textContent = C2_FAULT_HEAD;
+      c2body.textContent = '';
+      await c2Delay(150); if (token !== c2RunToken) return;
+      typeInto(c2body, C2_FAULT_BODY, 18, token, () => enableCTA(token));
+    });
+  }
+
+  // HHH C2 L6: the CLOSED-CASE bridge state — after the finale, the alert stops
+  // alarming. Calm amber, no corruption turn, and the CTA reads Reopen (a fresh
+  // C2 run through intake, same flow). STATE.c2Complete survives backToTitle.
+  const C2_CLOSED_HEAD = 'TAA ARCHIVE · CASE FILE — CLOSED';
+  const C2_CLOSED_BODY = '> Source: identified.\n> Verdict: entered, by your hand.\n> The record keeps the argument.';
+
+  async function activateC2() {
+    const token = ++c2RunToken;
+    c2Reset();
+    c2AnimActive = true;         // HHH C2: a title click can now fast-forward the bridge (cleared in enableCTA)
+    clearTimeout(c2HideTimer);   // a fast intro-skip must not let a stale deactivate hide the box
+    const caseClosed = !!STATE.c2Complete;
+    openCaseBtn.textContent = caseClosed ? '▶ Reopen Case File' : '▶ Open Case File';
+
+    // Closed case: a quiet settled panel — no scan, no fake-out, no corrupt turn.
+    if (caseClosed) {
+      c2alert.style.display = 'flex';
+      layoutC2();
+      c2alert.classList.add('reveal');
+      c2head.textContent = C2_CLOSED_HEAD;
+      c2body.textContent = C2_CLOSED_BODY;
+      if (c2ReduceMotion) { enableCTA(token); return; }
+      await c2Delay(900); if (token !== c2RunToken) return;
+      enableCTA(token);
+      return;
+    }
+
+    // prefers-reduced-motion: snap straight to the final (corrupt) state.
+    if (c2ReduceMotion) {
+      c2alert.style.display = 'flex';
+      layoutC2();
+      c2alert.classList.add('reveal');
+      c2frame.classList.add('corrupt');
+      c2head.textContent = C2_FAULT_HEAD;
+      c2body.textContent = C2_FAULT_BODY;
+      enableCTA(token);
+      return;
+    }
+
+    // First entrance: 1. the title block lifts as one and the hero mark folds…
+    c2alert.style.display = 'flex';
+    layoutC2();
+    await c2Delay(620);                 // let the lift finish…
+    if (token !== c2RunToken) return;
+    await c2Delay(300);                 // …a beat of empty space…
+    if (token !== c2RunToken) return;
+    c2alert.classList.add('reveal');    // …the box fades/rises into the opened space…
+    await c2Delay(520);
+    if (token !== c2RunToken) return;
+    runAnimA(token);                    // …and Animation A runs inside it.
+  }
+
+  // Fire the bridge when the title has settled and C1 is finished (or C2_BUILD_MODE).
+  function maybeActivateC2Bridge() {
+    if (currentScreen !== 'TITLE') return;
+    if (!c1Finished()) return;
+    if (c2alert.classList.contains('reveal')) return;   // already up
+    activateC2();
+  }
+
+  // ── TAA Field Intake: two sequential pop-ups (companion, then discipline) ──
+  const intakeEl      = $('intake');
+  const intakeStepEl  = $('intake-step');
+  const intakeTitleEl = $('intake-title');
+  const intakeCarried = $('intake-carried');
+  const intakePrompt  = $('intake-prompt');
+  const intakeOpts    = $('intake-opts');
+  const intakeHint    = $('intake-hint');
+  const intakeConfirm = $('intake-confirm');
+  const intakeBack    = $('intake-back');
+
+  let intakeStage = 0;                  // 0 = companion, 1 = discipline
+  let intakeSel = null;                 // current selection in the active stage
+  const intakePicks = { companion: null, discipline: null };
+
+  function c2meta() { return (window.HHH_C2_DATA && HHH_C2_DATA.meta) || {}; }
+
+  // The companion bonded in a finished C1 save (impl plan §4) — c1Companion is the
+  // durable field (set on C1 completion, survives resets); a finished C1 save's
+  // live companionSpecies is the fallback. Malformed/absent save ⇒ null ⇒ fresh
+  // roster pick, silently (graceful degradation — never an error).
+  function savedC1Companion() {
+    const s = loadState() || {};
+    return s.c1Companion || STATE.c1Companion ||
+      ((s.campaign !== 2 && s.campaign1Complete && s.companionSpecies) ? s.companionSpecies : null);
+  }
+
+  function renderIntakeOpts(list, preselectId) {
+    intakeOpts.innerHTML = '';
+    intakeSel = preselectId || null;
+    list.forEach(o => {
+      const el = document.createElement('div');
+      el.className = 'opt' + (o.id === preselectId ? ' selected' : '');
+      el.dataset.optId = o.id;
+      el.innerHTML =
+        '<div class="opt-head">' +
+          '<span class="opt-icon"><img src="' + o.img + '" alt="" onerror="this.style.display=\'none\'"></span>' +
+          '<span class="opt-name">' + escHtml(o.label) + '</span>' +
+        '</div>' +
+        '<div class="opt-blurb">' + escHtml(o.blurb) +
+          (o.tag ? '<span class="opt-tag">' + o.tag + '</span>' : '') + '</div>';
+      el.addEventListener('click', () => {
+        [...intakeOpts.children].forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        intakeSel = o.id;
+        intakeConfirm.disabled = false;
+      });
+      intakeOpts.appendChild(el);
+    });
+    intakeConfirm.disabled = !preselectId;
+  }
+
+  function intakeCompanionList() {
+    const comps = c2meta().companions || {};
+    return Object.keys(comps).map(id => ({
+      id: id, label: comps[id].label || id, img: comps[id].portrait || '', blurb: comps[id].blurb || ''
+    }));
+  }
+  function intakeDisciplineList() {
+    const discs = c2meta().disciplines || {};
+    return Object.keys(discs).map(id => ({
+      id: id, label: discs[id].label || id, img: discs[id].emblem || '', blurb: discs[id].blurb || '', tag: discs[id].tag || ''
+    }));
+  }
+
+  function renderCompanionStage() {
+    const it = c2meta().intake || {};
+    intakeStage = 0;
+    intakeBack.style.display = 'none';           // no back on the first step
+    intakeStepEl.textContent = 'STEP 1 / 2';
+    intakeTitleEl.textContent = it.companionTitle || 'Assign Comms Partner';
+    const carried = savedC1Companion();
+    const comps = c2meta().companions || {};
+    // Pre-select the already-chosen companion (returning via Back), else the carried one.
+    const preselect = intakePicks.companion || carried || null;
+    if (carried && !intakePicks.companion && comps[carried]) {
+      intakeCarried.textContent = (it.companionCarried || '↳ Your last partner — {name} ({species}) — is still cleared for fieldwork.')
+        .replace('{name}', comps[carried].name || carried)
+        .replace('{species}', comps[carried].label || carried);
+      intakePrompt.textContent = it.companionCarriedPrompt || 'Reconnect, or request a different partner?';
+    } else {
+      intakeCarried.textContent = '';
+      intakePrompt.textContent = it.companionFreshPrompt || 'Choose who you trust at your side.';
+    }
+    renderIntakeOpts(intakeCompanionList(), preselect);
+    intakeHint.textContent = it.companionHint || '';
+  }
+
+  function renderDisciplineStage() {
+    const it = c2meta().intake || {};
+    intakeStage = 1;
+    intakeBack.style.display = '';                // back available on the discipline step
+    intakeStepEl.textContent = 'STEP 2 / 2';
+    intakeTitleEl.textContent = it.disciplineTitle || 'Declare Your Discipline';
+    intakeCarried.textContent = '';
+    intakePrompt.textContent = it.disciplinePrompt || 'How were you trained to read a record?';
+    renderIntakeOpts(intakeDisciplineList(), intakePicks.discipline);   // keep prior pick if returning
+    intakeHint.textContent = it.disciplineHint || '';
+  }
+
+  function openCaseFile() {
+    // Open Case File → the two Level 0 intake pop-ups over the clean amber backdrop.
+    intakePicks.companion = null; intakePicks.discipline = null;
+    resumePrompt.classList.add('hidden');
+    intakeEl.classList.add('show');
+    renderCompanionStage();
+  }
+
+  intakeBack.addEventListener('click', () => renderCompanionStage());
+  intakeConfirm.addEventListener('click', () => {
+    if (intakeConfirm.disabled) return;
+    if (intakeStage === 0) {
+      intakePicks.companion = intakeSel;
+      renderDisciplineStage();
+    } else {
+      intakePicks.discipline = intakeSel;
+      beginC2Run(intakePicks.companion, intakePicks.discipline);
+    }
+  });
+  openCaseBtn.addEventListener('click', (e) => { e.stopPropagation(); openCaseFile(); });
+
+  // Start the Campaign 2 run: fresh C2 state (both intake choices persisted),
+  // preserving the durable identity (name, finished flag, C1 bond). No back-step
+  // once confirmed — forward-only, matching SSS (re-pick = restart C2).
+  function beginC2Run(companion, discipline) {
+    const prev = loadState() || {};
+    const name = (nameInput.value || '').trim() || prev.playerName || STATE.playerName || 'The Archivist';
+    const flag = prev.campaign1Complete || STATE.campaign1Complete || false;
+    const bond = prev.c1Companion || STATE.c1Companion || null;
+    STATE = defaultState();
+    STATE.campaign = 2;
+    STATE.playerName = name;
+    STATE.campaign1Complete = flag;
+    STATE.c1Companion = bond;
+    STATE.companionSpecies = companion || 'oolian';
+    STATE.discipline = discipline || 'forensics';
+    setActiveCampaign(0);
+    saveState();
+    PlayLog.startSession(STATE.playerName);
+    resumePrompt.classList.add('hidden');
+    intakeEl.classList.remove('show');
+    enterLevel(0);
+  }
+
+  // DEV: cross-campaign jump for the thread menu's dev rows + harnesses.
+  function devJumpCampaignLevel(camp, idx) {
+    if (camp === 2) { devJumpC2Level(idx); return; }
+    STATE.campaign = 1;
+    devJumpLevel(idx);
+    saveState();   // persist the campaign switch (boot/resume reads it)
+  }
+
   // ── Public API (for inline onclick handlers) ────────────────────
   window.SSS = {
     beginInvestigation,
@@ -8163,6 +9965,8 @@
     confirmDiagnosis,
     selectSolution,
     confirmSolution,
+    showDossier,        // HHH C2 L6: the Case Dossier view (Field Notes lens)
+    showFinalChoice,    // HHH C2 L6: confrontation → the 3-way verdict
     showExplanationScreen,
     nextCase,
     showVictory,
@@ -8177,7 +9981,13 @@
     showTitle,
     resumeGame,
     declineResume,
-    // Campaign 2
+    // HHH Campaign 2 (bridge / intake / dev jumps)
+    c2BuildMode: C2_BUILD_MODE,   // harness-readable — title harness asserts shipped god-toggle only when false
+    devJumpC2Level,
+    devJumpCampaignLevel,
+    openCaseFile,
+    beginC2Run,
+    activateC2,
     backToTitle,
     // character creation + call home onclick handlers
     selectSpecies,
