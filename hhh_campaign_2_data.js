@@ -763,7 +763,8 @@ const HHH_C2_DATA = {
     // THE DIFFICULTY SPIKE + EMOTIONAL PEAK (bible: restraint and dignity — the
     // sacrifice, not spectacle). Design locked with the author (2026-07-06):
     // STREET-FIRST COLD OPEN (arrive on the besieged street; vault open off it;
-    // the keeper's testimony unlocks the Institute Office = anchor); 5-CLUE GATE —
+    // the keeper's testimony unlocks the Institute Office = anchor); 6-CLUE GATE
+    // (siege_witnessed required since the 2026-08-12 remediation — it gates the vault) —
     // the forged Consumption Report is REQUIRED reading this time (the level's
     // thesis: stare at the finished record and realize the finished one is the lie);
     // its internal tell: it cites Vavilov as present at the siege. 3rd candidate =
@@ -827,13 +828,16 @@ const HHH_C2_DATA = {
             snow: { count: 175, speed: 48, drift: 7.0, size: 2.1, opacity: 0.49, color: '#e8eef4', fadeBottom: 69 },
           },
           sources: {
-            // The siege itself — context, not evidence (OPTIONAL insight)
+            // The siege itself — REQUIRED context (remediation 2026-08-12, HHH-IMP-C2L2-001:
+            // was insight:true, but it gates seed_vault, so the "optional" tag was structurally
+            // false. Marked required to match the intended street-first flow; the reveal keeps
+            // its bonusInsight score, exactly as the 2026-07-06 playtest note intended).
             street: {
-              type: 'examination', speaker: 'The Street', personality: 'stoic', insight: true,
+              type: 'examination', speaker: 'The Street', personality: 'stoic',
               evidenceType: 'testimony',
               clueTag: 'siege_witnessed', icon: '❄', label: 'Take In the Street',
               sprites: { iconImg: 'c2/ui/portrait_ration_notice.jpg' },   // §3 portrait audit — author-generated
-              learned: "Insight: the city is starving — the bread ration is 125 grams. This is what the word \"siege\" means.",
+              learned: "The city is starving — the bread ration is 125 grams. This is what the word \"siege\" means.",
               nodes: {
                 start: {
                   text: "A queue stands along the wall opposite, no one speaking. A notice is pasted at the corner: the bread ration, cut again. One hundred twenty-five grams. A bread slice and a half.\n\nSomewhere past the rooftops, artillery, far off and patient. Nobody in the queue looks up. The institute is ahead and inside it is a room full of food that no one ate.",
@@ -849,9 +853,9 @@ const HHH_C2_DATA = {
         },
         // ── 2 · The Seed Bank Vault (unlocks on the street beat — playtest fix
         //    2026-07-06: an ungated vault fired no unlock nudge, leaving the player
-        //    unguided off the street; gating on the cold-open insight restores the
-        //    toast AND strengthens the street-first intent; siege_witnessed stays
-        //    bonus-scored, it just gates this door) ──
+        //    unguided off the street; gating on the cold-open clue restores the
+        //    toast AND strengthens the street-first intent; siege_witnessed is a
+        //    REQUIRED clue as of the 2026-08-12 remediation and stays bonus-scored) ──
         {
           id: 'seed_vault',
           label: 'Seed Bank Vault',
