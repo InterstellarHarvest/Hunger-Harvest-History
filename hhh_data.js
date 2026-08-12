@@ -387,7 +387,7 @@ const HHH_DATA = {
       tagline: 'The first seed',
       location: 'a river valley',
       date: "9,700 BCE",
-      briefing: "Welcome to the first thread, Archivist. You are standing at the edge of a river valley nearly twelve thousand years ago, where ice has only recently loosened its grip and the grasses grow thick and wild. A record is fraying here around a single woman and an ordinary act of attention. The Archive needs you to witness exactly what she did, find the evidence that proves it, and stabilize the moment before it slips away for good.",
+      briefing: "Welcome to the first thread, Archivist. You are standing at the edge of a river valley nearly twelve thousand years ago, where ice has only recently loosened its grip and the grasses grow thick and wild. No record names the first hand that bent wild grain toward harvest — the change took thousands of years and countless hands across many valleys, and the Archive has woven them into one woman, one field, one ordinary act of attention, so the practice itself can be witnessed. The record is fraying around that practice. Witness what she does, find the evidence that proves it, and stabilize the moment before it slips away for good.",
       palette: {
         bg:        'radial-gradient(circle at 50% 35%, #2a2a14, #14140a)',
         bgMid:     '#1a1a10',
@@ -608,7 +608,7 @@ const HHH_DATA = {
       ],
       explanation: {
         title: "Record Stabilized",
-        body: "You witnessed the quiet beginning of agriculture as not an invention, but a practice built season by season. In wild wheat and barley, the little joint holding seed to stalk, shatters when ripe so the plant can scatter and reseed itself. A rare mutation occurred that keeps the joints intact, leaving the seed clinging to the stalk. Such a mutant can't sow itself and would vanish in the wild. But it's exactly the head a harvester can gather, and by setting those seeds apart in her storage pit and replanting them, she selected for it on purpose. And when the practice crossed to her neighbor, the thread held and spread.",
+        body: "You witnessed the quiet beginnings of agriculture as not an invention, but a practice built season by season. The woman is the Archive's reconstruction — a composite standing for generations of harvesters across the region, whose repeated choices raised the non-shattering trait slowly, over many centuries, from rare accident to whole crop. In wild wheat and barley, the little joint holding seed to stalk, shatters when ripe so the plant can scatter and reseed itself. A rare mutation occurred that keeps the joints intact, leaving the seed clinging to the stalk. Such a mutant can't sow itself and would vanish in the wild. But it's exactly the head a harvester can gather, and by setting those seeds apart in her storage pit and replanting them, she selected for it on purpose. And when the practice crossed to her neighbor, the thread held and spread.",
         funFact: "The trait that defines domesticated wheat, seed that stays on the stalk, is one that would doom the plant in the wild, since it can no longer drop and replant itself. Our most successful grain is, in a sense, a plant that can only survive because we promised to sow it each season.",
       },
     },
@@ -692,7 +692,7 @@ const HHH_DATA = {
             overseer: {
               type: 'conversation', speaker: 'The Overseer', personality: 'professional', startMood: 0,
               clueTag: 'irrigation_practice', icon: '🧑‍🌾', label: 'The Overseer', actionLabel: 'Approach',
-              learned: "The overseer floods the fields from the channels again and again, and crops the land every season without the old fallow res. Answering each failing harvest with more water, never less.",
+              learned: "The overseer floods the fields from the channels again and again, and crops the land every season without the old fallow rest. Answering each failing harvest with more water, never less.",
               revisit: 'revisit',
               sprites: { spritesheet: 'npc/nile_overseer/spritesheet.png', spritesheetJson: 'npc/nile_overseer/spritesheet.json' },
               nodes: {
@@ -1064,16 +1064,16 @@ const HHH_DATA = {
       taaCommsHints: {
         low:  "Nova here. This one's heavy, and I won't pretend otherwise. The people will tell you it's a judgment, and you'll feel the pull to leave it there. Don't. Read the field itself as closely as you read the man. Turn a leaf over and look at the underside.",
         mid:  "You've named the killer. Now ask the harder question: why does a sickness of one plant become the hunger of a whole people? Go to the cottage and see what they have to fall back on when the potato's gone. Then see how far this has already traveled.",
-        full: "You've got it all. Anchor back at the cottage to stabilize. A living water-mold is destroying the crop, the whole country leans on a single, identical potato with nothing beneath it, and food is still leaving for the ports while people starve. We can't stop any of it. We can make sure it's remembered true. That has to be enough.",
+        full: "You've got it all. Anchor back at the cottage to stabilize. A living water-mold is destroying the crop, millions of the poorest families lean on a single, identical potato with almost nothing of their own beneath it, and food is still leaving for the ports while people starve. We can't stop any of it. We can make sure it's remembered true. That has to be enough.",
       },
       diagnoses: [
-        { label: "A living organism — a water-mould, later named Phytophthora infestans — is killing the potato, spreading on wind and rain from one identical Lumper to the next. Because the whole country leans on that single clonal crop with nothing beneath it, one plant disease becomes a famine — while grain and cattle that could feed the people are shipped out for the rents.", isCorrect: true, hint: "" },
+        { label: "A living organism — a water-mould, later named Phytophthora infestans — is killing the potato, spreading on wind and rain from one identical Lumper to the next. Because millions of the poorest tenant families lean on that single clonal crop for nearly all they eat, its failure becomes hunger — and poverty, the land system, and the grain and cattle still shipped out for the rents turn hunger into famine.", isCorrect: true, hint: "" },
         { label: "It is a judgment on the land — or, in plainer terms, the soil has finally failed after too many years of the same crop worked too hard.", isCorrect: false, hint: "The soil reads sound — good dirt, no exhaustion, no poison. What you found killing the crop was the white growth on the underside of the leaves: a living thing, spreading field to field on wind and rain. The ground didn't fail. Something is eating the plant alive." },
         { label: "It is simply the cold, wet season rotting the crop in the wet ground — bad weather, nothing more.", isCorrect: false, hint: "The wet matters — but only because it carries the organism. Weather alone doesn't fruit white spores that leap from parish to parish across a whole island in a single season, and it doesn't explain why every identical Lumper falls together while the soil stays healthy. The damp is the messenger, not the killer." },
       ],
       explanation: {
         title: "Record Stabilized",
-        body: "You witnessed the Great Famine at its beginning, and you fixed its true cause in the record. The killer was Phytophthora infestans — a water-mold, an oomycete, not a true fungus though it wears the look of one. Spreading on cool, wet wind and rain, leaping field to field faster than anyone could flee it. \n\nWhat turned a crop disease into a catastrophe was uniformity and dependence: nearly the whole of poor Ireland lived on one potato, the Lumper, grown from cuttings of cuttings until every field was the same plant repeated — and a blight that fit one fit them all. With nothing else grown to fall back on, the failure of that single crop was the failure of the only food the people had. And all the while, grain, butter, and cattle left Irish ports under guard. The land was not empty of food. Its food simply belonged to someone else. The archivist cannot stop a famine. But the correct biological cause, set down clearly, is the seed of plant pathology. The science that would one day let humanity see a disease coming before it starves a people.",
+        body: "You witnessed the Great Famine at its beginning, and you fixed its true cause in the record. The killer was Phytophthora infestans — a water-mold, an oomycete, not a true fungus though it wears the look of one. Spreading on cool, wet wind and rain, leaping field to field faster than anyone could flee it. \n\nWhat turned a crop disease into a catastrophe was uniformity, dependence, and who owned what: around a third of Ireland's people — its poorest tenant families above all — lived mainly on the potato, and overwhelmingly on one variety, the Lumper, grown from cuttings of cuttings until field after field held the same plant repeated — and a blight that fit one fit them all. Other food was grown in Ireland all through the hunger, but the poorest had no claim to it: it was rent, it was export, it was someone else's property, and grain, butter, and cattle left Irish ports under guard while relief came late and grudging. The blight killed the potato; poverty, the land system, and the choices of those in power made the deaths. The land was not empty of food. Its food simply belonged to someone else. The archivist cannot stop a famine. But the correct biological cause, set down clearly, is the seed of plant pathology. The science that would one day let humanity see a disease coming before it starves a people.",
         funFact: "It took years for the true cause to win out. At the time, many insisted the blight rose from the wet ground itself, or was punishment, or simple decay. The idea that an invisible living organism could cause disease was still radical. The clergyman-botanist Miles Berkeley argued correctly in 1846 that the mold itself was the cause of the rot, not merely a result of it — a radical idea he was largely disbelieved for, until Anton de Bary's work around 1861 proved him right — and showed the culprit was no ordinary fungus at all. Phytophthora infestans means, almost exactly, 'the plant-destroyer that attacks' — and the famine it triggered killed roughly a million people and drove a million more to emigrate, reshaping Ireland and the nations they sailed to. The same lineage of blight still hunts potatoes today.",
       },
       locations: [
@@ -1687,7 +1687,7 @@ const HHH_DATA = {
       },
       taaCommsHints: {
         low:  "This one isn't a whodunit, it's a why. Everyone can see the soil blowing away. The fight is over what set it loose. Start at the farm. Hear the man out, but read the ground he's standing on just as close. And notice what the wind did to the field that was plowed against anything that wasn't.",
-        mid:  "You're getting there. You've seen the bare field. Now go where the land's cut open and read it like a book. There's a dark band of good topsoil that should run deep and instead runs thin as a knife, and dead sand below it. That thinness is the whole crime. Once you've got it, you'll need to carry it east where Bennett's testifying.",
+        mid:  "You're getting there. You've seen the bare field. Now go where the land's cut open and read it like a book. There's a dark band of good topsoil that should run deep and instead runs thin as a knife, and starved sand below it. That thinness is the whole crime. Once you've got it, you'll need to carry it east where Bennett's testifying.",
         full: "That's all of it, Archivist. Anchor in the committee room and stabilize there. This one's sealed by testimony, not by soil. Hold the shape of it: the deep prairie grass held this fine dirt through every dry spell for ten thousand years, because its roots were a net underground. They plowed the net up for wheat; the dry years came like they always do. And with nothing left to hold it, the soil just got up and walked. The drought didn't cause this, it only pulled the trigger. And the fix was never rain. It was never farming the land naked again.",
       },
       diagnoses: [
@@ -1853,12 +1853,12 @@ const HHH_DATA = {
             clouds: { color: '#797060', bandTop: 0, bandBottom: 78, count: 15, speed: 38, opacity: 0.55, size: 130 },
           },
           sources: {
-            // Examination (REQUIRED) — the soil profile: topsoil that should run a foot deep is worn to an inch over dead sand.
+            // Examination (REQUIRED) — the soil profile: topsoil that should run a foot deep is worn to an inch over starved subsoil.
             examine_strata: {
               type: 'examination', speaker: 'The Gully Wall', personality: 'stoic',
               clueTag: 'profile_stripped', icon: '🪨', label: 'Examine the Strata',
               sprites: { iconImg: 'UI/portrait_dust_soil.png' },
-              learned: "The cut wall of the gully reads like a ruined book: a dark band of topsoil that should run many inches deep is worn to barely one, and below it only pale, lifeless subsoil that will grow nothing. Most of the living soil that took millennia to build is already gone on the wind.",
+              learned: "The cut wall of the gully reads like a ruined book: a dark band of topsoil that should run many inches deep is worn to barely one, and below it only pale, starved subsoil — poor in the organic matter, fertility, and living activity a crop depends on. Most of the living soil that took millennia to build is already gone on the wind.",
               nodes: {
                 start: {
                   text: "You climb down into the gully: a raw wound cut man-deep into what used to be flat field. The walls are sheared earth, and they show the soil's whole history in cross-section, layer on layer, the way a cliff face shows rock. You set your hand against the cut and read it from the bottom up.",
@@ -1868,13 +1868,13 @@ const HHH_DATA = {
                   ],
                 },
                 layers: {
-                  text: "Pale sand and clay at the bottom. The dead subsoil, mineral and starved, the kind of ground that grows nothing but more gully. Above it, where the living soil should be, a thin dark line. That dark band is the whole inheritance: the topsoil, the part it took the prairie thousands of years to build a root at a time. Everywhere good land survives, that band runs deep. Here you could cover it with two fingers.",
+                  text: "Pale sand and clay at the bottom. The subsoil, mineral and starved, the kind of ground that grows little but more gully. Above it, where the living soil should be, a thin dark line. That dark band is the whole inheritance: the topsoil, the part it took the prairie thousands of years to build a root at a time. Everywhere good land survives, that band runs deep. Here you could cover it with two fingers.",
                   options: [
                     { label: "Measure the dark topsoil band.", goto: 'topsoil' },
                   ],
                 },
                 topsoil: {
-                  text: "You lay your fingers flat against the dark line and it doesn't reach the second knuckle. An inch, where there should be a foot. And the rest hasn't been used up. Lifted clean off the ground and carried away on the wind, season after season, until only this last starved inch remains over dead sand. You cannot feed a field back to life that has already blown away.",
+                  text: "You lay your fingers flat against the dark line and it doesn't reach the second knuckle. An inch, where there should be a foot. And the rest hasn't been used up. Lifted clean off the ground and carried away on the wind, season after season, until only this last starved inch remains over sand with little left to give. You cannot feed a field back to life that has already blown away.",
                   revealsClue: 'profile_stripped',
                   options: [
                     { label: "Mark the stripped profile and climb out.", goto: '__exit__' },
@@ -1882,16 +1882,16 @@ const HHH_DATA = {
                 },
               },
             },
-            // Insight (optional) — a core: the wound goes deeper than the eye; the subsoil is biologically dead.
+            // Insight (optional) — a core: the wound goes deeper than the eye; the subsoil is severely degraded.
             sample_core: {
               type: 'examination', speaker: 'TAA Core Analysis', personality: 'stoic', insight: true,
               clueTag: 'dead_soil', icon: '🧫', label: 'Sample the Core',
               sprites: { iconImg: 'UI/portrait_soil_core.png' },
-              learned: "A core driven through the gully floor confirms the wound runs deeper than the eye: beneath the last residual topsoil, the subsoil is biologically dead — no organic matter, no microbial life, nothing for a root to take hold in. Even if the wind stopped tomorrow, what's left here could not grow a crop.",
+              learned: "A core driven through the gully floor confirms the wound runs deeper than the eye: beneath the last residual topsoil, the subsoil is severely degraded — organic matter down to a trace, biological activity a fraction of living topsoil's, little structure for a root to take hold in. Even if the wind stopped tomorrow, what's left here could not carry a crop.",
               nodes: {
                 start: {
                   type: 'terminal',
-                  text: "> TAA SOIL CORE — gully floor, full column\n  drive depth ........ 1.2 m\n  topsoil horizon .... 2 cm (residual)\n  organic carbon ..... near zero below surface\n  microbial activity . none detected\n\n  Awaiting query.",
+                  text: "> TAA SOIL CORE — gully floor, full column\n  drive depth ........ 1.2 m\n  topsoil horizon .... 2 cm (residual)\n  organic carbon ..... trace below surface\n  microbial activity . far below living-topsoil range\n\n  Awaiting query.",
                   options: [
                     { label: "Query: how long to rebuild what's lost?", goto: 'rebuild' },
                     { label: "Query: could this ground still grow a crop?", goto: 'verdict' },
@@ -1906,7 +1906,7 @@ const HHH_DATA = {
                 },
                 verdict: {
                   type: 'terminal',
-                  text: "> QUERY — viability\n  Below the residual topsoil: dead mineral subsoil.\n  No organic matter. \n  No living community. \n  No structure.\n\n  A seed set here would find nothing to root in and nothing to feed it. Stopping the wind would only preserve a corpse. The land cannot simply recover on its own — what was lost was not fertility but the living soil itself, and that is not waiting under the surface to be coaxed back.",
+                  text: "> QUERY — viability\n  Below the residual topsoil: severely degraded mineral subsoil.\n  Organic matter: a trace. \n  Living community: sparse. \n  Structure: broken down.\n\n  A seed set here would find poor anchor and poorer feeding — far too little to carry a crop. Stopping the wind would preserve a ruin, not restore a field. The land cannot simply recover on its own — what was lost was the living topsoil itself, and that is not waiting under the surface to be coaxed back.",
                   revealsClue: 'dead_soil',
                   bonusInsight: true,
                   options: [
