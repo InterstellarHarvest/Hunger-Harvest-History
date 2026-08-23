@@ -51,7 +51,7 @@ Hold the chain to the end and the Archive calls you back. An audit of the stabil
 | 5 | First Garden, Earth · 2387 | A forgery written in real time |
 | 6 | — | *[ SEALED ]* |
 
-The history is real here too: chinampa agriculture, Nikolai Vavilov's seed bank and the siege of Leningrad, the Green Revolution, radiation hormesis, and the mycorrhizal networks that partnered with plants to colonize land.
+The history is real here too: chinampa agriculture, Nikolai Vavilov's seed bank and the siege of Leningrad, the Green Revolution, and the mycorrhizal networks that partnered with plants to colonize land. Thread 4 is the exception — the karreth bloom, the Concord, and the Universal Shielding Protocol are invented, and the real work on radiation-tolerant organisms it borrows from is an analogy for the bloom, not an explanation of it.
 
 ## About
 
